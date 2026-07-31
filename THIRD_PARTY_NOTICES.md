@@ -1,7 +1,14 @@
 # Third-party notices
 
-This project is a clean Go port of `alexewerlof/micromustache`, which is distributed under the MIT License and includes copyright held by Alex Ewerlöf.
+## micromustache
 
-The upstream copyright notice and MIT license will be respected in every copied or derived file that requires attribution. The authoritative upstream license text and the exact files covered by it have not yet been imported into this repository. They will be captured from fixed commit `da3420db27b7a2fdfbb768811a1280b34952dc95` in the next Goal together with the original test material and integrity manifest.
+- Project: `alexewerlof/micromustache`
+- Upstream: https://github.com/alexewerlof/micromustache
+- Fixed commit: `da3420db27b7a2fdfbb768811a1280b34952dc95`
+- Package version: `8.0.3`
+- Copyright: Copyright (c) 2019 Alex Ewerlöf
+- License: MIT License
+- Authoritative license copy: [third_party/micromustache/LICENSE](third_party/micromustache/LICENSE)
+- Package metadata: [package.json](third_party/micromustache/package.json) and [package-lock.json](third_party/micromustache/package-lock.json)
 
-No upstream source, test, or license file is copied into this initialization commit.
+The license and package metadata above were copied byte-for-byte from the fixed upstream commit. Original upstream tests are likewise stored without modification under `tests/original/` and verified by `tests/original.sha256`.

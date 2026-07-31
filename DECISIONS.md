@@ -22,3 +22,18 @@
 - The first commit contains repository foundations only.
 - Original tests, the Node.js oracle, and Go implementation will be separate later commits.
 - Large initial dump commits are intentionally avoided.
+
+## D-004 Original-test preservation
+
+- Original tests were obtained from fixed upstream commit `da3420db27b7a2fdfbb768811a1280b34952dc95`.
+- They are stored unchanged under `tests/original/` with their upstream-relative directory structure.
+- A per-file SHA-256 manifest is stored at `tests/original.sha256`.
+- The acquisition and manifest times are recorded honestly as post-kickoff times; the manifest was not generated at kickoff.
+- Original tests remain immutable, and future adapters will be placed outside `tests/original/`.
+- The temporary clone used `core.autocrlf=false` to prevent newline conversion.
+
+## D-005 Third-party license preservation
+
+- The authoritative upstream MIT License is stored unchanged at `third_party/micromustache/LICENSE`.
+- Upstream package metadata and the fixed commit identifier are stored beside it for reproducibility.
+- The upstream license is kept separate from this port project's own `LICENSE`.

@@ -22,7 +22,7 @@ This repository contains the post-kickoff Go port of `alexewerlof/micromustache`
 
 - Do not modify upstream tests.
 - Once imported, files under `tests/original/` are immutable reference copies.
-- Preserve and verify their kickoff-time SHA-256 manifest.
+- Preserve and verify the SHA-256 manifest generated from the fixed upstream commit after kickoff.
 
 ## Git and security
 
