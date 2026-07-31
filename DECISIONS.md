@@ -96,3 +96,20 @@
 - Values with no deliberately defined JavaScript coercion mapping return an error matching `ErrUnsupportedValue`. This includes structs, pointers, functions, channels, complex values, other slice/map types, named scalar types, cyclic arrays, excessive array nesting, and integers outside JavaScript's safe range.
 - The Go renderer does not invoke Node.js, reflection-based methods, getters, callbacks, the file system, the network, or mutable global caches. Concurrent calls are safe when callers only read shared scope data.
 - Fifty-three UTF-8 NDJSON cases were measured through the fixed Node oracle for output, error wording, error order, explicit values, arrays, objects, custom tags, Unicode values and quoted keys, method-looking object keys, and number-format thresholds. This targeted measurement is not the later full differential harness.
+
+## D-013 Synchronous resolver rendering
+
+### Upstream facts
+
+- Top-level `renderFn` tokenizes first, then calls the supplied resolver synchronously once for every raw trimmed path occurrence from left to right. Repeated paths are not cached or deduplicated.
+- Resolver calls receive the raw path and the same scope supplied to `renderFn`. Resolution stops at the first thrown error, and all successfully returned values are collected before stringification starts.
+- Paths are parsed before resolver invocation only when `validatePath` is true. Without it, even a syntactically invalid path is passed to the resolver. `validateRef` and `maxRefDepth` do not participate in resolver rendering.
+
+### Go decisions
+
+- Phase 3D implements only top-level `RenderFunc`. It shares private path-validation and stringification helpers with `Render`; `RenderFuncAsync`, `Compile`, `NewRenderer`, all `Renderer` methods, and caches remain unimplemented.
+- A resolver-returned error is wrapped with the raw path and occurrence index while preserving the original error for `errors.Is` and `errors.As`. The added context is Go-specific and is not presented as an upstream JavaScript message.
+- A nil `Resolver` returns an error matching `ErrInvalidResolver` after tokenization and optional path validation. This is a Go-specific safety boundary corresponding only conceptually to upstream's non-function `TypeError`.
+- Resolver results use the same deterministic stringification as `Render`. Unsupported Go values still return `ErrUnsupportedValue`; no alternative coercion is introduced.
+- `RenderFunc` does not recover resolver panics, invoke Node.js, access the file system or network, start goroutines, or add global mutable state. It does not mutate the template, scope, or returned values itself.
+- Thirty-seven declarative `renderFn` oracle requests and eleven fixed call-observation cases confirmed representative output, errors, raw paths, scope identity, order, count, repetition, stopping, and validation timing. The temporary observation inputs are not a full differential harness.

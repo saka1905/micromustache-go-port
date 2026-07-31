@@ -51,6 +51,10 @@ func TestImplementedAPIsDoNotReturnErrNotImplemented(t *testing.T) {
 		{"GetRef", func() error { _, err := mm.GetRef(mm.Scope{}, mm.Ref{}, mm.GetOptions{}); return err }},
 		{"Get", func() error { _, err := mm.Get(mm.Scope{}, "", mm.GetOptions{}); return err }},
 		{"Render", func() error { _, err := mm.Render("", mm.Scope{}, mm.CompileOptions{}); return err }},
+		{"RenderFunc", func() error {
+			_, err := mm.RenderFunc("", func(string, mm.Scope) (mm.Value, error) { return mm.Undefined{}, nil }, mm.Scope{}, mm.CompileOptions{})
+			return err
+		}},
 	}
 
 	for _, test := range tests {
@@ -81,11 +85,6 @@ func TestUnimplementedAPIsReturnErrNotImplemented(t *testing.T) {
 		name string
 		call func() error
 	}{
-		{"RenderFunc", func() error {
-			value, err := mm.RenderFunc("", resolver, scope, mm.CompileOptions{})
-			assertEmptyString(t, value)
-			return err
-		}},
 		{"RenderFuncAsync", func() error {
 			value, err := mm.RenderFuncAsync(ctx, "", asyncResolver, scope, mm.CompileOptions{})
 			assertEmptyString(t, value)

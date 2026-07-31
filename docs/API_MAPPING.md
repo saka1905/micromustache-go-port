@@ -12,10 +12,10 @@ by `oracle/upstream.sha256`.
 `renderFnAsync`, `compile`, `get`, `getRef`, `tokenize`, and `Renderer`.
 `Renderer` exposes `render`, `renderFn`, and `renderFnAsync` methods.
 
-**Go design decision:** Phase 3C implements top-level synchronous `Render` in
-addition to `Tokenize`, `GetRef`, and `Get`. Compilation, renderer methods,
-resolver callbacks, and asynchronous behavior still return a zero value with
-an error matching `ErrNotImplemented` through `errors.Is`.
+**Go design decision:** Phase 3D implements top-level synchronous `RenderFunc`
+in addition to `Render`, `Tokenize`, `GetRef`, and `Get`. Compilation, renderer
+methods, and asynchronous behavior still return a zero value with an error
+matching `ErrNotImplemented` through `errors.Is`.
 
 ## Function and type mapping
 
@@ -31,10 +31,10 @@ an error matching `ErrNotImplemented` through `errors.Is`.
 | `CompileOptions` | `CompileOptions` |
 | path reference `string[]` | `Ref` (`[]string`) |
 
-| Fixed upstream TypeScript API | Go API | Phase 3C result |
+| Fixed upstream TypeScript API | Go API | Phase 3D result |
 | --- | --- | --- |
 | `render(template, scope?, options?): string` | `Render(template string, scope Scope, options CompileOptions) (string, error)` | implemented |
-| `renderFn(template, resolveFn, scope?, options?): string` | `RenderFunc(template string, resolve Resolver, scope Scope, options CompileOptions) (string, error)` | `"", ErrNotImplemented` |
+| `renderFn(template, resolveFn, scope?, options?): string` | `RenderFunc(template string, resolve Resolver, scope Scope, options CompileOptions) (string, error)` | implemented |
 | `renderFnAsync(template, resolveFn, scope?, options?): Promise<string>` | `RenderFuncAsync(ctx context.Context, template string, resolve AsyncResolver, scope Scope, options CompileOptions) (string, error)` | `"", ErrNotImplemented` |
 | `compile(template, options?): Renderer` | `Compile(template string, options CompileOptions) (*Renderer, error)` | `nil, ErrNotImplemented` |
 | `get(scope, path, options?): any` | `Get(scope Scope, path string, options GetOptions) (Value, error)` | implemented |
@@ -74,10 +74,11 @@ The following states remain representable and distinct:
 Top-level `Render` applies the Phase 3C conversion boundary described below.
 
 The synchronous resolver is
-`func(path string, scope Scope) (Value, error)`. The asynchronous resolver is
-`func(ctx context.Context, path string, scope Scope) (Value, error)`. Phase 3B
-still does not call either resolver. Promise ordering, rejection behavior, and
-cancellation semantics remain implementation work.
+`func(path string, scope Scope) (Value, error)`. `RenderFunc` calls it in Phase
+3D as described below. The asynchronous resolver is `func(ctx context.Context,
+path string, scope Scope) (Value, error)` and remains uncalled; Promise
+ordering, rejection behavior, and cancellation semantics remain implementation
+work.
 
 ## Options and defaults
 
@@ -99,6 +100,11 @@ defaults. `Get`, `GetRef`, and `Render` apply the upstream depth default.
 `Render` applies `Explicit`; `ValidatePath` does not change top-level output
 because the fixed top-level operation parses all paths before lookup whether
 that flag is false or true.
+
+`RenderFunc` applies tags and path-length options during tokenization,
+`ValidatePath` before any resolver call, and `Explicit` during shared
+stringification. `ValidateRef` and `MaxRefDepth` are lookup options and do not
+apply because the resolver owns path interpretation.
 
 ## Tokens and source positions
 
@@ -205,6 +211,43 @@ overly deep arrays, and integers outside JavaScript's safe range. This is a Go
 API safety decision, not a claim that fixed JavaScript throws the same error
 class for analogous JavaScript values.
 
+## Top-level synchronous resolver rendering
+
+The fixed upstream top-level `renderFn` compiles the template and then calls
+`Renderer.renderFn`. Phase 3D reproduces its observable one-shot behavior
+without implementing `Compile` or a public `Renderer` method:
+
+1. `Tokenize` produces literal strings and raw trimmed paths.
+2. When `ValidatePath` is true, every path is parsed before the resolver is
+   validated or called. When false, paths are not parsed.
+3. A valid resolver is called synchronously once per raw path occurrence, from
+   left to right, with `(path, scope)`.
+4. All resolver results are collected before shared stringification and
+   concatenation begin.
+
+Repeated paths are called repeatedly and are not cached. Empty templates and
+templates without interpolation call a valid resolver zero times. A resolver
+error stops the loop immediately, so later paths are not called and no
+stringification occurs. Conversely, if all calls succeed, a later unsupported
+Go value is detected only after every resolver call finishes.
+
+`RenderFunc` passes the same `Scope` value supplied by the caller and does not
+interpret a raw path itself unless validation was requested. Measurements
+confirmed that `a.`, which is invalid for the parser, is passed to the resolver
+and can render successfully when `ValidatePath` is false.
+
+Resolver-returned values go through exactly the same private stringification
+helper as `Render`, including `Explicit`, array/object handling, number forms,
+and `ErrUnsupportedValue`. The resolver owns missing-value semantics: returning
+`Undefined{}` is the Go representation of upstream `undefined`.
+
+A returned Go error is wrapped as resolver context containing the raw path and
+zero-based occurrence index. Wrapping retains the original error for
+`errors.Is` and `errors.As`, but that added text is not an upstream JavaScript
+message. A nil Go `Resolver` returns `ErrInvalidResolver`; upstream instead
+rejects a non-function with `TypeError`, so only the safety intent corresponds.
+Resolver panics are not converted into success and are not recovered.
+
 ## Go map and slice traversal
 
 `GetRef` traverses `Scope`, `map[string]any`, and `[]any`. Maps use exact own
@@ -228,9 +271,10 @@ explicit zero and rejects explicit zero, while the Go value struct cannot.
 ## Error policy
 
 Go exposes stable sentinels usable with `errors.Is`: `ErrInvalidTemplate`,
-`ErrInvalidPath`, `ErrInvalidOption`, `ErrReference`, and
-`ErrUnsupportedValue`. The associated source-derived error text retains the
-fixed wording for corresponding measured inputs.
+`ErrInvalidPath`, `ErrInvalidOption`, `ErrReference`, `ErrUnsupportedValue`,
+and `ErrInvalidResolver`. The associated source-derived error text retains the
+fixed wording for corresponding measured inputs. `ErrInvalidResolver` and
+resolver error context are Go-specific.
 JavaScript's `SyntaxError`, `TypeError`, generic `Error`, `RangeError`, and
 `ReferenceError` classes do not have direct Go equivalents; the mapping is by
 sentinel and message.
@@ -259,6 +303,14 @@ produce `[object Object]`. This known deliberate object-model difference is not
 reported as upstream-equivalent behavior. These targeted measurements do not
 constitute the later general differential harness.
 
+Phase 3D measured 37 declarative top-level `renderFn` requests plus 11 fixed
+call-observation cases. They confirmed success/failure output, raw path and
+scope arguments, left-to-right call order, one call per occurrence, repeated
+calls, first-error stopping, tokenize-before-resolver order,
+`ValidatePath`-before-resolver order, explicit values, arrays, objects, custom
+tags, Unicode, and source error messages. The observer was a fixed temporary
+script with no request-provided code and was deleted after measurement.
+
 **Unresolved compatibility warning:** fixed JavaScript lookup uses the `in`
 operator. It can traverse prototype properties, execute getters, expose array
 constructors, and observe an inherited `__proto__`; direct Node measurements
@@ -275,8 +327,8 @@ byte-for-byte JavaScript equivalent.
 
 ## Error and runtime boundary
 
-`ErrNotImplemented` remains the stable sentinel for `RenderFunc`,
-`RenderFuncAsync`, compilation, constructor, and Renderer-method skeletons.
+`ErrNotImplemented` remains the stable sentinel for `RenderFuncAsync`,
+compilation, constructor, and Renderer-method skeletons.
 Each unimplemented function and method wraps it with the API name.
 
 The Node oracle is a development and differential-validation reference only.
@@ -286,6 +338,5 @@ has no external dependency.
 ## Later implementation order
 
 1. Compile and cache behavior.
-2. Synchronous callback rendering.
-3. Asynchronous rendering.
-4. Differential testing against the fixed Node oracle.
+2. Asynchronous rendering.
+3. Differential testing against the fixed Node oracle.

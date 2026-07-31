@@ -18,6 +18,8 @@ var (
 	ErrReference = errors.New("micromustache: reference error")
 	// ErrUnsupportedValue marks a Go value that has no deterministic JavaScript string coercion mapping.
 	ErrUnsupportedValue = errors.New("micromustache: unsupported value")
+	// ErrInvalidResolver marks a nil synchronous resolver supplied to RenderFunc.
+	ErrInvalidResolver = errors.New("micromustache: invalid resolver")
 )
 
 type compatibilityError struct {
