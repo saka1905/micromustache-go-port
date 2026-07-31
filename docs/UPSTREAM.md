@@ -18,4 +18,4 @@
 - Original test aggregate size: 30,626 bytes
 - Test manifest: [tests/original.sha256](../tests/original.sha256)
 
-The preserved license, package metadata, and original tests were obtained from the fixed commit. The temporary upstream clone is not retained in this repository. No Go implementation has started.
+The preserved license, package metadata, and original tests were obtained from the fixed commit. The temporary upstream clone is not retained in this repository. The Go public API skeleton exists, but behavior remains unimplemented.

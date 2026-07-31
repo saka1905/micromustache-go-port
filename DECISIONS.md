@@ -53,3 +53,20 @@
 - They are regenerated with `npm.cmd ci` from the fixed `package-lock.json` and the measured upstream build command.
 - Only the raw upstream source and required build configuration are preserved in `oracle/upstream/`.
 - `oracle/upstream.sha256` detects changes to every preserved snapshot file.
+
+## D-008 Go API mapping
+
+- The Phase 3A API covers every runtime export and public `Renderer` method at fixed upstream commit `da3420db27b7a2fdfbb768811a1280b34952dc95`.
+- Upstream `renderFn` maps to Go `RenderFunc`; asynchronous variants accept `context.Context`.
+- Upstream `compile` returns `*Renderer`; no separate `CompiledTemplate` abstraction is introduced.
+- JavaScript objects map to `Scope`, values map to `Value`, segmented references map to `Ref`, and JavaScript `undefined` uses an explicit `Undefined` marker.
+- Public tokens contain only literal strings and paths, matching the fixed upstream public type.
+- The complete mapping and unresolved UTF-16 position warning are recorded in `docs/API_MAPPING.md`.
+
+## D-009 Skeleton before behavior
+
+- Phase 3A defines types and signatures only; it does not implement parsing, path resolution, rendering, compilation, caching, or asynchronous execution.
+- Every public operation returns a zero value and an error that matches `ErrNotImplemented` through `errors.Is`.
+- Skeleton methods do not invoke resolvers or produce plausible output that could be mistaken for a completed implementation.
+- The Go package has no Node.js runtime path and no external dependency.
+- Any necessary public API change must record its rationale in `DECISIONS.md` and update `docs/API_MAPPING.md`.
