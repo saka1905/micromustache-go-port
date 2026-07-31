@@ -3,7 +3,7 @@ package micromustache
 import "context"
 
 // Renderer is the reusable compiled-template object exposed by the upstream API.
-// Its state and behavior are deliberately absent in Phase 3A.
+// Its state and behavior remain deliberately absent in Phase 3B.
 type Renderer struct{}
 
 // NewRenderer maps the upstream public Renderer constructor.

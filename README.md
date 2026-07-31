@@ -18,9 +18,10 @@ See [docs/UPSTREAM.md](docs/UPSTREAM.md) for the fixed metadata, [docs/ORIGINAL_
 
 ## Current status
 
-- Phase: **3A - Go public API skeleton**
+- Phase: **3B - path tokenization and value lookup**
 - Go public API: **Defined for the complete fixed upstream surface**
-- Go behavior: **Not implemented; every operation returns `ErrNotImplemented`**
+- Implemented: **`Tokenize`, `GetRef`, and `Get`**
+- Not implemented: **`Render`, `RenderFunc`, `RenderFuncAsync`, `Compile`, `Renderer` behavior, differential harness, and benchmark**
 - Original tests: **Stored unchanged and hash-verified**
 - Node oracle: **Implemented and verified for validation only**
 - Original tests against Go: **Not started**
@@ -51,4 +52,4 @@ This Git repository was created after the Port Mortem 2026 kickoff at 2026-08-01
 9. Build differential testing.
 10. Complete benchmarks, documentation, and the demo.
 
-The Node oracle is a development and test reference only. The Go package must never call Node at runtime, use it as a proxy or fallback, or require it in the final build. The Go API surface exists, but no micromustache behavior is implemented yet.
+The Node oracle is a development and test reference only. The Go package must never call Node at runtime, use it as a proxy or fallback, or require it in the final build. Phase 3B implements only tokenization and value lookup; rendering and compilation remain unimplemented.

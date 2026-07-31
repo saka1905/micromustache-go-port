@@ -7,8 +7,8 @@ type Tags struct {
 	Close string
 }
 
-// GetOptions controls reference traversal. MaxRefDepth zero means unspecified;
-// the upstream default is 10. Phase 3A records but does not apply defaults.
+// GetOptions controls reference traversal. MaxRefDepth zero selects the
+// upstream default of 10 for Get and GetRef.
 type GetOptions struct {
 	ValidateRef bool
 	MaxRefDepth int
@@ -22,9 +22,8 @@ type RendererOptions struct {
 	ValidatePath bool
 }
 
-// TokenizeOptions controls template tokenization. MaxPathLen zero means
-// unspecified; the upstream default is 1000. Empty Tags are also unspecified.
-// Phase 3A records but does not apply defaults.
+// TokenizeOptions controls template tokenization. MaxPathLen zero selects the
+// upstream default of 1000. Empty Tags select the upstream default delimiters.
 type TokenizeOptions struct {
 	MaxPathLen int
 	Tags       Tags

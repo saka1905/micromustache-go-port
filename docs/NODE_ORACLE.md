@@ -6,7 +6,7 @@ The Node oracle executes the fixed TypeScript implementation to produce referenc
 
 It may be used to observe upstream values, JavaScript errors, and deterministic expectations for future differential testing. It must not be called by the Go package at runtime, used as a product proxy or fallback, included as a final-build dependency, or used to conceal an unimplemented Go feature.
 
-The differential harness does not exist yet. The Go public API skeleton exists, but its behavior remains unimplemented.
+The differential harness does not exist yet. Phase 3B implements Go tokenization and value lookup; rendering and compilation remain unimplemented.
 
 ## Fixed upstream snapshot
 

@@ -66,7 +66,23 @@
 ## D-009 Skeleton before behavior
 
 - Phase 3A defines types and signatures only; it does not implement parsing, path resolution, rendering, compilation, caching, or asynchronous execution.
-- Every public operation returns a zero value and an error that matches `ErrNotImplemented` through `errors.Is`.
+- During Phase 3A, every public operation returned a zero value and an error matching `ErrNotImplemented` through `errors.Is`; later phases replace that sentinel only as each operation becomes implemented.
 - Skeleton methods do not invoke resolvers or produce plausible output that could be mistaken for a completed implementation.
 - The Go package has no Node.js runtime path and no external dependency.
 - Any necessary public API change must record its rationale in `DECISIONS.md` and update `docs/API_MAPPING.md`.
+
+## D-010 Path representation
+
+- The reference grammar is ported from `oracle/upstream/src/parse.ts` at fixed commit `da3420db27b7a2fdfbb768811a1280b34952dc95`, not from a general Mustache grammar.
+- `Tokenize` preserves trimmed path text. `Get` privately converts dot and bracket notation to a `Ref` segment list, while `GetRef` accepts an existing segment list.
+- Quoted keys retain dots, brackets, quotes, backslashes, Unicode, and numeric-looking text. Numeric bracket indices normalize optional plus signs and leading zeroes without losing quoted-key distinctions.
+- Invalid paths return errors matching `ErrInvalidPath`; tokenization errors match `ErrInvalidTemplate`. Source-derived error messages are retained.
+- Parsing allocates a new reference and never changes the input path, map, slice, or caller-supplied `Ref`. No parser cache is added in this phase.
+
+## D-011 Go value traversal boundary
+
+- `Scope`, `map[string]any`, and `[]any` are the supported traversal containers. Slice lookup supports canonical non-negative indices and `length`.
+- A missing property returns `Undefined{}` unless `ValidateRef` requests an `ErrReference`. A present `Undefined{}` and a present `nil` remain distinguishable during traversal.
+- JavaScript prototype-chain lookup is not reproduced. Own map keys named `__proto__`, `constructor`, or `prototype` remain ordinary keys.
+- Structs, pointers, reflection, getters, and arbitrary methods are not traversed or invoked. Sparse-array holes and custom array properties are not modeled by `[]any`.
+- Node.js is used only to measure the fixed implementation. The Go package uses the standard library and never calls the oracle at runtime.

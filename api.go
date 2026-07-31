@@ -21,18 +21,3 @@ func RenderFuncAsync(ctx context.Context, template string, resolve AsyncResolver
 func Compile(template string, options CompileOptions) (*Renderer, error) {
 	return nil, notImplemented("Compile")
 }
-
-// Get resolves a string path from a scope.
-func Get(scope Scope, path string, options GetOptions) (Value, error) {
-	return nil, notImplemented("Get")
-}
-
-// GetRef resolves an already-segmented reference from a scope.
-func GetRef(scope Scope, ref Ref, options GetOptions) (Value, error) {
-	return nil, notImplemented("GetRef")
-}
-
-// Tokenize separates a template into literal strings and property paths.
-func Tokenize(template string, options TokenizeOptions) (Tokens, error) {
-	return Tokens{}, notImplemented("Tokenize")
-}

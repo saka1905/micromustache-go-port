@@ -42,7 +42,28 @@ func TestValueStatesRemainDistinct(t *testing.T) {
 	}
 }
 
-func TestSkeletonReturnsErrNotImplemented(t *testing.T) {
+func TestImplementedAPIsDoNotReturnErrNotImplemented(t *testing.T) {
+	tests := []struct {
+		name string
+		call func() error
+	}{
+		{"Tokenize", func() error { _, err := mm.Tokenize("", mm.TokenizeOptions{}); return err }},
+		{"GetRef", func() error { _, err := mm.GetRef(mm.Scope{}, mm.Ref{}, mm.GetOptions{}); return err }},
+		{"Get", func() error { _, err := mm.Get(mm.Scope{}, "", mm.GetOptions{}); return err }},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if err := test.call(); err != nil {
+				t.Fatalf("implemented API returned error: %v", err)
+			} else if errors.Is(err, mm.ErrNotImplemented) {
+				t.Fatal("implemented API returned ErrNotImplemented")
+			}
+		})
+	}
+}
+
+func TestUnimplementedAPIsReturnErrNotImplemented(t *testing.T) {
 	ctx := context.Background()
 	scope := mm.Scope{}
 	resolver := func(string, mm.Scope) (mm.Value, error) {
@@ -78,27 +99,6 @@ func TestSkeletonReturnsErrNotImplemented(t *testing.T) {
 			value, err := mm.Compile("", mm.CompileOptions{})
 			if value != nil {
 				t.Error("Compile returned a non-nil renderer")
-			}
-			return err
-		}},
-		{"Get", func() error {
-			value, err := mm.Get(scope, "", mm.GetOptions{})
-			if value != nil {
-				t.Error("Get returned a non-nil value")
-			}
-			return err
-		}},
-		{"GetRef", func() error {
-			value, err := mm.GetRef(scope, nil, mm.GetOptions{})
-			if value != nil {
-				t.Error("GetRef returned a non-nil value")
-			}
-			return err
-		}},
-		{"Tokenize", func() error {
-			value, err := mm.Tokenize("", mm.TokenizeOptions{})
-			if value.Strings != nil || value.Paths != nil {
-				t.Error("Tokenize returned non-zero tokens")
 			}
 			return err
 		}},
