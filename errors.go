@@ -20,6 +20,10 @@ var (
 	ErrUnsupportedValue = errors.New("micromustache: unsupported value")
 	// ErrInvalidResolver marks a nil synchronous resolver supplied to RenderFunc.
 	ErrInvalidResolver = errors.New("micromustache: invalid resolver")
+	// ErrInvalidTokens marks a Tokens value that cannot represent a Renderer template.
+	ErrInvalidTokens = errors.New("micromustache: invalid tokens")
+	// ErrInvalidRenderer marks a nil or zero-value Renderer receiver.
+	ErrInvalidRenderer = errors.New("micromustache: invalid renderer")
 )
 
 type compatibilityError struct {

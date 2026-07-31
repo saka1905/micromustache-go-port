@@ -6,25 +6,11 @@ import "strings"
 // scope. It mirrors the fixed upstream order: tokenize, parse all paths,
 // resolve every reference, then stringify and concatenate.
 func Render(template string, scope Scope, options CompileOptions) (string, error) {
-	tokens, err := Tokenize(template, options.TokenizeOptions)
+	renderer, err := Compile(template, options)
 	if err != nil {
 		return "", err
 	}
-
-	refs, err := parseTokenPaths(tokens)
-	if err != nil {
-		return "", err
-	}
-
-	values := make([]Value, len(refs))
-	for index, ref := range refs {
-		values[index], err = GetRef(scope, ref, options.GetOptions)
-		if err != nil {
-			return "", err
-		}
-	}
-
-	return stringifyTokens(tokens, values, options.Explicit)
+	return renderer.Render(scope)
 }
 
 func parseTokenPaths(tokens Tokens) ([]Ref, error) {

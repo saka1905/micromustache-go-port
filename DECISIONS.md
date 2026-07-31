@@ -113,3 +113,29 @@
 - Resolver results use the same deterministic stringification as `Render`. Unsupported Go values still return `ErrUnsupportedValue`; no alternative coercion is introduced.
 - `RenderFunc` does not recover resolver panics, invoke Node.js, access the file system or network, start goroutines, or add global mutable state. It does not mutate the template, scope, or returned values itself.
 - Thirty-seven declarative `renderFn` oracle requests and eleven fixed call-observation cases confirmed representative output, errors, raw paths, scope identity, order, count, repetition, stopping, and validation timing. The temporary observation inputs are not a full differential harness.
+
+## D-014 Compiled template representation
+
+### Upstream facts
+
+- Fixed `compile` tokenizes immediately and passes the resulting public `Tokens` plus renderer options to the `Renderer` constructor. The template string itself is not retained.
+- `Renderer` retains tokens and options. Parsed refs are cached per template: eagerly in the constructor when `validatePath` is true, otherwise lazily on the first data render. Render data and output are never cached.
+- Upstream retains JavaScript object/array references. Direct measurement confirmed that later options and token-array mutation can affect an existing renderer, while tag mutation after tokenization does not retokenize it.
+
+### Go decisions
+
+- `Compile` tokenizes once and delegates to `NewRenderer`. `Renderer` stores defensive copies of token strings and paths, a by-value `RendererOptions` snapshot, and a `sync.Once`-protected parsed-ref result. It stores no template string, scope, lookup values, or render output.
+- Go deliberately prevents caller mutation of constructor tokens/options from changing an existing renderer. This differs from upstream reference retention and provides deterministic concurrent read-only use.
+- Lazy parsing preserves upstream error timing when `ValidatePath` is false; eager parsing preserves constructor failure when it is true. The template-scoped cache is internal to one renderer, with no package-level or global cache.
+- `NewRenderer` retains its existing signature. Invalid token shape returns `ErrInvalidTokens`; nil and zero-value renderers return `ErrInvalidRenderer` instead of panicking. Both are Go mappings/safety boundaries, not JavaScript error classes.
+- `Renderer.Render` reuses parsed refs, calls `GetRef` for every occurrence on every invocation, and shares the same stringification helper as top-level `Render`. The top-level function now follows fixed source directly through `Compile(...).Render(...)`.
+- The implementation uses only the Go standard library and does not call Node.js, the file system, or the network.
+
+## D-015 Compile-time and render-time errors
+
+- Tokenization errors, including invalid tags, unclosed tags, and `MaxPathLen`, occur during `Compile`.
+- Invalid paths occur during `Compile` only with `ValidatePath`; otherwise they occur on the first `Renderer.Render` and are cached as the renderer's template error.
+- `MaxRefDepth`, `ValidateRef`, unsupported Go values, and other data-dependent lookup/stringification errors occur during each `Renderer.Render`. They are not cached.
+- All paths are parsed before any lookup, and all lookup values are collected before stringification. This preserves invalid-path-before-data-error and lookup-before-unsupported-value ordering.
+- Source-derived errors retain existing sentinels and messages. `ErrInvalidTokens` and `ErrInvalidRenderer` remain distinguishable with `errors.Is`; they are not described as identical to upstream `TypeError`.
+- Forty-eight declarative `compile.render` oracle requests and sixteen fixed stage/reuse observations confirmed representative output, first-error selection, compile/render stage boundaries, data non-caching, token/options reference behavior, and repeated rendering.

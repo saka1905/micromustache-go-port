@@ -9,5 +9,9 @@ func RenderFuncAsync(ctx context.Context, template string, resolve AsyncResolver
 
 // Compile tokenizes a template and returns a reusable Renderer.
 func Compile(template string, options CompileOptions) (*Renderer, error) {
-	return nil, notImplemented("Compile")
+	tokens, err := Tokenize(template, options.TokenizeOptions)
+	if err != nil {
+		return nil, err
+	}
+	return NewRenderer(tokens, options.RendererOptions)
 }

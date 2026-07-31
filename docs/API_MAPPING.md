@@ -12,10 +12,10 @@ by `oracle/upstream.sha256`.
 `renderFnAsync`, `compile`, `get`, `getRef`, `tokenize`, and `Renderer`.
 `Renderer` exposes `render`, `renderFn`, and `renderFnAsync` methods.
 
-**Go design decision:** Phase 3D implements top-level synchronous `RenderFunc`
-in addition to `Render`, `Tokenize`, `GetRef`, and `Get`. Compilation, renderer
-methods, and asynchronous behavior still return a zero value with an error
-matching `ErrNotImplemented` through `errors.Is`.
+**Go design decision:** Phase 3E implements `Compile`, `NewRenderer`, and
+`Renderer.Render` in addition to the earlier top-level functions, tokenization,
+and lookup. Resolver renderer methods and asynchronous behavior still return a
+zero value with an error matching `ErrNotImplemented` through `errors.Is`.
 
 ## Function and type mapping
 
@@ -31,17 +31,17 @@ matching `ErrNotImplemented` through `errors.Is`.
 | `CompileOptions` | `CompileOptions` |
 | path reference `string[]` | `Ref` (`[]string`) |
 
-| Fixed upstream TypeScript API | Go API | Phase 3D result |
+| Fixed upstream TypeScript API | Go API | Phase 3E result |
 | --- | --- | --- |
 | `render(template, scope?, options?): string` | `Render(template string, scope Scope, options CompileOptions) (string, error)` | implemented |
 | `renderFn(template, resolveFn, scope?, options?): string` | `RenderFunc(template string, resolve Resolver, scope Scope, options CompileOptions) (string, error)` | implemented |
 | `renderFnAsync(template, resolveFn, scope?, options?): Promise<string>` | `RenderFuncAsync(ctx context.Context, template string, resolve AsyncResolver, scope Scope, options CompileOptions) (string, error)` | `"", ErrNotImplemented` |
-| `compile(template, options?): Renderer` | `Compile(template string, options CompileOptions) (*Renderer, error)` | `nil, ErrNotImplemented` |
+| `compile(template, options?): Renderer` | `Compile(template string, options CompileOptions) (*Renderer, error)` | implemented |
 | `get(scope, path, options?): any` | `Get(scope Scope, path string, options GetOptions) (Value, error)` | implemented |
 | `getRef(scope, ref, options?): any` | `GetRef(scope Scope, ref Ref, options GetOptions) (Value, error)` | implemented |
 | `tokenize(template, options?): Tokens` | `Tokenize(template string, options TokenizeOptions) (Tokens, error)` | implemented |
-| `new Renderer(tokens, options?)` | `NewRenderer(tokens Tokens, options RendererOptions) (*Renderer, error)` | `nil, ErrNotImplemented` |
-| `Renderer.render(scope?): string` | `(*Renderer).Render(scope Scope) (string, error)` | `"", ErrNotImplemented` |
+| `new Renderer(tokens, options?)` | `NewRenderer(tokens Tokens, options RendererOptions) (*Renderer, error)` | implemented |
+| `Renderer.render(scope?): string` | `(*Renderer).Render(scope Scope) (string, error)` | implemented |
 | `Renderer.renderFn(resolveFn, scope?): string` | `(*Renderer).RenderFunc(resolve Resolver, scope Scope) (string, error)` | `"", ErrNotImplemented` |
 | `Renderer.renderFnAsync(resolveFn, scope?): Promise<string>` | `(*Renderer).RenderFuncAsync(ctx context.Context, resolve AsyncResolver, scope Scope) (string, error)` | `"", ErrNotImplemented` |
 
@@ -105,6 +105,12 @@ that flag is false or true.
 `ValidatePath` before any resolver call, and `Explicit` during shared
 stringification. `ValidateRef` and `MaxRefDepth` are lookup options and do not
 apply because the resolver owns path interpretation.
+
+`Compile` applies tags and `MaxPathLen` while producing tokens. Its renderer
+snapshot retains only `RendererOptions`; tags and the template string are not
+needed after tokenization. `Explicit`, `ValidateRef`, and `MaxRefDepth` apply
+to every later `Renderer.Render`. `ValidatePath` selects eager constructor
+parsing instead of the normal lazy first-render parsing.
 
 ## Tokens and source positions
 
@@ -215,7 +221,7 @@ class for analogous JavaScript values.
 
 The fixed upstream top-level `renderFn` compiles the template and then calls
 `Renderer.renderFn`. Phase 3D reproduces its observable one-shot behavior
-without implementing `Compile` or a public `Renderer` method:
+without invoking `Compile`; `Renderer.RenderFunc` remains unimplemented:
 
 1. `Tokenize` produces literal strings and raw trimmed paths.
 2. When `ValidatePath` is true, every path is parsed before the resolver is
@@ -248,6 +254,69 @@ message. A nil Go `Resolver` returns `ErrInvalidResolver`; upstream instead
 rejects a non-function with `TypeError`, so only the safety intent corresponds.
 Resolver panics are not converted into success and are not recovered.
 
+## Compiled templates and data rendering
+
+Fixed `compile` calls `tokenize(template, options)` immediately and constructs
+a `Renderer` from the resulting `Tokens`. It does not retain the template text.
+The renderer's data path is:
+
+1. Obtain all parsed refs from the template-scoped cache, parsing once if the
+   cache is not initialized.
+2. Call `GetRef` for each cached ref and the current scope in template order.
+3. Collect every value, then use the shared stringification and concatenation
+   helper.
+
+`ValidatePath` initializes the ref cache during `Compile`/`NewRenderer`;
+otherwise the first `Renderer.Render` initializes it. The cache contains only
+parsed template refs and a possible parse error. Every Render call performs
+fresh lookup and stringification, so changing, adding, or removing scope data
+is visible immediately. Repeated and adjacent paths retain their occurrence
+order.
+
+The Go `Renderer` stores:
+
+- defensive copies of `Tokens.Strings` and `Tokens.Paths`;
+- a by-value `RendererOptions` snapshot;
+- `sync.Once`, parsed refs, and the template parse error;
+- an initialization marker for safe nil/zero receiver rejection.
+
+It does not store the original template, `CompileOptions.Tags`, any scope,
+lookup values, rendered strings, or a global cache. `sync.Once` makes the lazy
+template initialization safe when multiple goroutines make read-only Render
+calls concurrently.
+
+**Known deliberate difference:** fixed JavaScript retains its token arrays and
+options object by reference. Measurements showed token string mutation changed
+later output and changing `options.explicit` changed an existing renderer. Go
+copies/snapshots constructor inputs so caller mutation cannot alter an existing
+renderer. Tags are consumed during tokenization in both implementations and do
+not retokenize an existing renderer.
+
+`NewRenderer` requires `len(Strings) == len(Paths)+1`. Other JavaScript
+wrong-object/type cases are prevented by Go's `Tokens` type. Invalid shape is
+`ErrInvalidTokens`. A nil or zero-value Go `Renderer` has no JavaScript
+constructor equivalent and returns `ErrInvalidRenderer` rather than panicking.
+
+Top-level `Render` now directly follows fixed source by calling `Compile` and
+then `Renderer.Render`. Therefore ordinary results and error classification are
+shared rather than independently duplicated.
+
+### Compile-time and render-time errors
+
+| Condition | Phase |
+| --- | --- |
+| invalid tags, unclosed tag, `MaxPathLen` | `Compile` tokenization |
+| invalid path with `ValidatePath` | `Compile` / `NewRenderer` |
+| invalid path without `ValidatePath` | first `Renderer.Render` |
+| `MaxRefDepth`, `ValidateRef`, missing validated ref | every `Renderer.Render` |
+| unsupported Go value | every `Renderer.Render`, after all lookups |
+| invalid token shape | `NewRenderer` |
+| nil or zero-value Renderer | `Renderer.Render` |
+
+All refs are parsed before any lookup. All values are looked up before
+stringification. A cached path error remains template-scoped, while data errors
+are recomputed and can disappear when later scope data changes.
+
 ## Go map and slice traversal
 
 `GetRef` traverses `Scope`, `map[string]any`, and `[]any`. Maps use exact own
@@ -272,9 +341,10 @@ explicit zero and rejects explicit zero, while the Go value struct cannot.
 
 Go exposes stable sentinels usable with `errors.Is`: `ErrInvalidTemplate`,
 `ErrInvalidPath`, `ErrInvalidOption`, `ErrReference`, `ErrUnsupportedValue`,
-and `ErrInvalidResolver`. The associated source-derived error text retains the
-fixed wording for corresponding measured inputs. `ErrInvalidResolver` and
-resolver error context are Go-specific.
+`ErrInvalidResolver`, `ErrInvalidTokens`, and `ErrInvalidRenderer`. The
+associated source-derived error text retains the fixed wording for
+corresponding measured inputs. Resolver, token-shape, and zero-renderer safety
+boundaries are Go-specific mappings.
 JavaScript's `SyntaxError`, `TypeError`, generic `Error`, `RangeError`, and
 `ReferenceError` classes do not have direct Go equivalents; the mapping is by
 sentinel and message.
@@ -311,6 +381,14 @@ calls, first-error stopping, tokenize-before-resolver order,
 tags, Unicode, and source error messages. The observer was a fixed temporary
 script with no request-provided code and was deleted after measurement.
 
+Phase 3E measured 48 declarative `compile.render` requests plus 16 fixed
+compile-stage and renderer-reuse observations. They covered output and error
+messages, compile-versus-render failure stages, first invalid path, validation
+limits, repeated renders with same/different/mutated data, missing-to-present
+transitions, nested map/array changes, invalid tokens, and upstream token/options
+reference retention. Temporary measurement inputs were deleted and do not form
+the later differential harness.
+
 **Unresolved compatibility warning:** fixed JavaScript lookup uses the `in`
 operator. It can traverse prototype properties, execute getters, expose array
 constructors, and observe an inherited `__proto__`; direct Node measurements
@@ -328,7 +406,7 @@ byte-for-byte JavaScript equivalent.
 ## Error and runtime boundary
 
 `ErrNotImplemented` remains the stable sentinel for `RenderFuncAsync`,
-compilation, constructor, and Renderer-method skeletons.
+`Renderer.RenderFunc`, and `Renderer.RenderFuncAsync`.
 Each unimplemented function and method wraps it with the API name.
 
 The Node oracle is a development and differential-validation reference only.
@@ -337,6 +415,5 @@ has no external dependency.
 
 ## Later implementation order
 
-1. Compile and cache behavior.
-2. Asynchronous rendering.
-3. Differential testing against the fixed Node oracle.
+1. Asynchronous rendering.
+2. Differential testing against the fixed Node oracle.

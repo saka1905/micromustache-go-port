@@ -6,7 +6,7 @@ The Node oracle executes the fixed TypeScript implementation to produce referenc
 
 It may be used to observe upstream values, JavaScript errors, and deterministic expectations for future differential testing. It must not be called by the Go package at runtime, used as a product proxy or fallback, included as a final-build dependency, or used to conceal an unimplemented Go feature.
 
-The differential harness does not exist yet. Phase 3D implements top-level synchronous resolver rendering in addition to ordinary rendering, tokenization, and value lookup; compilation, renderer methods, and asynchronous rendering remain unimplemented.
+The differential harness does not exist yet. Phase 3E implements compiled templates and synchronous data rendering in addition to top-level rendering, tokenization, and value lookup; resolver renderer methods and asynchronous rendering remain unimplemented.
 
 ## Fixed upstream snapshot
 
@@ -82,6 +82,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/verify-node-orac
 - Source manifest: PASS; 12/12 files before and after preparation
 - Phase 3C targeted render measurement: PASS; 53 UTF-8 NDJSON requests covering output, conversion, Unicode keys, object-key coercion, and error order
 - Phase 3D targeted renderFn measurement: PASS; 37 declarative UTF-8 NDJSON requests and 11 fixed call-observation cases
+- Phase 3E targeted compile/render measurement: PASS; 48 declarative UTF-8 NDJSON requests and 16 fixed stage/reuse observations
 
 The unit command was run in the temporary fixed-commit clone, not in `tests/original`, because the original specs depend on their upstream source-relative layout. This preserved the committed test originals while exercising the unmodified upstream command.
 
@@ -92,3 +93,5 @@ Smoke expected values are not hand-written into the case file. The fixed impleme
 The Phase 3C targeted request file was temporary and is not part of the committed oracle corpus. Its measured expectations were converted into Go table tests. This was a bounded implementation check, not the later reusable differential harness.
 
 The Phase 3D request and call-observation files were also temporary and were deleted before commit. The fixed observer accepted no external code and recorded only path, scope identity, order, count, output, and error. Phase 3D did not extend the committed protocol or create the later differential harness.
+
+The Phase 3E request and observation files were temporary and deleted before commit. The fixed observer separated compile and render failures and exercised one renderer repeatedly; it accepted no external code. The committed protocol and smoke corpus remain unchanged.

@@ -55,6 +55,19 @@ func TestImplementedAPIsDoNotReturnErrNotImplemented(t *testing.T) {
 			_, err := mm.RenderFunc("", func(string, mm.Scope) (mm.Value, error) { return mm.Undefined{}, nil }, mm.Scope{}, mm.CompileOptions{})
 			return err
 		}},
+		{"Compile", func() error { _, err := mm.Compile("", mm.CompileOptions{}); return err }},
+		{"NewRenderer", func() error {
+			_, err := mm.NewRenderer(mm.Tokens{Strings: []string{""}}, mm.RendererOptions{})
+			return err
+		}},
+		{"Renderer.Render", func() error {
+			renderer, err := mm.NewRenderer(mm.Tokens{Strings: []string{""}}, mm.RendererOptions{})
+			if err != nil {
+				return err
+			}
+			_, err = renderer.Render(mm.Scope{})
+			return err
+		}},
 	}
 
 	for _, test := range tests {
@@ -90,21 +103,6 @@ func TestUnimplementedAPIsReturnErrNotImplemented(t *testing.T) {
 			assertEmptyString(t, value)
 			return err
 		}},
-		{"Compile", func() error {
-			value, err := mm.Compile("", mm.CompileOptions{})
-			if value != nil {
-				t.Error("Compile returned a non-nil renderer")
-			}
-			return err
-		}},
-		{"NewRenderer", func() error {
-			value, err := mm.NewRenderer(mm.Tokens{}, mm.RendererOptions{})
-			if value != nil {
-				t.Error("NewRenderer returned a non-nil renderer")
-			}
-			return err
-		}},
-		{"Renderer.Render", func() error { value, err := renderer.Render(scope); assertEmptyString(t, value); return err }},
 		{"Renderer.RenderFunc", func() error {
 			value, err := renderer.RenderFunc(resolver, scope)
 			assertEmptyString(t, value)
