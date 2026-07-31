@@ -6,7 +6,7 @@ The Node oracle executes the fixed TypeScript implementation to produce referenc
 
 It may be used to observe upstream values, JavaScript errors, and deterministic expectations for future differential testing. It must not be called by the Go package at runtime, used as a product proxy or fallback, included as a final-build dependency, or used to conceal an unimplemented Go feature.
 
-The differential harness does not exist yet. Phase 3B implements Go tokenization and value lookup; rendering and compilation remain unimplemented.
+The differential harness does not exist yet. Phase 3C implements top-level synchronous Go rendering in addition to tokenization and value lookup; compilation, callback rendering, and asynchronous rendering remain unimplemented.
 
 ## Fixed upstream snapshot
 
@@ -21,7 +21,7 @@ The differential harness does not exist yet. Phase 3B implements Go tokenization
 
 The snapshot contains the eight non-test TypeScript source files plus `package.json`, `package-lock.json`, `rollup.config.js`, and `tsconfig.json`. Every file matched the fixed clone byte-for-byte before the clone was removed. Original specs are not duplicated; [tests/original](../tests/original) remains their canonical location.
 
-`node_modules`, `dist`, build output, coverage, editor settings, CI configuration, and upstream documentation are not committed. Generated dependencies and outputs are recreated from the fixed lockfile and then removed before commit.
+`node_modules`, `dist`, build output, coverage, editor settings, CI configuration, and upstream documentation are not committed. Generated dependencies and outputs are recreated from the fixed lockfile. They may remain locally as ignored validation artifacts, but they are never staged or used by the Go runtime.
 
 ## Protocol and codec
 
@@ -80,9 +80,12 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/verify-node-orac
 - Determinism: PASS; two executions produced byte-identical NDJSON stdout
 - Original-test manifest: PASS; 16/16 files
 - Source manifest: PASS; 12/12 files before and after preparation
+- Phase 3C targeted render measurement: PASS; 53 UTF-8 NDJSON requests covering output, conversion, Unicode keys, object-key coercion, and error order
 
 The unit command was run in the temporary fixed-commit clone, not in `tests/original`, because the original specs depend on their upstream source-relative layout. This preserved the committed test originals while exercising the unmodified upstream command.
 
 npm 11 emitted old-lockfile and deprecated-dependency warnings; no packages or lockfiles were updated. The known full-`npm test` CRLF/ESLint conflict and Node 24 extensionless-ESM distribution-test failure come from preparation-stage investigation and were not rerun or reported as current Phase 2C test results. Only the upstream unit command was run in this phase.
 
 Smoke expected values are not hand-written into the case file. The fixed implementation generates responses at verification time; the verifier checks request/response ids, declared success/error status, codec validity, empty oracle stderr, and identical results across two runs.
+
+The Phase 3C targeted request file was temporary and is not part of the committed oracle corpus. Its measured expectations were converted into Go table tests. This was a bounded implementation check, not the later reusable differential harness.

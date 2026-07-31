@@ -86,3 +86,13 @@
 - JavaScript prototype-chain lookup is not reproduced. Own map keys named `__proto__`, `constructor`, or `prototype` remain ordinary keys.
 - Structs, pointers, reflection, getters, and arbitrary methods are not traversed or invoked. Sparse-array holes and custom array properties are not modeled by `[]any`.
 - Node.js is used only to measure the fixed implementation. The Go package uses the standard library and never calls the oracle at runtime.
+
+## D-012 Synchronous rendering pipeline
+
+- Phase 3C implements only the top-level `Render` function. `RenderFunc`, `RenderFuncAsync`, `Compile`, `NewRenderer`, all `Renderer` methods, caching, a general differential harness, and benchmarks remain unimplemented.
+- The fixed upstream control flow is preserved: tokenize the template, parse every path, resolve every reference, then stringify and concatenate. Parsing every path before the first lookup preserves the observed invalid-path-before-missing-reference error order.
+- `nil` and `Undefined{}` are swallowed by default and become `null` and `undefined` when `Explicit` is true. Within arrays they always contribute an empty element, matching JavaScript `Array.prototype.toString`/join behavior.
+- Supported deterministic coercions are strings, booleans, floating-point values (including negative zero, NaN, and infinities), JavaScript-safe Go integers, `[]any`, `Scope`, and `map[string]any`. Arrays join recursively with commas; supported map objects stringify as `[object Object]` without depending on map iteration order.
+- Values with no deliberately defined JavaScript coercion mapping return an error matching `ErrUnsupportedValue`. This includes structs, pointers, functions, channels, complex values, other slice/map types, named scalar types, cyclic arrays, excessive array nesting, and integers outside JavaScript's safe range.
+- The Go renderer does not invoke Node.js, reflection-based methods, getters, callbacks, the file system, the network, or mutable global caches. Concurrent calls are safe when callers only read shared scope data.
+- Fifty-three UTF-8 NDJSON cases were measured through the fixed Node oracle for output, error wording, error order, explicit values, arrays, objects, custom tags, Unicode values and quoted keys, method-looking object keys, and number-format thresholds. This targeted measurement is not the later full differential harness.

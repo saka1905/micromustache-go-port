@@ -50,6 +50,7 @@ func TestImplementedAPIsDoNotReturnErrNotImplemented(t *testing.T) {
 		{"Tokenize", func() error { _, err := mm.Tokenize("", mm.TokenizeOptions{}); return err }},
 		{"GetRef", func() error { _, err := mm.GetRef(mm.Scope{}, mm.Ref{}, mm.GetOptions{}); return err }},
 		{"Get", func() error { _, err := mm.Get(mm.Scope{}, "", mm.GetOptions{}); return err }},
+		{"Render", func() error { _, err := mm.Render("", mm.Scope{}, mm.CompileOptions{}); return err }},
 	}
 
 	for _, test := range tests {
@@ -80,11 +81,6 @@ func TestUnimplementedAPIsReturnErrNotImplemented(t *testing.T) {
 		name string
 		call func() error
 	}{
-		{"Render", func() error {
-			value, err := mm.Render("", scope, mm.CompileOptions{})
-			assertEmptyString(t, value)
-			return err
-		}},
 		{"RenderFunc", func() error {
 			value, err := mm.RenderFunc("", resolver, scope, mm.CompileOptions{})
 			assertEmptyString(t, value)

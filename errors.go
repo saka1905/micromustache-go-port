@@ -16,6 +16,8 @@ var (
 	ErrInvalidOption = errors.New("micromustache: invalid option")
 	// ErrReference marks a missing or over-depth reference when validation is required.
 	ErrReference = errors.New("micromustache: reference error")
+	// ErrUnsupportedValue marks a Go value that has no deterministic JavaScript string coercion mapping.
+	ErrUnsupportedValue = errors.New("micromustache: unsupported value")
 )
 
 type compatibilityError struct {

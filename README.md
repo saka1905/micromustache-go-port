@@ -18,10 +18,10 @@ See [docs/UPSTREAM.md](docs/UPSTREAM.md) for the fixed metadata, [docs/ORIGINAL_
 
 ## Current status
 
-- Phase: **3B - path tokenization and value lookup**
+- Phase: **3C - synchronous top-level rendering**
 - Go public API: **Defined for the complete fixed upstream surface**
-- Implemented: **`Tokenize`, `GetRef`, and `Get`**
-- Not implemented: **`Render`, `RenderFunc`, `RenderFuncAsync`, `Compile`, `Renderer` behavior, differential harness, and benchmark**
+- Implemented: **`Render`, `Tokenize`, `GetRef`, and `Get`**
+- Not implemented: **`RenderFunc`, `RenderFuncAsync`, `Compile`, `NewRenderer`, `Renderer` methods, differential harness, and benchmark**
 - Original tests: **Stored unchanged and hash-verified**
 - Node oracle: **Implemented and verified for validation only**
 - Original tests against Go: **Not started**
@@ -52,4 +52,4 @@ This Git repository was created after the Port Mortem 2026 kickoff at 2026-08-01
 9. Build differential testing.
 10. Complete benchmarks, documentation, and the demo.
 
-The Node oracle is a development and test reference only. The Go package must never call Node at runtime, use it as a proxy or fallback, or require it in the final build. Phase 3B implements only tokenization and value lookup; rendering and compilation remain unimplemented.
+The Node oracle is a development and test reference only. The Go package never calls Node at runtime, uses it as a proxy or fallback, or requires it in the final build. Phase 3C implements only top-level synchronous `Render`; compilation, renderer methods, callback rendering, and asynchronous rendering remain unimplemented.
