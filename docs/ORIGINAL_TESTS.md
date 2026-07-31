@@ -31,4 +31,4 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/verify-original-
 
 The verifier fails on missing files, extra files, malformed or duplicate manifest entries, and hash mismatches. Files under `tests/original/` must not be edited. A later Goal will place adapters outside the original-test directory.
 
-These tests have not been run against a Go implementation because no Go implementation exists yet. Preparation-stage investigation reported 264/264 upstream unit tests passing, but this submission repository has not installed dependencies or rerun the Node.js test suite.
+These tests have not been run against a Go implementation because no Go implementation exists yet. Preparation-stage investigation reported 264/264 upstream unit tests passing. Phase 2C separately reran the fixed upstream unit command in a temporary clone and measured 264/264 passing again; it did not execute or modify the preserved copies under `tests/original/`.

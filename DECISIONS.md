@@ -37,3 +37,19 @@
 - The authoritative upstream MIT License is stored unchanged at `third_party/micromustache/LICENSE`.
 - Upstream package metadata and the fixed commit identifier are stored beside it for reproducibility.
 - The upstream license is kept separate from this port project's own `LICENSE`.
+
+## D-006 Validation-only Node oracle
+
+- The original TypeScript implementation from fixed commit `da3420db27b7a2fdfbb768811a1280b34952dc95` is preserved as a comparison oracle.
+- Node.js is used only during development and testing, never as a Go runtime dependency.
+- The oracle must not proxy, fall back for, or conceal an unimplemented Go feature.
+- Input and output use deterministic NDJSON with one response per request id.
+- Special JavaScript values use an unambiguous recursive type envelope.
+- Error comparison includes stable `name` and `message` fields and excludes stack traces.
+
+## D-007 Generated build artifacts
+
+- `node_modules` and generated build artifacts are not committed.
+- They are regenerated with `npm.cmd ci` from the fixed `package-lock.json` and the measured upstream build command.
+- Only the raw upstream source and required build configuration are preserved in `oracle/upstream/`.
+- `oracle/upstream.sha256` detects changes to every preserved snapshot file.

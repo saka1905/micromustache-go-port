@@ -14,13 +14,14 @@ This repository is the planned Port Mortem 2026 Track C submission for a TypeScr
 - Track: C - TypeScript → Go
 - Eligibility: PASS with WARN
 
-See [docs/UPSTREAM.md](docs/UPSTREAM.md) for the fixed metadata, [docs/ORIGINAL_TESTS.md](docs/ORIGINAL_TESTS.md) for the preserved-test record, and [DECISIONS.md](DECISIONS.md) for the initial decisions.
+See [docs/UPSTREAM.md](docs/UPSTREAM.md) for the fixed metadata, [docs/ORIGINAL_TESTS.md](docs/ORIGINAL_TESTS.md) for the preserved-test record, [docs/NODE_ORACLE.md](docs/NODE_ORACLE.md) for the validation-only oracle, and [DECISIONS.md](DECISIONS.md) for decisions.
 
 ## Current status
 
-- Phase: **2B - upstream evidence and original test snapshot**
+- Phase: **2C - fixed Node reference oracle**
 - Implementation: **Not started**
-- Original tests: **Stored unchanged from fixed upstream commit**
+- Original tests: **Stored unchanged and hash-verified**
+- Node oracle: **Implemented and verified for validation only**
 - Original test execution against Go: **Not started**
 - Differential testing: **Not started**
 - Benchmark: **Not started**
@@ -29,6 +30,9 @@ Integrity and license evidence:
 
 - [Original-test SHA-256 manifest](tests/original.sha256)
 - [Preserved upstream MIT License](third_party/micromustache/LICENSE)
+- [Node oracle protocol](oracle/node/PROTOCOL.md)
+- [Upstream source manifest](oracle/upstream.sha256)
+- [Node oracle verifier](scripts/verify-node-oracle.ps1)
 
 This Git repository was created after the Port Mortem 2026 kickoff at 2026-08-01 03:00 JST (2026-07-31 18:00 UTC). It does not contain pre-kickoff implementation code or history copied from the preparation or upstream repositories.
 
@@ -45,4 +49,4 @@ This Git repository was created after the Port Mortem 2026 kickoff at 2026-08-01
 9. Build differential testing.
 10. Complete benchmarks, documentation, and the demo.
 
-No micromustache behavior is implemented in this evidence-preservation phase.
+The Node oracle is a development and test reference only. The Go package must never call Node at runtime, use it as a proxy or fallback, or require it in the final build. No micromustache behavior is implemented in Go yet.

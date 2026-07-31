@@ -1,0 +1,27 @@
+{"id":"render-simple","op":"render","args":{"template":"Hello {{name}}","data":{"type":"object","value":{"name":{"type":"string","value":"Ada"}}}},"expectOk":true}
+{"id":"render-missing","op":"render","args":{"template":"A{{missing}}B","data":{"type":"object","value":{}}},"expectOk":true}
+{"id":"render-dot","op":"render","args":{"template":"{{user.name}}","data":{"type":"object","value":{"user":{"type":"object","value":{"name":{"type":"string","value":"Lin"}}}}}},"expectOk":true}
+{"id":"render-bracket","op":"render","args":{"template":"{{user[\"first-name\"]}}","data":{"type":"object","value":{"user":{"type":"object","value":{"first-name":{"type":"string","value":"Jo"}}}}}},"expectOk":true}
+{"id":"render-array","op":"render","args":{"template":"{{items[1]}}","data":{"type":"object","value":{"items":{"type":"array","value":[{"type":"string","value":"zero"},{"type":"string","value":"one"}]}}}},"expectOk":true}
+{"id":"render-custom-tags","op":"render","args":{"template":"<<name>>","data":{"type":"object","value":{"name":{"type":"string","value":"tagged"}}},"options":{"tags":["<<",">>"]}},"expectOk":true}
+{"id":"render-number","op":"render","args":{"template":"{{value}}","data":{"type":"object","value":{"value":{"type":"number","value":42}}}},"expectOk":true}
+{"id":"render-boolean","op":"render","args":{"template":"{{value}}","data":{"type":"object","value":{"value":{"type":"boolean","value":false}}}},"expectOk":true}
+{"id":"render-null","op":"render","args":{"template":"{{value}}","data":{"type":"object","value":{"value":{"type":"null"}}},"options":{"explicit":true}},"expectOk":true}
+{"id":"render-undefined","op":"render","args":{"template":"{{value}}","data":{"type":"object","value":{"value":{"type":"undefined"}}},"options":{"explicit":true}},"expectOk":true}
+{"id":"render-quoted-key","op":"render","args":{"template":"{{obj['a.b']}}","data":{"type":"object","value":{"obj":{"type":"object","value":{"a.b":{"type":"string","value":"quoted"}}}}}},"expectOk":true}
+{"id":"compile-render","op":"compile.render","args":{"template":"C={{value}}","data":{"type":"object","value":{"value":{"type":"string","value":"compiled"}}}},"expectOk":true}
+{"id":"renderfn-sync","op":"renderFn","args":{"template":"S={{name}}","resolver":{"paths":{"name":{"action":"value","value":{"type":"string","value":"sync"}}}}},"expectOk":true}
+{"id":"renderfn-async","op":"renderFnAsync","args":{"template":"A={{name}}","resolver":{"paths":{"name":{"action":"value","value":{"type":"string","value":"async"}}}}},"expectOk":true}
+{"id":"resolver-error","op":"renderFn","args":{"template":"{{name}}","resolver":{"paths":{"name":{"action":"error","error":{"name":"RangeError","message":"smoke resolver failure"}}}}},"expectOk":false}
+{"id":"invalid-path","op":"get","args":{"scope":{"type":"object","value":{}},"path":"a["},"expectOk":false}
+{"id":"tokenize","op":"tokenize","args":{"template":"A{{x}}B{{y}}C"},"expectOk":true}
+{"id":"get","op":"get","args":{"scope":{"type":"object","value":{"a":{"type":"object","value":{"b":{"type":"string","value":"get-value"}}}}},"path":"a.b"},"expectOk":true}
+{"id":"getref","op":"getRef","args":{"scope":{"type":"object","value":{"a":{"type":"object","value":{"b":{"type":"string","value":"ref-value"}}}}},"ref":["a","b"]},"expectOk":true}
+{"id":"renderer-render","op":"renderer.render","args":{"tokens":{"strings":["R=",""],"paths":["name"]},"data":{"type":"object","value":{"name":{"type":"string","value":"renderer"}}}},"expectOk":true}
+{"id":"renderer-renderfn","op":"renderer.renderFn","args":{"tokens":{"strings":["RF=",""],"paths":["name"]},"resolver":{"paths":{"name":{"action":"value","value":{"type":"string","value":"renderer-sync"}}}}},"expectOk":true}
+{"id":"renderer-renderfn-async","op":"renderer.renderFnAsync","args":{"tokens":{"strings":["RFA=",""],"paths":["name"]},"resolver":{"paths":{"name":{"action":"value","value":{"type":"string","value":"renderer-async"}}}}},"expectOk":true}
+{"id":"compile-renderfn","op":"compile.renderFn","args":{"template":"CF={{name}}","resolver":{"paths":{"name":{"action":"value","value":{"type":"string","value":"compile-sync"}}}}},"expectOk":true}
+{"id":"compile-renderfn-async","op":"compile.renderFnAsync","args":{"template":"CFA={{name}}","resolver":{"paths":{"name":{"action":"value","value":{"type":"string","value":"compile-async"}}}}},"expectOk":true}
+{"id":"render-nan","op":"render","args":{"template":"{{value}}","data":{"type":"object","value":{"value":{"type":"nan"}}}},"expectOk":true}
+{"id":"render-infinity","op":"render","args":{"template":"{{value}}","data":{"type":"object","value":{"value":{"type":"infinity"}}}},"expectOk":true}
+{"id":"render-negative-zero","op":"render","args":{"template":"{{value}}","data":{"type":"object","value":{"value":{"type":"negative-zero"}}}},"expectOk":true}

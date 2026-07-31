@@ -15,3 +15,5 @@ node_modules/
 Thumbs.db
 .vscode/
 .idea/
+/oracle/upstream/build/
+/oracle/upstream/.npm-cache/
