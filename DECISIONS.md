@@ -157,3 +157,22 @@
 - Resolver values use the existing deterministic stringification boundary. Unsupported Go values remain `ErrUnsupportedValue` and are not presented as the same error class as JavaScript stringification errors.
 - No resolver result cache, global mutable state, goroutine, Node.js runtime call, file-system/network access, or external dependency is added. Concurrent calls are safe when the caller's resolver and scope permit concurrent read-only use.
 - Forty declarative `compile.renderFn` oracle requests and fourteen fixed call/reuse observations confirmed representative output, raw path and scope, order/count, stopping, validation stage, stringification timing, and reuse after errors.
+
+## D-017 Asynchronous resolver execution
+
+### Upstream facts
+
+- Top-level `renderFnAsync` compiles first and delegates to `Renderer.renderFnAsync`. The renderer synchronously invokes every async resolver from left to right through `resolveRefs`, then passes the returned promises to `Promise.all`.
+- All resolver promises are created before the returned promise settles. Completion order may differ from invocation order, while `Promise.all` restores interpolation-index order before stringification.
+- Repeated paths create independent promises and are not deduplicated. A rejection does not prevent later path resolvers from having started; the first rejection to settle is reported, including a later-index rejection that settles earlier.
+- Stringification starts only after every promise fulfills. A stringification error therefore occurs after all resolver completions and follows interpolation order.
+
+### Go decisions
+
+- Top-level `RenderFuncAsync` compiles before validating the Go-only context and resolver boundaries. It dispatches one goroutine per raw path occurrence in left-to-right order, collects index-tagged results through a per-call channel buffered to the occurrence count, and uses the existing stringification helper.
+- Goroutine completion order does not affect output order. The first observed resolver error is wrapped with raw path and index while preserving the cause for `errors.Is` and `errors.As`; simultaneous completion remains scheduler-dependent, analogous only in intent to Promise settlement ordering.
+- `context.Context` is a Go-specific cancellation and deadline boundary. Nil context uses `ErrInvalidContext`; nil resolver continues to use `ErrInvalidResolver`. Cancellation and deadline causes remain available through `errors.Is`.
+- Cancellation is checked before dispatch and while collecting. It may prevent later resolver dispatch, which has no JavaScript equivalent. Already-started user resolvers cannot be forcibly terminated; if they ignore the context they may continue after `RenderFuncAsync` returns.
+- The result channel has enough capacity for every dispatched resolver, so internal result sends cannot remain blocked after an early error or cancellation. No global worker pool, semaphore, cache, mutable state, or package-level wait group is introduced.
+- Resolver panics are not recovered or converted into successful values. Go scheduler execution of user resolver bodies may interleave after ordered dispatch; this is documented rather than claimed as identical JavaScript call-stack timing.
+- Thirty-two declarative `renderFnAsync` oracle requests and seventeen fixed delay/event observations confirmed all-start behavior, invocation and completion ordering, repeated occurrences, fastest rejection selection, output order, validation timing, and stringification timing.

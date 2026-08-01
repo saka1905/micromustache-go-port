@@ -6,7 +6,7 @@ The Node oracle executes the fixed TypeScript implementation to produce referenc
 
 It may be used to observe upstream values, JavaScript errors, and deterministic expectations for future differential testing. It must not be called by the Go package at runtime, used as a product proxy or fallback, included as a final-build dependency, or used to conceal an unimplemented Go feature.
 
-The differential harness does not exist yet. Phase 3F implements compiled synchronous resolver rendering in addition to compiled data rendering, top-level rendering, tokenization, and value lookup; asynchronous rendering remains unimplemented.
+The differential harness does not exist yet. Phase 3G implements top-level asynchronous resolver rendering in addition to compiled synchronous rendering, top-level rendering, tokenization, and value lookup; the compiled asynchronous renderer method remains unimplemented.
 
 ## Fixed upstream snapshot
 
@@ -84,6 +84,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/verify-node-orac
 - Phase 3D targeted renderFn measurement: PASS; 37 declarative UTF-8 NDJSON requests and 11 fixed call-observation cases
 - Phase 3E targeted compile/render measurement: PASS; 48 declarative UTF-8 NDJSON requests and 16 fixed stage/reuse observations
 - Phase 3F targeted compiled renderFn measurement: PASS; 40 declarative UTF-8 NDJSON requests and 14 fixed call/reuse observations
+- Phase 3G targeted renderFnAsync measurement: PASS; 32 declarative UTF-8 NDJSON requests and 17 fixed delay/event observations
 
 The unit command was run in the temporary fixed-commit clone, not in `tests/original`, because the original specs depend on their upstream source-relative layout. This preserved the committed test originals while exercising the unmodified upstream command.
 
@@ -98,3 +99,5 @@ The Phase 3D request and call-observation files were also temporary and were del
 The Phase 3E request and observation files were temporary and deleted before commit. The fixed observer separated compile and render failures and exercised one renderer repeatedly; it accepted no external code. The committed protocol and smoke corpus remain unchanged.
 
 The Phase 3F request and observation files were temporary and deleted before commit. The fixed observer exercised raw-path delivery, scope identity, call order/count, resolver stopping, stringification timing, validation stages, and reuse of one renderer after resolver and value errors. It accepted no external code and did not extend the committed protocol.
+
+The Phase 3G request and observer files were temporary and deleted before commit. The observer used fixed delays and recorded resolver invocation, fulfillment/rejection order, returned-promise timing, output, and errors. It confirmed all-start `Promise.all` behavior, interpolation-order output, earliest-settled rejection, repeated occurrences, and stringify-after-fulfillment without accepting external code or extending the protocol.

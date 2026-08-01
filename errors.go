@@ -18,8 +18,10 @@ var (
 	ErrReference = errors.New("micromustache: reference error")
 	// ErrUnsupportedValue marks a Go value that has no deterministic JavaScript string coercion mapping.
 	ErrUnsupportedValue = errors.New("micromustache: unsupported value")
-	// ErrInvalidResolver marks a nil synchronous resolver supplied to a RenderFunc operation.
+	// ErrInvalidResolver marks a nil resolver supplied to a RenderFunc operation.
 	ErrInvalidResolver = errors.New("micromustache: invalid resolver")
+	// ErrInvalidContext marks a nil context supplied to an asynchronous operation.
+	ErrInvalidContext = errors.New("micromustache: invalid context")
 	// ErrInvalidTokens marks a Tokens value that cannot represent a Renderer template.
 	ErrInvalidTokens = errors.New("micromustache: invalid tokens")
 	// ErrInvalidRenderer marks a nil or zero-value Renderer receiver.
