@@ -67,4 +67,4 @@ Full cross-runtime regeneration first runs `scripts/prepare-node-oracle.ps1`, th
 - [Compliance review](SUBMISSION_COMPLIANCE.md)
 - [Decision log](../DECISIONS.md)
 - [Third-party notices](../THIRD_PARTY_NOTICES.md)
-- Demo video: `[DEMO_VIDEO_URL_TO_BE_ADDED]`
+- Demo video: https://www.youtube.com/watch?v=i3b8ixhRpDY

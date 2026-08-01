@@ -26,7 +26,7 @@ See [docs/SUBMISSION_DRAFT.md](docs/SUBMISSION_DRAFT.md) for submission-form cop
 - Benchmark workloads: **26 across all 11 mapped public operations**
 - Benchmark correctness: **PASS before timing; 728 raw measured samples across two runtime-order rounds**
 - Demo: **Six deterministic sections exercise all 11 mapped public operations; two complete runs are byte-for-byte verified**
-- Remaining work: **Phase 5C demo video, final rules/announcement recheck, and official form submission**
+- Remaining work: **Phase 5C final rules/announcement recheck and official form submission**
 - Original tests: **Fixed upstream suite measured 264/264 PASS; 16 imported files remain unchanged and hash-verified**
 - Node oracle: **Implemented and verified for validation only**
 - Original tests against Go: **Not started**

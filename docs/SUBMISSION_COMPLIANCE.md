@@ -16,7 +16,7 @@ Review scope: Port Mortem 2026 Track C submission package for `micromustache-go-
 | Decision record | PASS | [DECISIONS.md](../DECISIONS.md) | Public API, behavior, evidence, benchmark, demo, and submission boundaries recorded | Decisions do not replace upstream or event rules |
 | No original-language runtime in product | PASS | [Go-only boundary](../README.md#go-only-product-boundary) | `scripts/verify-submission.ps1` source scan plus execution without Node | Node remains in validation-only tools |
 | Runnable demo | PASS | [demo guide](DEMO.md), [tracked output](../evidence/demo-output.txt) | `go run ./cmd/micromustache-demo` and `scripts/run-demo.ps1` | Demo uses fixed deterministic inputs |
-| Demo video | PENDING | [recording plan](DEMO_RECORDING.md) | Placeholder is isolated in [submission draft](SUBMISSION_DRAFT.md) | Recording, upload, and URL replacement require the submitter |
+| Demo video | READY | [YouTube video](https://www.youtube.com/watch?v=i3b8ixhRpDY), [recording plan](DEMO_RECORDING.md) | Normal watch URL and exact title verified from an externally reachable unlisted page | Devfolio submission remains PENDING |
 | License and attribution | PASS | [project license](../LICENSE), [notices](../THIRD_PARTY_NOTICES.md), [upstream license](../third_party/micromustache/LICENSE) | `scripts/verify-submission.ps1` plus manual provenance review | No legal opinion is claimed |
 | API coverage and known differences | PASS | [API mapping](API_MAPPING.md) | All 11 mapped operations implemented; differential corpus covers each operation | Complete compatibility is not claimed |
 | Development within event window | PASS | Git history described below | `git log --reverse --format="%H|%P|%aI|%cI|%s"` and `git fsck --no-dangling --strict` | Reachable history alone cannot prove that no remote rewrite ever occurred |
@@ -52,7 +52,7 @@ Review scope: Port Mortem 2026 Track C submission package for `micromustache-go-
 - Innovation is in the validation architecture, not an invented product feature: preserved tests with manifests, a fixed Node oracle, stale-difference detection, and deterministic differential reports.
 - The correctness-gated cross-runtime benchmark retains every raw sample and reverses runtime order across rounds.
 - The deterministic Go-only demo covers all 11 mapped operations without reading evidence or invoking Node.
-- A concise video outline exists, but the actual video and URL are still PENDING.
+- The externally reachable demo video and its normal YouTube watch URL are recorded in the submission package.
 
 ## Development provenance
 
@@ -92,6 +92,7 @@ The expected module list is exactly `github.com/saka1905/micromustache-go-port`,
 
 ## Remaining submitter actions
 
-1. Record and upload the short demo using [docs/DEMO_RECORDING.md](DEMO_RECORDING.md).
-2. Replace the single video URL placeholder in [docs/SUBMISSION_DRAFT.md](SUBMISSION_DRAFT.md).
-3. Paste the draft into the official submission form, recheck the current official rules/announcements, and submit before 2026-08-04 03:00 JST.
+Devfolio submission remains **PENDING**.
+
+1. Paste the draft into the official submission form and recheck the current official rules/announcements.
+2. Verify the track, repository URL, video URL, descriptions, screenshots, and team information before publishing by 2026-08-04 03:00 JST.
