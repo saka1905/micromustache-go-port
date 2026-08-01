@@ -246,3 +246,12 @@
 - Tracked differential and benchmark values are not duplicated in Go source. Evidence reading remains in `scripts/run-demo.ps1` so a built demo binary works outside the repository and normal package use stays independent of validation artifacts.
 - The PowerShell 5.1 walkthrough builds only in a validated system temporary directory, requires two byte-for-byte identical UTF-8 runs, checks section order and evidence integrity, prints but does not automatically run the full differential and benchmark commands, and removes temporary artifacts in `finally`.
 - `evidence/demo-output.txt` records an actual successful direct run. It contains no timestamp, hostname, username, absolute path, environment details, or performance claim.
+
+## D-026 Final submission package and short verifier
+
+- The final README is organized for a judge to build, run the Go-only demo, inspect correctness and benchmark evidence, review limitations, and reach the submission documents without reconstructing the phase history.
+- `scripts/verify-submission.ps1` is the bounded final check. It builds, tests, vets, and enumerates the dependency-free Go module; runs the demo outside the repository; verifies protected manifests and tracked evidence invariants; audits documentation links, licensing, generated artifacts, and product subprocess boundaries; and emits one fixed final PASS line.
+- The short verifier intentionally does not install Node dependencies or rerun the long differential and benchmark workflows. Their tracked evidence, input hashes, counts, round/sample structure, and reproduction commands are checked instead. Full regeneration remains available through the existing validation-only scripts.
+- `.gitattributes` fixes text checkout to LF. This preserves byte-for-byte demo evidence and SHA-256 source-manifest verification in Windows fresh clones without changing the protected upstream or original-test file content.
+- Hosted CI is not added because it is not a supplied submission requirement and would introduce late platform configuration. The local verifier and an actual public fresh-clone run provide the Phase 5B reproducibility gate.
+- The demo video, upload URL, final rules/announcement recheck, and official form submission remain explicit Phase 5C user actions. The only placeholder is the exact video URL marker in the submission draft; the repository does not claim that the video or form submission already exists.
