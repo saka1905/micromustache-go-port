@@ -53,7 +53,7 @@ function namedError(spec) {
   return error
 }
 
-function resolveAction(spec, pathName) {
+function resolverAction(spec, pathName) {
   requireRecord(spec, 'resolver')
   const pathActions = spec.paths === undefined ? {} : requireRecord(spec.paths, 'resolver.paths')
   const action = Object.prototype.hasOwnProperty.call(pathActions, pathName)
@@ -61,6 +61,13 @@ function resolveAction(spec, pathName) {
     : spec.default
   requireRecord(action, `resolver action for ${JSON.stringify(pathName)}`)
 
+  if (action.delayMs !== undefined && (!Number.isInteger(action.delayMs) || action.delayMs < 0)) {
+    throw new TypeError(`resolver delayMs must be a non-negative integer for ${JSON.stringify(pathName)}`)
+  }
+  return action
+}
+
+function resolveAction(action, pathName) {
   switch (action.action) {
     case 'value':
       return decode(action.value)
@@ -68,16 +75,70 @@ function resolveAction(spec, pathName) {
       return undefined
     case 'error':
       throw namedError(action.error)
+    case 'unsupported':
+      return Symbol(`unsupported:${pathName}`)
     default:
       throw new TypeError(`Unknown resolver action for ${JSON.stringify(pathName)}`)
   }
 }
 
-function makeResolver(spec, asynchronous) {
+function makeResolver(spec, asynchronous, calls = undefined) {
   if (asynchronous) {
-    return async (pathName) => resolveAction(spec, pathName)
+    return async (pathName) => {
+      if (calls !== undefined) calls.push(pathName)
+      const action = resolverAction(spec, pathName)
+      if (action.delayMs > 0) {
+        await new Promise((resolve) => setTimeout(resolve, action.delayMs))
+      }
+      return resolveAction(action, pathName)
+    }
   }
-  return (pathName) => resolveAction(spec, pathName)
+  return (pathName) => {
+    if (calls !== undefined) calls.push(pathName)
+    return resolveAction(resolverAction(spec, pathName), pathName)
+  }
+}
+
+function traced(value, calls, enabled) {
+  return enabled ? { result: value, calls } : value
+}
+
+async function invokeResolver(renderer, args, asynchronous) {
+  const calls = []
+  const resolver = makeResolver(args.resolver, asynchronous, calls)
+  const scope = decoded(args.scope, {})
+  const value = asynchronous
+    ? await renderer.renderFnAsync(resolver, scope)
+    : renderer.renderFn(resolver, scope)
+  return traced(value, calls, args.trace === true)
+}
+
+async function runSequence(renderer, steps) {
+  if (!Array.isArray(steps)) throw new TypeError('steps must be an array')
+  const results = []
+  for (const step of steps) {
+    requireRecord(step, 'sequence step')
+    try {
+      let value
+      switch (step.op) {
+        case 'render':
+          value = renderer.render(decoded(step.data, {}))
+          break
+        case 'renderFn':
+          value = await invokeResolver(renderer, step, false)
+          break
+        case 'renderFnAsync':
+          value = await invokeResolver(renderer, step, true)
+          break
+        default:
+          throw new RangeError(`Unsupported sequence step: ${String(step.op)}`)
+      }
+      results.push({ ok: true, value })
+    } catch {
+      results.push({ ok: false })
+    }
+  }
+  return results
 }
 
 async function invoke(op, args) {
@@ -87,29 +148,20 @@ async function invoke(op, args) {
     case 'render':
       return upstream.render(args.template, decoded(args.data, {}), args.options)
     case 'renderFn':
-      return upstream.renderFn(
-        args.template,
-        makeResolver(args.resolver, false),
-        decoded(args.scope, {}),
-        args.options
-      )
+      return invokeResolver(upstream.compile(args.template, args.options), args, false)
     case 'renderFnAsync':
-      return upstream.renderFnAsync(
-        args.template,
-        makeResolver(args.resolver, true),
-        decoded(args.scope, {}),
-        args.options
-      )
+      return invokeResolver(upstream.compile(args.template, args.options), args, true)
+    case 'compile':
+      upstream.compile(args.template, args.options)
+      return { kind: 'renderer' }
     case 'compile.render':
       return upstream.compile(args.template, args.options).render(decoded(args.data, {}))
     case 'compile.renderFn':
-      return upstream
-        .compile(args.template, args.options)
-        .renderFn(makeResolver(args.resolver, false), decoded(args.scope, {}))
+      return invokeResolver(upstream.compile(args.template, args.options), args, false)
     case 'compile.renderFnAsync':
-      return upstream
-        .compile(args.template, args.options)
-        .renderFnAsync(makeResolver(args.resolver, true), decoded(args.scope, {}))
+      return invokeResolver(upstream.compile(args.template, args.options), args, true)
+    case 'compile.sequence':
+      return runSequence(upstream.compile(args.template, args.options), args.steps)
     case 'get':
       return upstream.get(decoded(args.scope, {}), args.path, args.options)
     case 'getRef':
@@ -118,16 +170,15 @@ async function invoke(op, args) {
       return upstream.tokenize(args.template, args.options)
     case 'renderer.render':
       return new upstream.Renderer(args.tokens, args.options).render(decoded(args.data, {}))
+    case 'renderer.construct':
+      new upstream.Renderer(args.tokens, args.options)
+      return { kind: 'renderer' }
     case 'renderer.renderFn':
-      return new upstream.Renderer(args.tokens, args.options).renderFn(
-        makeResolver(args.resolver, false),
-        decoded(args.scope, {})
-      )
+      return invokeResolver(new upstream.Renderer(args.tokens, args.options), args, false)
     case 'renderer.renderFnAsync':
-      return new upstream.Renderer(args.tokens, args.options).renderFnAsync(
-        makeResolver(args.resolver, true),
-        decoded(args.scope, {})
-      )
+      return invokeResolver(new upstream.Renderer(args.tokens, args.options), args, true)
+    case 'renderer.sequence':
+      return runSequence(new upstream.Renderer(args.tokens, args.options), args.steps)
     default:
       throw new RangeError(`Unsupported operation: ${String(op)}`)
   }

@@ -43,7 +43,7 @@ All data, scope, result, and resolver values use a recursive envelope. Because e
 | array | `{"type":"array","value":[...encoded values...]}` |
 | plain object | `{"type":"object","value":{"key":...encoded value...}}` |
 
-`bigint`, `Date`, symbol, and function values are not accepted: the fixed public operations do not require them for the current deterministic smoke scope, and accepting functions would violate the no-arbitrary-code boundary.
+`bigint`, `Date`, and function values are not accepted. A validation-only resolver action may create a fixed `Symbol` internally to exercise the unsupported-value boundary; requests still cannot provide code.
 
 ## Resolver specification
 
@@ -60,7 +60,7 @@ Resolver operations accept a declarative resolver. No request-provided JavaScrip
 }
 ```
 
-Synchronous operations return or throw the selected action directly. Asynchronous operations use an `async` resolver, so values and errors become Promise fulfillment and rejection. Resolver lookup depends only on the exact path string and shares no mutable state between requests.
+Synchronous operations return or throw the selected action directly. Asynchronous operations use an `async` resolver, so values and errors become Promise fulfillment and rejection. A validation-only `delayMs` delays fulfillment or rejection by a fixed number of milliseconds, and `trace: true` records declarative resolver calls. Resolver lookup depends only on the exact path string and shares no mutable state between requests.
 
 ## Operations
 
@@ -80,5 +80,9 @@ The fixed package exports eight runtime names: `render`, `renderFn`, `renderFnAs
 | `renderer.render` | `tokens`, optional encoded `data`, optional `options` | `new Renderer(tokens, options).render(scope)` |
 | `renderer.renderFn` | `tokens`, `resolver`, optional encoded `scope`, optional `options` | `new Renderer(...).renderFn(...)` |
 | `renderer.renderFnAsync` | same as `renderer.renderFn` | `await new Renderer(...).renderFnAsync(...)` |
+| `compile` | `template`, optional `options` | compile and return the public token/options observation |
+| `renderer.construct` | `tokens`, optional `options` | construct and return the public token/options observation |
+| `compile.sequence` | `template`, optional `options`, declarative `steps` | compile once and run ordered renderer steps on the same instance |
+| `renderer.sequence` | `tokens`, optional `options`, declarative `steps` | construct once and run ordered renderer steps on the same instance |
 
-`tokens` follows the measured constructor shape: `{ "strings": [string...], "paths": [string...] }`. Compile-cache reuse is not a separate operation in this phase. The committed smoke file has an additional boolean `expectOk` field used only by the smoke verifier; the oracle ignores it.
+`tokens` follows the measured constructor shape: `{ "strings": [string...], "paths": [string...] }`. Sequence steps are limited to `render`, `renderFn`, and `renderFnAsync` plus encoded data/scope, declarative resolver tables, context labels, and trace flags. Each step returns its own success or error envelope so reuse after a failure is observable. No arbitrary code, network input, or state shared between requests is permitted. The committed smoke file has an additional boolean `expectOk` field used only by the smoke verifier; the oracle ignores it.

@@ -1,7 +1,7 @@
 // Package micromustache defines the public API for a Go port of micromustache.
 //
-// Phase 3H implements the complete mapped public API, including compiled and
-// top-level asynchronous resolver rendering. Compatibility warnings and broad
-// differential validation remain documented work. The package has no Node.js
-// runtime dependency.
+// Phase 4A retains the complete mapped public API and validates it against the
+// fixed implementation with a shared differential corpus. Documented language
+// boundaries remain, so this is not a claim of complete compatibility. The
+// package has no Node.js runtime dependency.
 package micromustache

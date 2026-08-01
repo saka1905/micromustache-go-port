@@ -6,7 +6,7 @@ The Node oracle executes the fixed TypeScript implementation to produce referenc
 
 It may be used to observe upstream values, JavaScript errors, and deterministic expectations for future differential testing. It must not be called by the Go package at runtime, used as a product proxy or fallback, included as a final-build dependency, or used to conceal an unimplemented Go feature.
 
-The differential harness does not exist yet. Phase 3H completes the mapped Go public API through compiled asynchronous resolver rendering, while broad differential validation remains future work.
+Phase 4A uses this oracle as the fixed behavior reference for the tracked full differential harness. The same declarative corpus is sent independently to this process and to a validation-only Go runner; the Go product package still has no Node runtime path.
 
 ## Fixed upstream snapshot
 
@@ -29,12 +29,13 @@ The oracle reads one request per UTF-8 NDJSON line and writes one response per l
 
 The recursive codec covers `undefined`, `NaN`, positive and negative infinity, negative zero, `null`, booleans, finite numbers, strings, arrays, and plain objects. Every value uses an explicit type envelope, avoiding collisions between ordinary objects and special tags. Errors preserve stable `name` and `message` fields but omit stack traces.
 
-Supported operations cover the complete fixed runtime export surface:
+Supported operations cover the complete fixed runtime export surface and validation-only construction/reuse observations:
 
 - `render`, `renderFn`, and `renderFnAsync`
 - `compile.render`, `compile.renderFn`, and `compile.renderFnAsync`
 - `get`, `getRef`, and `tokenize`
 - `renderer.render`, `renderer.renderFn`, and `renderer.renderFnAsync`
+- `compile`, `renderer.construct`, `compile.sequence`, and `renderer.sequence`
 
 Resolvers are declarative path-to-action maps. They can return an encoded value, return `undefined`, or raise a named error. Asynchronous operations convert the same actions to Promise fulfillment or rejection. Request-provided JavaScript is never evaluated.
 
@@ -75,7 +76,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/verify-node-orac
 - `npm.cmd ci`: PASS; 777 packages installed from the fixed lockfile for verification only
 - `npm.cmd run build`: PASS; CJS, MJS, UMD, source maps, minified bundles, and type declarations generated
 - Fixed upstream unit command `npm.cmd run test:unit`: PASS; 9/9 suites and 264/264 tests, 0 snapshots, 4.971 seconds
-- Smoke: PASS; 27 requests, 25 success responses and 2 intentional error responses
+- Smoke: PASS; 31 requests, including construction and sequence operations
 - Error observations: resolver `RangeError` and invalid-path `SyntaxError`, both with deterministic name/message
 - Determinism: PASS; two executions produced byte-identical NDJSON stdout
 - Original-test manifest: PASS; 16/16 files
@@ -86,6 +87,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/verify-node-orac
 - Phase 3F targeted compiled renderFn measurement: PASS; 40 declarative UTF-8 NDJSON requests and 14 fixed call/reuse observations
 - Phase 3G targeted renderFnAsync measurement: PASS; 32 declarative UTF-8 NDJSON requests and 17 fixed delay/event observations
 - Phase 3H targeted compiled renderFnAsync measurement: PASS; 38 declarative UTF-8 NDJSON requests and 16 fixed delay/event/reuse observations
+- Phase 4A differential validation: PASS; 218 cases, 202 exact semantic matches, 13 approved differences, 3 reasoned skips, and 0 failures; two full runs produced the same deterministic result hash
 
 The unit command was run in the temporary fixed-commit clone, not in `tests/original`, because the original specs depend on their upstream source-relative layout. This preserved the committed test originals while exercising the unmodified upstream command.
 

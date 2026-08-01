@@ -200,3 +200,18 @@
 - `ErrNotImplemented` remains exported for source compatibility with earlier incremental phases, but no current public operation returns it. The now-unused private wrapper was removed.
 - Public API implementation does not establish complete compatibility. Known differences remain documented in `docs/API_MAPPING.md`, and broad compatibility claims wait for the later differential harness.
 - Work after Phase 3H focuses on validation, evaluation, demo, and submission evidence rather than adding unrequested public operations.
+
+## D-020 Differential validation architecture
+
+- The fixed Node oracle is the behavior reference. A validation-only Go runner calls only the actual exported Go APIs; it does not duplicate product logic or call Node.
+- The same fixed, declarative NDJSON corpus is sent independently to both processes. Construction and sequence operations allow compile and renderer reuse to be compared without accepting executable request code.
+- The comparator collects responses by id, validates protocol completeness, and compares normalized semantic results rather than raw process output. Stack traces, absolute paths, timestamps, and completion durations are excluded.
+- An unapproved result or error difference is `FAIL`. An approved language/API-boundary difference must carry a case-level difference id and must actually differ; a stale difference annotation also fails.
+- Node remains validation-only. The product package has no Node import, subprocess, proxy, fallback, or external Go dependency.
+
+## D-021 Evidence reports
+
+- Each successful full run writes a machine-readable JSON report and a human-readable Markdown summary under `evidence/`.
+- Evidence records the corpus SHA-256, a timestamp-free deterministic result SHA-256, a summary SHA-256, fixed upstream and Go base commits, working-tree state, oracle source/version, execution environment, and reproduction command.
+- The verifier executes the complete corpus twice and requires identical classifications, counts, normalized results, and deterministic hashes before copying the first run into tracked evidence.
+- Any `FAIL`, process failure, timeout, malformed or missing response, unexpected/duplicate id, unsupported difference id, or deterministic mismatch exits non-zero. A report containing `FAIL` is not accepted as successful evidence.

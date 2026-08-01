@@ -25,3 +25,7 @@
 {"id":"render-nan","op":"render","args":{"template":"{{value}}","data":{"type":"object","value":{"value":{"type":"nan"}}}},"expectOk":true}
 {"id":"render-infinity","op":"render","args":{"template":"{{value}}","data":{"type":"object","value":{"value":{"type":"infinity"}}}},"expectOk":true}
 {"id":"render-negative-zero","op":"render","args":{"template":"{{value}}","data":{"type":"object","value":{"value":{"type":"negative-zero"}}}},"expectOk":true}
+{"id":"compile","op":"compile","args":{"template":"{{value}}"},"expectOk":true}
+{"id":"renderer-construct","op":"renderer.construct","args":{"tokens":{"strings":["",""],"paths":["value"]}},"expectOk":true}
+{"id":"compile-sequence","op":"compile.sequence","args":{"template":"{{value}}","steps":[{"op":"render","data":{"type":"object","value":{"value":{"type":"string","value":"A"}}}},{"op":"render","data":{"type":"object","value":{"value":{"type":"string","value":"B"}}}}]},"expectOk":true}
+{"id":"renderer-sequence","op":"renderer.sequence","args":{"tokens":{"strings":["",""],"paths":["value"]},"steps":[{"op":"renderFn","resolver":{"paths":{"value":{"action":"value","value":{"type":"string","value":"A"}}}},"trace":true},{"op":"renderFnAsync","resolver":{"paths":{"value":{"action":"value","value":{"type":"string","value":"B"}}}},"trace":true}]},"expectOk":true}

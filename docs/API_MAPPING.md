@@ -568,7 +568,22 @@ The Node oracle is a development and differential-validation reference only.
 The Go package does not import, launch, proxy, or fall back to Node.js, and it
 has no external dependency.
 
+## Phase 4A differential evidence
+
+The tracked differential harness exercises every mapped operation through 218
+declarative cases. Two complete runs produced 202 exact semantic matches, 13
+approved differences, 3 reasoned skips, 0 failures, and the same normalized
+result hash. The approved ids correspond to the prototype-chain, own
+`toString`, unsupported-value, Go context, and numeric-zero boundaries already
+described in this document. Getter execution, sparse arrays, and invalid UTF-8
+are explicitly skipped because the safe shared JSON codec cannot represent
+them; they are not treated as implemented equivalence.
+
+See [DIFFERENTIAL_TESTING.md](DIFFERENTIAL_TESTING.md) for architecture and
+comparison rules and [the evidence summary](../evidence/differential-summary.md)
+for counts and case-level non-PASS results. These results are evidence for the
+fixed corpus, not a claim of complete compatibility.
+
 ## Later implementation order
 
-1. Differential testing against the fixed Node oracle.
-2. Benchmark, demo, and final submission evidence.
+1. Benchmark, demo, and final submission evidence.
