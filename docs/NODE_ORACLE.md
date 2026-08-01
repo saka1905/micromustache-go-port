@@ -6,7 +6,7 @@ The Node oracle executes the fixed TypeScript implementation to produce referenc
 
 It may be used to observe upstream values, JavaScript errors, and deterministic expectations for future differential testing. It must not be called by the Go package at runtime, used as a product proxy or fallback, included as a final-build dependency, or used to conceal an unimplemented Go feature.
 
-Phase 4A uses this oracle as the fixed behavior reference for the tracked full differential harness. The same declarative corpus is sent independently to this process and to a validation-only Go runner; the Go product package still has no Node runtime path.
+Phase 4A uses this oracle as the fixed behavior reference for the tracked full differential harness. Phase 4B adds a separate benchmark runner which directly calls the same fixed CJS artifact with declarative successful workloads. The Go product package still has no Node runtime path.
 
 ## Fixed upstream snapshot
 
@@ -40,6 +40,8 @@ Supported operations cover the complete fixed runtime export surface and validat
 Resolvers are declarative path-to-action maps. They can return an encoded value, return `undefined`, or raise a named error. Asynchronous operations convert the same actions to Promise fulfillment or rejection. Request-provided JavaScript is never evaluated.
 
 The fixed CommonJS bundle is loaded fresh for each request. Resolver state and upstream internal caches therefore do not leak across NDJSON requests.
+
+`oracle/node/benchmark.mjs` is a separate machine-readable measurement entry point. It loads the fixed bundle once outside timing, validates the shared workload, separates setup and calibration from measured samples, uses `process.hrtime.bigint()`, and has no npm dependency beyond the already fixed upstream build.
 
 ## Prepare, run, and verify
 
@@ -88,6 +90,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/verify-node-orac
 - Phase 3G targeted renderFnAsync measurement: PASS; 32 declarative UTF-8 NDJSON requests and 17 fixed delay/event observations
 - Phase 3H targeted compiled renderFnAsync measurement: PASS; 38 declarative UTF-8 NDJSON requests and 16 fixed delay/event/reuse observations
 - Phase 4A differential validation: PASS; 218 cases, 202 exact semantic matches, 13 approved differences, 3 reasoned skips, and 0 failures; two full runs produced the same deterministic result hash
+- Phase 4B benchmark baseline: 26 successful workloads, correctness-gated before timing, with Node/Go order reversed across two fresh-process rounds
 
 The unit command was run in the temporary fixed-commit clone, not in `tests/original`, because the original specs depend on their upstream source-relative layout. This preserved the committed test originals while exercising the unmodified upstream command.
 

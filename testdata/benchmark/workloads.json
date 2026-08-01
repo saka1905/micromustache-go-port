@@ -1,0 +1,1229 @@
+{
+  "schemaVersion": 1,
+  "workloads": [
+    {
+      "id": "tokenize-small-plain",
+      "api": "tokenize",
+      "category": "tokenization",
+      "size": "small",
+      "template": "hello world",
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 11,
+        "templateCharacters": 11,
+        "interpolations": 0,
+        "pathCount": 0,
+        "dataNodes": 0
+      }
+    },
+    {
+      "id": "tokenize-small-few",
+      "api": "tokenize",
+      "category": "tokenization",
+      "size": "small",
+      "template": "Hello {{user.name}} from {{city}}!",
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 34,
+        "templateCharacters": 34,
+        "interpolations": 2,
+        "pathCount": 2,
+        "dataNodes": 0
+      }
+    },
+    {
+      "id": "tokenize-medium-mixed",
+      "api": "tokenize",
+      "category": "tokenization",
+      "size": "medium",
+      "template": "{{name}}|{{city}}|{{user.name}}|{{user.profile.address.city}}|{{items[0].name}}|{{items[1].name}}|{{items[2][\"name\"]}}|{{items[3].name}}|{{count}}|{{[\"a.b\"]}}|{{user.name}}|{{city}}",
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 0
+      }
+    },
+    {
+      "id": "tokenize-large-repeated",
+      "api": "tokenize",
+      "category": "tokenization",
+      "size": "large",
+      "template": "{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}",
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 895,
+        "templateCharacters": 895,
+        "interpolations": 64,
+        "pathCount": 64,
+        "dataNodes": 0
+      }
+    },
+    {
+      "id": "get-small-shallow",
+      "api": "get",
+      "category": "path-lookup",
+      "size": "small",
+      "path": "name",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "get-medium-deep",
+      "api": "get",
+      "category": "path-lookup",
+      "size": "medium",
+      "path": "user.profile.address.city",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "get-medium-bracket",
+      "api": "get",
+      "category": "path-lookup",
+      "size": "medium",
+      "path": "user[\"profile\"].address[\"city\"]",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "get-medium-array-index",
+      "api": "get",
+      "category": "path-lookup",
+      "size": "medium",
+      "path": "items[3].name",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "getref-medium-deep",
+      "api": "getRef",
+      "category": "path-lookup",
+      "size": "medium",
+      "ref": [
+        "user",
+        "profile",
+        "address",
+        "city"
+      ],
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "excluded",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "getref-medium-array",
+      "api": "getRef",
+      "category": "path-lookup",
+      "size": "medium",
+      "ref": [
+        "items",
+        "3",
+        "name"
+      ],
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "excluded",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "render-small-shallow",
+      "api": "render",
+      "category": "end-to-end-render",
+      "size": "small",
+      "template": "Hello {{name}}!",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 15,
+        "templateCharacters": 15,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "render-medium-nested",
+      "api": "render",
+      "category": "end-to-end-render",
+      "size": "medium",
+      "template": "{{name}}|{{city}}|{{user.name}}|{{user.profile.address.city}}|{{items[0].name}}|{{items[1].name}}|{{items[2][\"name\"]}}|{{items[3].name}}|{{count}}|{{[\"a.b\"]}}|{{user.name}}|{{city}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "render-large-repeated",
+      "api": "render",
+      "category": "end-to-end-render",
+      "size": "large",
+      "template": "{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 895,
+        "templateCharacters": 895,
+        "interpolations": 64,
+        "pathCount": 64,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "compile-small",
+      "api": "compile",
+      "category": "compilation",
+      "size": "small",
+      "template": "Hello {{name}}!",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 15,
+        "templateCharacters": 15,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "compile-large",
+      "api": "compile",
+      "category": "compilation",
+      "size": "large",
+      "template": "{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 895,
+        "templateCharacters": 895,
+        "interpolations": 64,
+        "pathCount": 64,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "renderer-construct-medium",
+      "api": "renderer.construct",
+      "category": "construction",
+      "size": "medium",
+      "template": "{{name}}|{{city}}|{{user.name}}|{{user.profile.address.city}}|{{items[0].name}}|{{items[1].name}}|{{items[2][\"name\"]}}|{{items[3].name}}|{{count}}|{{[\"a.b\"]}}|{{user.name}}|{{city}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "renderer-render-small",
+      "api": "renderer.render",
+      "category": "compiled-reuse",
+      "size": "small",
+      "template": "Hello {{name}}!",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "excluded",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 15,
+        "templateCharacters": 15,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "renderer-render-medium-data-rotation",
+      "api": "renderer.render",
+      "category": "compiled-reuse",
+      "size": "medium",
+      "template": "{{name}}|{{city}}|{{user.name}}|{{user.profile.address.city}}|{{items[0].name}}|{{items[1].name}}|{{items[2][\"name\"]}}|{{items[3].name}}|{{count}}|{{[\"a.b\"]}}|{{user.name}}|{{city}}",
+      "dataVariants": [
+        {
+          "a.b": "quoted",
+          "city": "London",
+          "count": 42,
+          "items": [
+            {
+              "name": "zero"
+            },
+            {
+              "name": "one"
+            },
+            {
+              "name": "two"
+            },
+            {
+              "name": "three"
+            }
+          ],
+          "name": "Ada",
+          "user": {
+            "name": "Ada",
+            "profile": {
+              "address": {
+                "city": "London"
+              }
+            }
+          }
+        },
+        {
+          "a.b": "quoted",
+          "city": "New York",
+          "count": 7,
+          "items": [
+            {
+              "name": "zero"
+            },
+            {
+              "name": "one"
+            },
+            {
+              "name": "two"
+            },
+            {
+              "name": "three"
+            }
+          ],
+          "name": "Grace",
+          "user": {
+            "name": "Grace",
+            "profile": {
+              "address": {
+                "city": "New York"
+              }
+            }
+          }
+        }
+      ],
+      "options": {},
+      "timedSetup": "excluded",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "renderer-render-large",
+      "api": "renderer.render",
+      "category": "compiled-reuse",
+      "size": "large",
+      "template": "{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}|{{user.name}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "options": {},
+      "timedSetup": "excluded",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 0
+      },
+      "metrics": {
+        "templateBytes": 895,
+        "templateCharacters": 895,
+        "interpolations": 64,
+        "pathCount": 64,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "renderfn-small-single",
+      "api": "renderFn",
+      "category": "sync-resolver",
+      "size": "small",
+      "template": "{{name}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "resolver": {
+        "name": "value:name"
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 1
+      },
+      "metrics": {
+        "templateBytes": 8,
+        "templateCharacters": 8,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "renderfn-medium-repeated",
+      "api": "renderFn",
+      "category": "sync-resolver",
+      "size": "medium",
+      "template": "{{name}}|{{city}}|{{user.name}}|{{user.profile.address.city}}|{{items[0].name}}|{{items[1].name}}|{{items[2][\"name\"]}}|{{items[3].name}}|{{count}}|{{[\"a.b\"]}}|{{user.name}}|{{city}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "resolver": {
+        "[\"a.b\"]": "value:[\"a.b\"]",
+        "city": "value:city",
+        "count": "value:count",
+        "items[0].name": "value:items[0].name",
+        "items[1].name": "value:items[1].name",
+        "items[2][\"name\"]": "value:items[2][\"name\"]",
+        "items[3].name": "value:items[3].name",
+        "name": "value:name",
+        "user.name": "value:user.name",
+        "user.profile.address.city": "value:user.profile.address.city"
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 12
+      },
+      "metrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "renderer-renderfn-medium",
+      "api": "renderer.renderFn",
+      "category": "sync-resolver",
+      "size": "medium",
+      "template": "{{name}}|{{city}}|{{user.name}}|{{user.profile.address.city}}|{{items[0].name}}|{{items[1].name}}|{{items[2][\"name\"]}}|{{items[3].name}}|{{count}}|{{[\"a.b\"]}}|{{user.name}}|{{city}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "resolver": {
+        "[\"a.b\"]": "value:[\"a.b\"]",
+        "city": "value:city",
+        "count": "value:count",
+        "items[0].name": "value:items[0].name",
+        "items[1].name": "value:items[1].name",
+        "items[2][\"name\"]": "value:items[2][\"name\"]",
+        "items[3].name": "value:items[3].name",
+        "name": "value:name",
+        "user.name": "value:user.name",
+        "user.profile.address.city": "value:user.profile.address.city"
+      },
+      "options": {},
+      "timedSetup": "excluded",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 12
+      },
+      "metrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "renderfnasync-small-single",
+      "api": "renderFnAsync",
+      "category": "async-resolver",
+      "size": "small",
+      "template": "{{name}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "resolver": {
+        "name": "value:name"
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 1
+      },
+      "metrics": {
+        "templateBytes": 8,
+        "templateCharacters": 8,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "renderfnasync-medium-multiple",
+      "api": "renderFnAsync",
+      "category": "async-resolver",
+      "size": "medium",
+      "template": "{{name}}|{{city}}|{{user.name}}|{{user.profile.address.city}}|{{items[0].name}}|{{items[1].name}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "resolver": {
+        "city": "value:city",
+        "items[0].name": "value:items[0].name",
+        "items[1].name": "value:items[1].name",
+        "name": "value:name",
+        "user.name": "value:user.name",
+        "user.profile.address.city": "value:user.profile.address.city"
+      },
+      "options": {},
+      "timedSetup": "included",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 6
+      },
+      "metrics": {
+        "templateBytes": 97,
+        "templateCharacters": 97,
+        "interpolations": 6,
+        "pathCount": 6,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "renderer-renderfnasync-small",
+      "api": "renderer.renderFnAsync",
+      "category": "async-resolver",
+      "size": "small",
+      "template": "{{name}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "resolver": {
+        "name": "value:name"
+      },
+      "options": {},
+      "timedSetup": "excluded",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 1
+      },
+      "metrics": {
+        "templateBytes": 8,
+        "templateCharacters": 8,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      }
+    },
+    {
+      "id": "renderer-renderfnasync-medium",
+      "api": "renderer.renderFnAsync",
+      "category": "async-resolver",
+      "size": "medium",
+      "template": "{{name}}|{{city}}|{{user.name}}|{{user.profile.address.city}}|{{items[0].name}}|{{items[1].name}}",
+      "data": {
+        "a.b": "quoted",
+        "city": "London",
+        "count": 42,
+        "items": [
+          {
+            "name": "zero"
+          },
+          {
+            "name": "one"
+          },
+          {
+            "name": "two"
+          },
+          {
+            "name": "three"
+          }
+        ],
+        "name": "Ada",
+        "user": {
+          "name": "Ada",
+          "profile": {
+            "address": {
+              "city": "London"
+            }
+          }
+        }
+      },
+      "resolver": {
+        "city": "value:city",
+        "items[0].name": "value:items[0].name",
+        "items[1].name": "value:items[1].name",
+        "name": "value:name",
+        "user.name": "value:user.name",
+        "user.profile.address.city": "value:user.profile.address.city"
+      },
+      "options": {},
+      "timedSetup": "excluded",
+      "expected": {
+        "mode": "success",
+        "resolverCalls": 6
+      },
+      "metrics": {
+        "templateBytes": 97,
+        "templateCharacters": 97,
+        "interpolations": 6,
+        "pathCount": 6,
+        "dataNodes": 19
+      }
+    }
+  ]
+}

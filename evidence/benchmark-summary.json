@@ -1,0 +1,7080 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-08-01T07:39:28Z",
+  "generatedAtJst": "2026-08-01T16:39:28+09:00",
+  "repositoryCommit": "9f843a228ca73b07581fc501da39a1ebc22d4ce4",
+  "repositoryDirty": true,
+  "upstreamCommit": "da3420db27b7a2fdfbb768811a1280b34952dc95",
+  "upstreamPackageVersion": "8.0.3",
+  "workloadPath": "testdata/benchmark/workloads.json",
+  "workloadSha256": "8acaa9cb2d24a65abcf546b3c6e1c99403ea35b6542aa8159b0764d42a27b1cb",
+  "config": {
+    "warmup": 3,
+    "samples": 7,
+    "minDurationMs": 200,
+    "maxIterations": 16777216,
+    "processTimeoutSeconds": 300
+  },
+  "environment": {
+    "goVersion": "go1.26.5",
+    "nodeVersion": "v24.15.0",
+    "os": "windows",
+    "architecture": "amd64",
+    "cpuModel": "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+    "logicalProcessors": 12,
+    "installedMemory": "34284421120 bytes",
+    "powerPlan": "電源設定の GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (バランス)"
+  },
+  "runtimeOrder": [
+    "round 1: Node -\u003e Go",
+    "round 2: Go -\u003e Node"
+  ],
+  "commands": [
+    "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/verify-benchmark.ps1",
+    "node oracle/node/benchmark.mjs --workloads testdata/benchmark/workloads.json --mode validate|benchmark",
+    "micromustache-go-benchmark.exe -workloads testdata/benchmark/workloads.json -mode validate|benchmark",
+    "micromustache-benchmark-report.exe -mode validate|report"
+  ],
+  "apiCounts": {
+    "compile": 2,
+    "get": 4,
+    "getRef": 2,
+    "render": 3,
+    "renderFn": 2,
+    "renderFnAsync": 2,
+    "renderer.construct": 1,
+    "renderer.render": 3,
+    "renderer.renderFn": 1,
+    "renderer.renderFnAsync": 2,
+    "tokenize": 4
+  },
+  "correctnessStatus": "PASS",
+  "warnings": [
+    "Performance values are observations from one environment, not universal guarantees.",
+    "Immediate async workloads measure runtime-specific Promise and goroutine overhead, not I/O latency or parallel capacity.",
+    "Process startup, module load, workload parsing, setup, calibration, and report generation are outside measured API samples."
+  ],
+  "workloads": [
+    {
+      "id": "compile-large",
+      "api": "compile",
+      "category": "compilation",
+      "size": "large",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 895,
+        "templateCharacters": 895,
+        "interpolations": 64,
+        "pathCount": 64,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "d5fac4d8e2572fba7bb63031d8af93be74dba7a2d3aa8a6640aeec427a629c74",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 917504,
+        "minNsPerOp": 5831.858825683594,
+        "p25NsPerOp": 5872.808837890625,
+        "medianNsPerOp": 5903.502655029297,
+        "p75NsPerOp": 6145.770263671875,
+        "maxNsPerOp": 6234.272766113281,
+        "opsPerSecond": 169390.96303244354,
+        "iqrRatio": 0.04623719878379481
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 114688,
+        "minNsPerOp": 28584.1552734375,
+        "p25NsPerOp": 33328.91845703125,
+        "medianNsPerOp": 36505.6396484375,
+        "p75NsPerOp": 39580.2734375,
+        "maxNsPerOp": 48792.98095703125,
+        "opsPerSecond": 27393.027752159975,
+        "iqrRatio": 0.17124354046858395
+      },
+      "goMedianOverNodeMedian": 6.183725456164182,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 65536,
+          "elapsedNs": 406117200,
+          "nsPerOp": 6196.856689453125
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 65536,
+          "elapsedNs": 387740200,
+          "nsPerOp": 5916.4459228515625
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 65536,
+          "elapsedNs": 394835000,
+          "nsPerOp": 6024.7039794921875
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 65536,
+          "elapsedNs": 405380600,
+          "nsPerOp": 6185.6170654296875
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 65536,
+          "elapsedNs": 384915300,
+          "nsPerOp": 5873.341369628906
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 65536,
+          "elapsedNs": 387913600,
+          "nsPerOp": 5919.091796875
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 65536,
+          "elapsedNs": 402769200,
+          "nsPerOp": 6145.770263671875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 8192,
+          "elapsedNs": 237576700,
+          "nsPerOp": 29001.06201171875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 8192,
+          "elapsedNs": 399712100,
+          "nsPerOp": 48792.98095703125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 8192,
+          "elapsedNs": 311103400,
+          "nsPerOp": 37976.4892578125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 8192,
+          "elapsedNs": 277510700,
+          "nsPerOp": 33875.81787109375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 8192,
+          "elapsedNs": 295763100,
+          "nsPerOp": 36103.89404296875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 8192,
+          "elapsedNs": 294303800,
+          "nsPerOp": 35925.7568359375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 8192,
+          "elapsedNs": 392572100,
+          "nsPerOp": 47921.39892578125
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 65536,
+          "elapsedNs": 386043700,
+          "nsPerOp": 5890.559387207031
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 65536,
+          "elapsedNs": 408569300,
+          "nsPerOp": 6234.272766113281
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 65536,
+          "elapsedNs": 382614900,
+          "nsPerOp": 5838.240051269531
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 65536,
+          "elapsedNs": 385630100,
+          "nsPerOp": 5884.248352050781
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 65536,
+          "elapsedNs": 382196700,
+          "nsPerOp": 5831.858825683594
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 65536,
+          "elapsedNs": 383335100,
+          "nsPerOp": 5849.229431152344
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 65536,
+          "elapsedNs": 384880400,
+          "nsPerOp": 5872.808837890625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 8192,
+          "elapsedNs": 273030500,
+          "nsPerOp": 33328.91845703125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 8192,
+          "elapsedNs": 324241600,
+          "nsPerOp": 39580.2734375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 8192,
+          "elapsedNs": 234161400,
+          "nsPerOp": 28584.1552734375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 8192,
+          "elapsedNs": 302345300,
+          "nsPerOp": 36907.38525390625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 8192,
+          "elapsedNs": 307276300,
+          "nsPerOp": 37509.31396484375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 8192,
+          "elapsedNs": 360919500,
+          "nsPerOp": 44057.55615234375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 8192,
+          "elapsedNs": 250673700,
+          "nsPerOp": 30599.81689453125
+        }
+      ]
+    },
+    {
+      "id": "compile-small",
+      "api": "compile",
+      "category": "compilation",
+      "size": "small",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 15,
+        "templateCharacters": 15,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "b663911cc0fd82e71e1317646b95625e1a457a0077ec95220dd771eb4a01d97f",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 14680064,
+        "minNsPerOp": 203.89747619628906,
+        "p25NsPerOp": 206.31446838378906,
+        "medianNsPerOp": 210.90922355651855,
+        "p75NsPerOp": 213.59176635742188,
+        "maxNsPerOp": 233.74156951904297,
+        "opsPerSecond": 4741376.328342626,
+        "iqrRatio": 0.034504408346478374
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 7340032,
+        "minNsPerOp": 423.2582092285156,
+        "p25NsPerOp": 435.6975555419922,
+        "medianNsPerOp": 440.5620574951172,
+        "p75NsPerOp": 442.93479919433594,
+        "maxNsPerOp": 630.3218841552734,
+        "opsPerSecond": 2269827.7869992997,
+        "iqrRatio": 0.01642729674337414
+      },
+      "goMedianOverNodeMedian": 2.0888705105732717,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 221886400,
+          "nsPerOp": 211.60736083984375
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 216618700,
+          "nsPerOp": 206.58369064331055
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 239257100,
+          "nsPerOp": 228.1733512878418
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 223967200,
+          "nsPerOp": 213.59176635742188
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 221361700,
+          "nsPerOp": 211.1069679260254
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 245095800,
+          "nsPerOp": 233.74156951904297
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 220947000,
+          "nsPerOp": 210.71147918701172
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 230902600,
+          "nsPerOp": 440.41175842285156
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 231112400,
+          "nsPerOp": 440.8119201660156
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 232225400,
+          "nsPerOp": 442.93479919433594
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 223147800,
+          "nsPerOp": 425.6206512451172
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 228431000,
+          "nsPerOp": 435.6975555419922
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 221909200,
+          "nsPerOp": 423.2582092285156
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 232770000,
+          "nsPerOp": 443.9735412597656
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 235306000,
+          "nsPerOp": 224.40528869628906
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 214781800,
+          "nsPerOp": 204.8318862915039
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 219551300,
+          "nsPerOp": 209.38043594360352
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 214493200,
+          "nsPerOp": 204.55665588378906
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 222543600,
+          "nsPerOp": 212.23411560058594
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 213802000,
+          "nsPerOp": 203.89747619628906
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 216336400,
+          "nsPerOp": 206.31446838378906
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 231784000,
+          "nsPerOp": 442.0928955078125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 223009200,
+          "nsPerOp": 425.3562927246094
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 232898900,
+          "nsPerOp": 444.21939849853516
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 231060200,
+          "nsPerOp": 440.7123565673828
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 229416700,
+          "nsPerOp": 437.57762908935547
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 230176800,
+          "nsPerOp": 439.02740478515625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 330470200,
+          "nsPerOp": 630.3218841552734
+        }
+      ]
+    },
+    {
+      "id": "get-medium-array-index",
+      "api": "get",
+      "category": "path-lookup",
+      "size": "medium",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "097a4dfb7f430ff3e44aa2399549a038c1f29465540d1e18701e8b5cd3fd2ccb",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 3670016,
+        "minNsPerOp": 843.8625335693359,
+        "p25NsPerOp": 845.2644348144531,
+        "medianNsPerOp": 851.6119003295898,
+        "p75NsPerOp": 861.0378265380859,
+        "maxNsPerOp": 948.0598449707031,
+        "opsPerSecond": 1174243.8070827583,
+        "iqrRatio": 0.018521807548166264
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 7340032,
+        "minNsPerOp": 452.87322998046875,
+        "p25NsPerOp": 469.8518753051758,
+        "medianNsPerOp": 558.1038475036621,
+        "p75NsPerOp": 633.9723587036133,
+        "maxNsPerOp": 953.7477493286133,
+        "opsPerSecond": 1791781.232960302,
+        "iqrRatio": 0.2940680020976931
+      },
+      "goMedianOverNodeMedian": 0.6553499866402354,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 233780400,
+          "nsPerOp": 891.8014526367188
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 248528200,
+          "nsPerOp": 948.0598449707031
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 225715900,
+          "nsPerOp": 861.0378265380859
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 233716100,
+          "nsPerOp": 891.5561676025391
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 223869800,
+          "nsPerOp": 853.9955139160156
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 223074700,
+          "nsPerOp": 850.9624481201172
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 223415200,
+          "nsPerOp": 852.2613525390625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 246447300,
+          "nsPerOp": 470.06092071533203
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 273519300,
+          "nsPerOp": 521.696662902832
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 246337700,
+          "nsPerOp": 469.8518753051758
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 241704200,
+          "nsPerOp": 461.01417541503906
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 319996200,
+          "nsPerOp": 610.3443145751953
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 500038500,
+          "nsPerOp": 953.7477493286133
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 315675000,
+          "nsPerOp": 602.1022796630859
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 224849500,
+          "nsPerOp": 857.7327728271484
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 221229000,
+          "nsPerOp": 843.9216613769531
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 221743300,
+          "nsPerOp": 845.8835601806641
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 221213500,
+          "nsPerOp": 843.8625335693359
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 221350900,
+          "nsPerOp": 844.3866729736328
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 221581000,
+          "nsPerOp": 845.2644348144531
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 221666400,
+          "nsPerOp": 845.5902099609375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 332384100,
+          "nsPerOp": 633.9723587036133
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 292839300,
+          "nsPerOp": 558.5466384887695
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 448438500,
+          "nsPerOp": 855.3285598754883
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 418232000,
+          "nsPerOp": 797.7142333984375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 244279400,
+          "nsPerOp": 465.9259796142578
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 292375000,
+          "nsPerOp": 557.6610565185547
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 237436000,
+          "nsPerOp": 452.87322998046875
+        }
+      ]
+    },
+    {
+      "id": "get-medium-bracket",
+      "api": "get",
+      "category": "path-lookup",
+      "size": "medium",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "c70d2abc8a53f0a06d2ab363f2e3a6f32e6180a3a4a99f3db81374740ed4ec58",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 3670016,
+        "minNsPerOp": 1227.6756286621094,
+        "p25NsPerOp": 1234.1934204101562,
+        "medianNsPerOp": 1240.0997161865234,
+        "p75NsPerOp": 1273.043441772461,
+        "maxNsPerOp": 1303.9493560791016,
+        "opsPerSecond": 806386.7662796803,
+        "iqrRatio": 0.031328143096245376
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 7340032,
+        "minNsPerOp": 540.3465270996094,
+        "p25NsPerOp": 623.0897903442383,
+        "medianNsPerOp": 737.5024795532227,
+        "p75NsPerOp": 967.3385620117188,
+        "maxNsPerOp": 1245.723533630371,
+        "opsPerSecond": 1355927.6446172735,
+        "iqrRatio": 0.46677642612947634
+      },
+      "goMedianOverNodeMedian": 0.5947122396101693,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 341822500,
+          "nsPerOp": 1303.9493560791016
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 339030800,
+          "nsPerOp": 1293.2998657226562
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 327796500,
+          "nsPerOp": 1250.4444122314453
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 335545300,
+          "nsPerOp": 1280.0037384033203
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 324943800,
+          "nsPerOp": 1239.5622253417969
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 325553600,
+          "nsPerOp": 1241.888427734375
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 333720700,
+          "nsPerOp": 1273.043441772461
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 569770600,
+          "nsPerOp": 1086.7511749267578
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 283297200,
+          "nsPerOp": 540.3465270996094
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 285023000,
+          "nsPerOp": 543.6382293701172
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 289057000,
+          "nsPerOp": 551.3324737548828
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 328360200,
+          "nsPerOp": 626.2973785400391
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 401348300,
+          "nsPerOp": 765.5111312866211
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 326678500,
+          "nsPerOp": 623.0897903442383
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 323468400,
+          "nsPerOp": 1233.9340209960938
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 323999800,
+          "nsPerOp": 1235.9611511230469
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 324125200,
+          "nsPerOp": 1236.4395141601562
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 321827800,
+          "nsPerOp": 1227.6756286621094
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 323235300,
+          "nsPerOp": 1233.0448150634766
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 323536400,
+          "nsPerOp": 1234.1934204101562
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 325225600,
+          "nsPerOp": 1240.63720703125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 328392700,
+          "nsPerOp": 626.3593673706055
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 400749400,
+          "nsPerOp": 764.3688201904297
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 507164000,
+          "nsPerOp": 967.3385620117188
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 372578000,
+          "nsPerOp": 710.6361389160156
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 443284500,
+          "nsPerOp": 845.4980850219727
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 560071200,
+          "nsPerOp": 1068.2510375976562
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 653117900,
+          "nsPerOp": 1245.723533630371
+        }
+      ]
+    },
+    {
+      "id": "get-medium-deep",
+      "api": "get",
+      "category": "path-lookup",
+      "size": "medium",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "c70d2abc8a53f0a06d2ab363f2e3a6f32e6180a3a4a99f3db81374740ed4ec58",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 3670016,
+        "minNsPerOp": 1122.4201202392578,
+        "p25NsPerOp": 1138.3346557617188,
+        "medianNsPerOp": 1187.1681213378906,
+        "p75NsPerOp": 1242.850112915039,
+        "maxNsPerOp": 1277.8533935546875,
+        "opsPerSecond": 842340.6778081611,
+        "iqrRatio": 0.08803762101995764
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 7340032,
+        "minNsPerOp": 480.56602478027344,
+        "p25NsPerOp": 509.85546112060547,
+        "medianNsPerOp": 541.2397384643555,
+        "p75NsPerOp": 607.1733474731445,
+        "maxNsPerOp": 1025.8501052856445,
+        "opsPerSecond": 1847610.0864974777,
+        "iqrRatio": 0.1798055084215664
+      },
+      "goMedianOverNodeMedian": 0.45590824815477704,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 306882100,
+          "nsPerOp": 1170.6623077392578
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 325805700,
+          "nsPerOp": 1242.850112915039
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 328987500,
+          "nsPerOp": 1254.9877166748047
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 317948200,
+          "nsPerOp": 1212.8761291503906
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 303605100,
+          "nsPerOp": 1158.1615447998047
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 313561500,
+          "nsPerOp": 1196.1421966552734
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 310147300,
+          "nsPerOp": 1183.1180572509766
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 337929700,
+          "nsPerOp": 644.5497512817383
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 537840900,
+          "nsPerOp": 1025.8501052856445
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 271090700,
+          "nsPerOp": 517.0644760131836
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 251955000,
+          "nsPerOp": 480.56602478027344
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 318333700,
+          "nsPerOp": 607.1733474731445
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 277911700,
+          "nsPerOp": 530.0745010375977
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 259590100,
+          "nsPerOp": 495.12882232666016
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 296110400,
+          "nsPerOp": 1129.571533203125
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 294235700,
+          "nsPerOp": 1122.4201202392578
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 329327400,
+          "nsPerOp": 1256.2843322753906
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 312270700,
+          "nsPerOp": 1191.2181854248047
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 296462900,
+          "nsPerOp": 1130.9162139892578
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 298407600,
+          "nsPerOp": 1138.3346557617188
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 334981600,
+          "nsPerOp": 1277.8533935546875
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 267311100,
+          "nsPerOp": 509.85546112060547
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 284356200,
+          "nsPerOp": 542.3664093017578
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 374760600,
+          "nsPerOp": 714.7991180419922
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 316805700,
+          "nsPerOp": 604.258918762207
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 287353600,
+          "nsPerOp": 548.08349609375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 283174800,
+          "nsPerOp": 540.1130676269531
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 262017900,
+          "nsPerOp": 499.75948333740234
+        }
+      ]
+    },
+    {
+      "id": "get-small-shallow",
+      "api": "get",
+      "category": "path-lookup",
+      "size": "small",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "a39afeed7d3319213be7a235840b3c6d3f09f2810b9c91779f34572b6b36832a",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 14680064,
+        "minNsPerOp": 310.3322982788086,
+        "p25NsPerOp": 311.0260009765625,
+        "medianNsPerOp": 316.4076805114746,
+        "p75NsPerOp": 322.2963333129883,
+        "maxNsPerOp": 328.2468795776367,
+        "opsPerSecond": 3160479.5382447573,
+        "iqrRatio": 0.035619654738491914
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 14680064,
+        "minNsPerOp": 283.57648849487305,
+        "p25NsPerOp": 296.8313217163086,
+        "medianNsPerOp": 319.65436935424805,
+        "p75NsPerOp": 418.172550201416,
+        "maxNsPerOp": 579.1519165039062,
+        "opsPerSecond": 3128378.948863289,
+        "iqrRatio": 0.3796013448220205
+      },
+      "goMedianOverNodeMedian": 1.010261093654633,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 335500400,
+          "nsPerOp": 319.95811462402344
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 329314300,
+          "nsPerOp": 314.05858993530273
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 336120900,
+          "nsPerOp": 320.5498695373535
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 334240700,
+          "nsPerOp": 318.7567710876465
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 337952200,
+          "nsPerOp": 322.2963333129883
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 343284200,
+          "nsPerOp": 327.3813247680664
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 342151500,
+          "nsPerOp": 326.30109786987305
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 297351500,
+          "nsPerOp": 283.57648849487305
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 317442200,
+          "nsPerOp": 302.7364730834961
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 305644200,
+          "nsPerOp": 291.48502349853516
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 352921600,
+          "nsPerOp": 336.572265625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 438485700,
+          "nsPerOp": 418.172550201416
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 607284800,
+          "nsPerOp": 579.1519165039062
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 527612200,
+          "nsPerOp": 503.17020416259766
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 325407000,
+          "nsPerOp": 310.3322982788086
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 326897100,
+          "nsPerOp": 311.75336837768555
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 326134400,
+          "nsPerOp": 311.0260009765625
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 325475600,
+          "nsPerOp": 310.39772033691406
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 326011400,
+          "nsPerOp": 310.90869903564453
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 326177700,
+          "nsPerOp": 311.0672950744629
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 344191800,
+          "nsPerOp": 328.2468795776367
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 311494200,
+          "nsPerOp": 297.0640182495117
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 307027700,
+          "nsPerOp": 292.8044319152832
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 311250200,
+          "nsPerOp": 296.8313217163086
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 576386800,
+          "nsPerOp": 549.6852874755859
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 311626600,
+          "nsPerOp": 297.1902847290039
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 359034400,
+          "nsPerOp": 342.4018859863281
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 373390600,
+          "nsPerOp": 356.09302520751953
+        }
+      ]
+    },
+    {
+      "id": "getref-medium-array",
+      "api": "getRef",
+      "category": "path-lookup",
+      "size": "medium",
+      "timedSetup": "excluded",
+      "workloadMetrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "097a4dfb7f430ff3e44aa2399549a038c1f29465540d1e18701e8b5cd3fd2ccb",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 58720256,
+        "minNsPerOp": 62.81158924102783,
+        "p25NsPerOp": 63.05434703826904,
+        "medianNsPerOp": 66.1095380783081,
+        "p75NsPerOp": 67.58627891540527,
+        "maxNsPerOp": 75.71578025817871,
+        "opsPerSecond": 15126410.334549297,
+        "iqrRatio": 0.06855186118178687
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 14680064,
+        "minNsPerOp": 220.04175186157227,
+        "p25NsPerOp": 226.65576934814453,
+        "medianNsPerOp": 269.38939094543457,
+        "p75NsPerOp": 306.6091537475586,
+        "maxNsPerOp": 408.9831352233887,
+        "opsPerSecond": 3712098.670591494,
+        "iqrRatio": 0.29679485193835564
+      },
+      "goMedianOverNodeMedian": 4.074894467214962,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 4194304,
+          "elapsedNs": 277993400,
+          "nsPerOp": 66.2787914276123
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 4194304,
+          "elapsedNs": 279514500,
+          "nsPerOp": 66.64144992828369
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 4194304,
+          "elapsedNs": 289397500,
+          "nsPerOp": 68.99774074554443
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 4194304,
+          "elapsedNs": 317575000,
+          "nsPerOp": 75.71578025817871
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 4194304,
+          "elapsedNs": 281173500,
+          "nsPerOp": 67.03698635101318
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 4194304,
+          "elapsedNs": 276573600,
+          "nsPerOp": 65.9402847290039
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 4194304,
+          "elapsedNs": 284935900,
+          "nsPerOp": 67.9340124130249
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 368295200,
+          "nsPerOp": 351.2336730957031
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 321503000,
+          "nsPerOp": 306.6091537475586
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 319758400,
+          "nsPerOp": 304.94537353515625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 320065000,
+          "nsPerOp": 305.2377700805664
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 380709400,
+          "nsPerOp": 363.0727767944336
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 234440300,
+          "nsPerOp": 223.57969284057617
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 241174100,
+          "nsPerOp": 230.00154495239258
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 4194304,
+          "elapsedNs": 283477400,
+          "nsPerOp": 67.58627891540527
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 4194304,
+          "elapsedNs": 270310400,
+          "nsPerOp": 64.447021484375
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 4194304,
+          "elapsedNs": 264469100,
+          "nsPerOp": 63.05434703826904
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 4194304,
+          "elapsedNs": 263679000,
+          "nsPerOp": 62.8659725189209
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 4194304,
+          "elapsedNs": 263665100,
+          "nsPerOp": 62.86265850067139
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 4194304,
+          "elapsedNs": 264682200,
+          "nsPerOp": 63.105154037475586
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 4194304,
+          "elapsedNs": 263450900,
+          "nsPerOp": 62.81158924102783
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 231828100,
+          "nsPerOp": 221.08850479125977
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 253527500,
+          "nsPerOp": 241.78266525268555
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 428849900,
+          "nsPerOp": 408.9831352233887
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 311423000,
+          "nsPerOp": 296.9961166381836
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 241590500,
+          "nsPerOp": 230.39865493774414
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 230730500,
+          "nsPerOp": 220.04175186157227
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 237665800,
+          "nsPerOp": 226.65576934814453
+        }
+      ]
+    },
+    {
+      "id": "getref-medium-deep",
+      "api": "getRef",
+      "category": "path-lookup",
+      "size": "medium",
+      "timedSetup": "excluded",
+      "workloadMetrics": {
+        "templateBytes": 0,
+        "templateCharacters": 0,
+        "interpolations": 0,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "c70d2abc8a53f0a06d2ab363f2e3a6f32e6180a3a4a99f3db81374740ed4ec58",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 58720256,
+        "minNsPerOp": 78.2447338104248,
+        "p25NsPerOp": 80.22048473358154,
+        "medianNsPerOp": 80.74326515197754,
+        "p75NsPerOp": 84.73420143127441,
+        "maxNsPerOp": 88.83936405181885,
+        "opsPerSecond": 12384933.87798683,
+        "iqrRatio": 0.055902082844891274
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 14680064,
+        "minNsPerOp": 237.75691986083984,
+        "p25NsPerOp": 241.50915145874023,
+        "medianNsPerOp": 263.0141258239746,
+        "p75NsPerOp": 328.73687744140625,
+        "maxNsPerOp": 434.89646911621094,
+        "opsPerSecond": 3802077.157898592,
+        "iqrRatio": 0.33164654449413195
+      },
+      "goMedianOverNodeMedian": 3.257412557306434,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 4194304,
+          "elapsedNs": 366679800,
+          "nsPerOp": 87.42327690124512
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 4194304,
+          "elapsedNs": 340253300,
+          "nsPerOp": 81.12270832061768
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 4194304,
+          "elapsedNs": 355401000,
+          "nsPerOp": 84.73420143127441
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 4194304,
+          "elapsedNs": 336977300,
+          "nsPerOp": 80.34164905548096
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 4194304,
+          "elapsedNs": 337070300,
+          "nsPerOp": 80.3638219833374
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 4194304,
+          "elapsedNs": 351353300,
+          "nsPerOp": 83.76915454864502
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 4194304,
+          "elapsedNs": 347436400,
+          "nsPerOp": 82.83529281616211
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 287002200,
+          "nsPerOp": 273.70662689208984
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 258830700,
+          "nsPerOp": 246.84019088745117
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 456022000,
+          "nsPerOp": 434.89646911621094
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 253240700,
+          "nsPerOp": 241.50915145874023
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 249306200,
+          "nsPerOp": 237.75691986083984
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 265260400,
+          "nsPerOp": 252.97203063964844
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 252694900,
+          "nsPerOp": 240.9886360168457
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 4194304,
+          "elapsedNs": 336611400,
+          "nsPerOp": 80.2544116973877
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 4194304,
+          "elapsedNs": 336469100,
+          "nsPerOp": 80.22048473358154
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 4194304,
+          "elapsedNs": 360761100,
+          "nsPerOp": 86.0121488571167
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 4194304,
+          "elapsedNs": 329597800,
+          "nsPerOp": 78.58223915100098
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 4194304,
+          "elapsedNs": 330689200,
+          "nsPerOp": 78.84244918823242
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 4194304,
+          "elapsedNs": 372619300,
+          "nsPerOp": 88.83936405181885
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 4194304,
+          "elapsedNs": 328182200,
+          "nsPerOp": 78.2447338104248
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 390088400,
+          "nsPerOp": 372.0172882080078
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 344705600,
+          "nsPerOp": 328.73687744140625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 253118200,
+          "nsPerOp": 241.39232635498047
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 256675700,
+          "nsPerOp": 244.7850227355957
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 328035800,
+          "nsPerOp": 312.83931732177734
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 439849100,
+          "nsPerOp": 419.4727897644043
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 286320200,
+          "nsPerOp": 273.0562210083008
+        }
+      ]
+    },
+    {
+      "id": "render-large-repeated",
+      "api": "render",
+      "category": "end-to-end-render",
+      "size": "large",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 895,
+        "templateCharacters": 895,
+        "interpolations": 64,
+        "pathCount": 64,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "d5fac4d8e2572fba7bb63031d8af93be74dba7a2d3aa8a6640aeec427a629c74",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 229376,
+        "minNsPerOp": 12971.03271484375,
+        "p25NsPerOp": 13011.4013671875,
+        "medianNsPerOp": 13266.2841796875,
+        "p75NsPerOp": 13718.1640625,
+        "maxNsPerOp": 14288.775634765625,
+        "opsPerSecond": 75379.05765136081,
+        "iqrRatio": 0.053275105955792094
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 114688,
+        "minNsPerOp": 43453.80859375,
+        "p25NsPerOp": 45213.7939453125,
+        "medianNsPerOp": 51643.951416015625,
+        "p75NsPerOp": 60244.93408203125,
+        "maxNsPerOp": 71573.2421875,
+        "opsPerSecond": 19363.3518075436,
+        "iqrRatio": 0.2910532545357742
+      },
+      "goMedianOverNodeMedian": 3.892872391131919,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 16384,
+          "elapsedNs": 224742400,
+          "nsPerOp": 13717.1875
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 16384,
+          "elapsedNs": 234107300,
+          "nsPerOp": 14288.775634765625
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 16384,
+          "elapsedNs": 228060900,
+          "nsPerOp": 13919.732666015625
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 16384,
+          "elapsedNs": 220620700,
+          "nsPerOp": 13465.618896484375
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 16384,
+          "elapsedNs": 224758400,
+          "nsPerOp": 13718.1640625
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 16384,
+          "elapsedNs": 222089400,
+          "nsPerOp": 13555.26123046875
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 16384,
+          "elapsedNs": 229225900,
+          "nsPerOp": 13990.838623046875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 8192,
+          "elapsedNs": 403290300,
+          "nsPerOp": 49229.77294921875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 8192,
+          "elapsedNs": 493526500,
+          "nsPerOp": 60244.93408203125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 8192,
+          "elapsedNs": 358476800,
+          "nsPerOp": 43759.375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 8192,
+          "elapsedNs": 355973600,
+          "nsPerOp": 43453.80859375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 8192,
+          "elapsedNs": 442844200,
+          "nsPerOp": 54058.1298828125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 8192,
+          "elapsedNs": 567449800,
+          "nsPerOp": 69268.7744140625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 8192,
+          "elapsedNs": 508746300,
+          "nsPerOp": 62102.81982421875
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 16384,
+          "elapsedNs": 212804500,
+          "nsPerOp": 12988.555908203125
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 16384,
+          "elapsedNs": 213877900,
+          "nsPerOp": 13054.071044921875
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 16384,
+          "elapsedNs": 212517400,
+          "nsPerOp": 12971.03271484375
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 16384,
+          "elapsedNs": 213178800,
+          "nsPerOp": 13011.4013671875
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 16384,
+          "elapsedNs": 212944600,
+          "nsPerOp": 12997.10693359375
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 16384,
+          "elapsedNs": 213450900,
+          "nsPerOp": 13028.009033203125
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 16384,
+          "elapsedNs": 214088900,
+          "nsPerOp": 13066.949462890625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 8192,
+          "elapsedNs": 586328000,
+          "nsPerOp": 71573.2421875
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 8192,
+          "elapsedNs": 453835200,
+          "nsPerOp": 55399.8046875
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 8192,
+          "elapsedNs": 378822000,
+          "nsPerOp": 46242.919921875
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 8192,
+          "elapsedNs": 372147000,
+          "nsPerOp": 45428.1005859375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 8192,
+          "elapsedNs": 369648200,
+          "nsPerOp": 45123.0712890625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 8192,
+          "elapsedNs": 370391400,
+          "nsPerOp": 45213.7939453125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 8192,
+          "elapsedNs": 485674300,
+          "nsPerOp": 59286.41357421875
+        }
+      ]
+    },
+    {
+      "id": "render-medium-nested",
+      "api": "render",
+      "category": "end-to-end-render",
+      "size": "medium",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "b2a1ee8a0629a1616e2d1c21ff120916dacc783df574a24a8bc3e51ff827bebf",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 1835008,
+        "minNsPerOp": 2736.4173889160156,
+        "p25NsPerOp": 2756.7092895507812,
+        "medianNsPerOp": 2899.437713623047,
+        "p75NsPerOp": 3000.4150390625,
+        "maxNsPerOp": 3288.0470275878906,
+        "opsPerSecond": 344894.4584329184,
+        "iqrRatio": 0.08405276249483272
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 458752,
+        "minNsPerOp": 6168.804931640625,
+        "p25NsPerOp": 6429.376220703125,
+        "medianNsPerOp": 7851.020812988281,
+        "p75NsPerOp": 9656.9580078125,
+        "maxNsPerOp": 11582.208251953125,
+        "opsPerSecond": 127371.97159707652,
+        "iqrRatio": 0.4111034557149368
+      },
+      "goMedianOverNodeMedian": 2.707773571441164,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 131072,
+          "elapsedNs": 376533200,
+          "nsPerOp": 2872.7203369140625
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 131072,
+          "elapsedNs": 376975400,
+          "nsPerOp": 2876.0940551757812
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 131072,
+          "elapsedNs": 430970900,
+          "nsPerOp": 3288.0470275878906
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 131072,
+          "elapsedNs": 426395300,
+          "nsPerOp": 3253.137969970703
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 131072,
+          "elapsedNs": 399609900,
+          "nsPerOp": 3048.7815856933594
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 131072,
+          "elapsedNs": 393270400,
+          "nsPerOp": 3000.4150390625
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 131072,
+          "elapsedNs": 384533400,
+          "nsPerOp": 2933.7570190429688
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 32768,
+          "elapsedNs": 204957700,
+          "nsPerOp": 6254.8126220703125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 32768,
+          "elapsedNs": 268043700,
+          "nsPerOp": 8180.0445556640625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 32768,
+          "elapsedNs": 215838400,
+          "nsPerOp": 6586.865234375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 32768,
+          "elapsedNs": 327146400,
+          "nsPerOp": 9983.7158203125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 32768,
+          "elapsedNs": 202139400,
+          "nsPerOp": 6168.804931640625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 32768,
+          "elapsedNs": 204112000,
+          "nsPerOp": 6229.00390625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 32768,
+          "elapsedNs": 316439200,
+          "nsPerOp": 9656.9580078125
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 131072,
+          "elapsedNs": 391372300,
+          "nsPerOp": 2985.9336853027344
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 131072,
+          "elapsedNs": 358667700,
+          "nsPerOp": 2736.4173889160156
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 131072,
+          "elapsedNs": 381742200,
+          "nsPerOp": 2912.4618530273438
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 131072,
+          "elapsedNs": 359812800,
+          "nsPerOp": 2745.15380859375
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 131072,
+          "elapsedNs": 360380700,
+          "nsPerOp": 2749.486541748047
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 131072,
+          "elapsedNs": 378328000,
+          "nsPerOp": 2886.41357421875
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 131072,
+          "elapsedNs": 361327400,
+          "nsPerOp": 2756.7092895507812
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 32768,
+          "elapsedNs": 379525800,
+          "nsPerOp": 11582.208251953125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 32768,
+          "elapsedNs": 327830100,
+          "nsPerOp": 10004.580688476562
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 32768,
+          "elapsedNs": 282231900,
+          "nsPerOp": 8613.034057617188
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 32768,
+          "elapsedNs": 248692700,
+          "nsPerOp": 7589.4989013671875
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 32768,
+          "elapsedNs": 254252000,
+          "nsPerOp": 7759.1552734375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 32768,
+          "elapsedNs": 210677800,
+          "nsPerOp": 6429.376220703125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 32768,
+          "elapsedNs": 260272500,
+          "nsPerOp": 7942.8863525390625
+        }
+      ]
+    },
+    {
+      "id": "render-small-shallow",
+      "api": "render",
+      "category": "end-to-end-render",
+      "size": "small",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 15,
+        "templateCharacters": 15,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "b663911cc0fd82e71e1317646b95625e1a457a0077ec95220dd771eb4a01d97f",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 14680064,
+        "minNsPerOp": 377.8759002685547,
+        "p25NsPerOp": 379.14600372314453,
+        "medianNsPerOp": 382.32741355895996,
+        "p75NsPerOp": 399.54137802124023,
+        "maxNsPerOp": 416.69931411743164,
+        "opsPerSecond": 2615559.241989292,
+        "iqrRatio": 0.05334530973921509
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 7340032,
+        "minNsPerOp": 779.2720794677734,
+        "p25NsPerOp": 800.733757019043,
+        "medianNsPerOp": 1015.7222747802734,
+        "p75NsPerOp": 1355.9967041015625,
+        "maxNsPerOp": 1433.5872650146484,
+        "opsPerSecond": 984521.0889131337,
+        "iqrRatio": 0.5466680812947978
+      },
+      "goMedianOverNodeMedian": 2.6566817830959315,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 414628300,
+          "nsPerOp": 395.42036056518555
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 417543100,
+          "nsPerOp": 398.2001304626465
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 418949500,
+          "nsPerOp": 399.54137802124023
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 397676300,
+          "nsPerOp": 379.2536735534668
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 436940900,
+          "nsPerOp": 416.69931411743164
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 420514400,
+          "nsPerOp": 401.0337829589844
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 397563400,
+          "nsPerOp": 379.14600372314453
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 579497300,
+          "nsPerOp": 1105.3033828735352
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 726942900,
+          "nsPerOp": 1386.533546447754
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 546781500,
+          "nsPerOp": 1042.902946472168
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 416879100,
+          "nsPerOp": 795.1337814331055
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 417173000,
+          "nsPerOp": 795.6943511962891
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 408563000,
+          "nsPerOp": 779.2720794677734
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 419815100,
+          "nsPerOp": 800.733757019043
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 402748100,
+          "nsPerOp": 384.090518951416
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 396318800,
+          "nsPerOp": 377.9590606689453
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 399050600,
+          "nsPerOp": 380.5643081665039
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 433661900,
+          "nsPerOp": 413.57221603393555
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 397430000,
+          "nsPerOp": 379.01878356933594
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 398148100,
+          "nsPerOp": 379.70361709594727
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 396231600,
+          "nsPerOp": 377.8759002685547
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 518280500,
+          "nsPerOp": 988.5416030883789
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 710932800,
+          "nsPerOp": 1355.9967041015625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 751612600,
+          "nsPerOp": 1433.5872650146484
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 486560700,
+          "nsPerOp": 928.040885925293
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 725814400,
+          "nsPerOp": 1384.381103515625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 556668200,
+          "nsPerOp": 1061.7603302001953
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 509032300,
+          "nsPerOp": 970.9020614624023
+        }
+      ]
+    },
+    {
+      "id": "renderer-construct-medium",
+      "api": "renderer.construct",
+      "category": "construction",
+      "size": "medium",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "b2a1ee8a0629a1616e2d1c21ff120916dacc783df574a24a8bc3e51ff827bebf",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 117440512,
+        "minNsPerOp": 44.78445053100586,
+        "p25NsPerOp": 45.3094482421875,
+        "medianNsPerOp": 46.85913920402527,
+        "p75NsPerOp": 48.61245155334473,
+        "maxNsPerOp": 51.12862586975098,
+        "opsPerSecond": 21340554.20109165,
+        "iqrRatio": 0.07048792118813599
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 14680064,
+        "minNsPerOp": 338.0613327026367,
+        "p25NsPerOp": 343.33763122558594,
+        "medianNsPerOp": 347.2294807434082,
+        "p75NsPerOp": 376.08022689819336,
+        "maxNsPerOp": 478.2686233520508,
+        "opsPerSecond": 2879939.7961804084,
+        "iqrRatio": 0.09429670430778654
+      },
+      "goMedianOverNodeMedian": 7.410069554021613,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 8388608,
+          "elapsedNs": 380083200,
+          "nsPerOp": 45.3094482421875
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 8388608,
+          "elapsedNs": 397879100,
+          "nsPerOp": 47.43088483810425
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 8388608,
+          "elapsedNs": 377404900,
+          "nsPerOp": 44.99017000198364
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 8388608,
+          "elapsedNs": 401930000,
+          "nsPerOp": 47.91378974914551
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 8388608,
+          "elapsedNs": 383332600,
+          "nsPerOp": 45.69680690765381
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 8388608,
+          "elapsedNs": 399560800,
+          "nsPerOp": 47.6313591003418
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 8388608,
+          "elapsedNs": 428898000,
+          "nsPerOp": 51.12862586975098
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 363572400,
+          "nsPerOp": 346.7296600341797
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 494222500,
+          "nsPerOp": 471.3273048400879
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 492452200,
+          "nsPerOp": 469.6390151977539
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 394348700,
+          "nsPerOp": 376.08022689819336
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 354483000,
+          "nsPerOp": 338.0613327026367
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 367619600,
+          "nsPerOp": 350.58937072753906
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 360015600,
+          "nsPerOp": 343.33763122558594
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 8388608,
+          "elapsedNs": 375679200,
+          "nsPerOp": 44.78445053100586
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 8388608,
+          "elapsedNs": 378907000,
+          "nsPerOp": 45.16923427581787
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 8388608,
+          "elapsedNs": 407790800,
+          "nsPerOp": 48.61245155334473
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 8388608,
+          "elapsedNs": 388286800,
+          "nsPerOp": 46.28739356994629
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 8388608,
+          "elapsedNs": 385844200,
+          "nsPerOp": 45.99621295928955
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 8388608,
+          "elapsedNs": 421964800,
+          "nsPerOp": 50.3021240234375
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 8388608,
+          "elapsedNs": 412532200,
+          "nsPerOp": 49.1776704788208
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 359607200,
+          "nsPerOp": 342.9481506347656
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 501501000,
+          "nsPerOp": 478.2686233520508
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 364620600,
+          "nsPerOp": 347.7293014526367
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 360597900,
+          "nsPerOp": 343.8929557800293
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 360126300,
+          "nsPerOp": 343.4432029724121
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 369640900,
+          "nsPerOp": 352.517032623291
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 359922200,
+          "nsPerOp": 343.2485580444336
+        }
+      ]
+    },
+    {
+      "id": "renderer-render-large",
+      "api": "renderer.render",
+      "category": "compiled-reuse",
+      "size": "large",
+      "timedSetup": "excluded",
+      "workloadMetrics": {
+        "templateBytes": 895,
+        "templateCharacters": 895,
+        "interpolations": 64,
+        "pathCount": 64,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "d5fac4d8e2572fba7bb63031d8af93be74dba7a2d3aa8a6640aeec427a629c74",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 917504,
+        "minNsPerOp": 3416.522216796875,
+        "p25NsPerOp": 3513.0661010742188,
+        "medianNsPerOp": 3530.016326904297,
+        "p75NsPerOp": 3564.61181640625,
+        "maxNsPerOp": 3779.6295166015625,
+        "opsPerSecond": 283284.8087354218,
+        "iqrRatio": 0.014602118108964973
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 917504,
+        "minNsPerOp": 3274.8825073242188,
+        "p25NsPerOp": 3371.0159301757812,
+        "medianNsPerOp": 3571.7544555664062,
+        "p75NsPerOp": 5093.687438964844,
+        "maxNsPerOp": 5519.3084716796875,
+        "opsPerSecond": 279974.4530146938,
+        "iqrRatio": 0.482304013397215
+      },
+      "goMedianOverNodeMedian": 1.01182377779502,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 65536,
+          "elapsedNs": 247701800,
+          "nsPerOp": 3779.6295166015625
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 65536,
+          "elapsedNs": 233610400,
+          "nsPerOp": 3564.61181640625
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 65536,
+          "elapsedNs": 237833400,
+          "nsPerOp": 3629.0496826171875
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 65536,
+          "elapsedNs": 245780400,
+          "nsPerOp": 3750.311279296875
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 65536,
+          "elapsedNs": 223905200,
+          "nsPerOp": 3416.522216796875
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 65536,
+          "elapsedNs": 224951800,
+          "nsPerOp": 3432.4920654296875
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 65536,
+          "elapsedNs": 224897800,
+          "nsPerOp": 3431.6680908203125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 65536,
+          "elapsedNs": 217278900,
+          "nsPerOp": 3315.4129028320312
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 65536,
+          "elapsedNs": 339605800,
+          "nsPerOp": 5181.9732666015625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 65536,
+          "elapsedNs": 308282600,
+          "nsPerOp": 4704.0191650390625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 65536,
+          "elapsedNs": 214622700,
+          "nsPerOp": 3274.8825073242188
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 65536,
+          "elapsedNs": 336914500,
+          "nsPerOp": 5140.907287597656
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 65536,
+          "elapsedNs": 242702500,
+          "nsPerOp": 3703.3462524414062
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 65536,
+          "elapsedNs": 361713400,
+          "nsPerOp": 5519.3084716796875
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 65536,
+          "elapsedNs": 231092400,
+          "nsPerOp": 3526.190185546875
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 65536,
+          "elapsedNs": 230232300,
+          "nsPerOp": 3513.0661010742188
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 65536,
+          "elapsedNs": 232029000,
+          "nsPerOp": 3540.4815673828125
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 65536,
+          "elapsedNs": 231662300,
+          "nsPerOp": 3534.8861694335938
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 65536,
+          "elapsedNs": 230926900,
+          "nsPerOp": 3523.6648559570312
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 65536,
+          "elapsedNs": 230310500,
+          "nsPerOp": 3514.2593383789062
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 65536,
+          "elapsedNs": 231593900,
+          "nsPerOp": 3533.8424682617188
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 65536,
+          "elapsedNs": 319363400,
+          "nsPerOp": 4873.0987548828125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 65536,
+          "elapsedNs": 333819900,
+          "nsPerOp": 5093.687438964844
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 65536,
+          "elapsedNs": 220922900,
+          "nsPerOp": 3371.0159301757812
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 65536,
+          "elapsedNs": 218173200,
+          "nsPerOp": 3329.058837890625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 65536,
+          "elapsedNs": 225454500,
+          "nsPerOp": 3440.1626586914062
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 65536,
+          "elapsedNs": 221686500,
+          "nsPerOp": 3382.6675415039062
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 65536,
+          "elapsedNs": 221730100,
+          "nsPerOp": 3383.3328247070312
+        }
+      ]
+    },
+    {
+      "id": "renderer-render-medium-data-rotation",
+      "api": "renderer.render",
+      "category": "compiled-reuse",
+      "size": "medium",
+      "timedSetup": "excluded",
+      "workloadMetrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "b2a1ee8a0629a1616e2d1c21ff120916dacc783df574a24a8bc3e51ff827bebf",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 3670016,
+        "minNsPerOp": 790.9835815429688,
+        "p25NsPerOp": 794.1669464111328,
+        "medianNsPerOp": 805.9194564819336,
+        "p75NsPerOp": 810.8421325683594,
+        "maxNsPerOp": 863.7771606445312,
+        "opsPerSecond": 1240818.7840076264,
+        "iqrRatio": 0.020690884210710667
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 3670016,
+        "minNsPerOp": 1010.5976104736328,
+        "p25NsPerOp": 1033.3488464355469,
+        "medianNsPerOp": 1308.817481994629,
+        "p75NsPerOp": 1491.2342071533203,
+        "maxNsPerOp": 2020.175552368164,
+        "opsPerSecond": 764048.4741050424,
+        "iqrRatio": 0.3498466111714517
+      },
+      "goMedianOverNodeMedian": 1.624005316496499,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 207940600,
+          "nsPerOp": 793.2304382324219
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 209607900,
+          "nsPerOp": 799.5906829833984
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 208361100,
+          "nsPerOp": 794.8345184326172
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 226434000,
+          "nsPerOp": 863.7771606445312
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 207351600,
+          "nsPerOp": 790.9835815429688
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 208014400,
+          "nsPerOp": 793.511962890625
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 208186100,
+          "nsPerOp": 794.1669464111328
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 356115500,
+          "nsPerOp": 1358.4728240966797
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 264922100,
+          "nsPerOp": 1010.5976104736328
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 346164400,
+          "nsPerOp": 1320.5123901367188
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 340032900,
+          "nsPerOp": 1297.122573852539
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 509922800,
+          "nsPerOp": 1945.2011108398438
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 390918100,
+          "nsPerOp": 1491.2342071533203
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 272457100,
+          "nsPerOp": 1039.3413543701172
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 213011000,
+          "nsPerOp": 812.5724792480469
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 211948500,
+          "nsPerOp": 808.5193634033203
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 213118600,
+          "nsPerOp": 812.9829406738281
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 212557400,
+          "nsPerOp": 810.8421325683594
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 211251800,
+          "nsPerOp": 805.8616638183594
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 212535400,
+          "nsPerOp": 810.7582092285156
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 211282100,
+          "nsPerOp": 805.9772491455078
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 270886200,
+          "nsPerOp": 1033.3488464355469
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 309767400,
+          "nsPerOp": 1181.6688537597656
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 268925200,
+          "nsPerOp": 1025.8682250976562
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 358012600,
+          "nsPerOp": 1365.7096862792969
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 270241800,
+          "nsPerOp": 1030.8906555175781
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 495048500,
+          "nsPerOp": 1888.4601593017578
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 529576900,
+          "nsPerOp": 2020.175552368164
+        }
+      ]
+    },
+    {
+      "id": "renderer-render-small",
+      "api": "renderer.render",
+      "category": "compiled-reuse",
+      "size": "small",
+      "timedSetup": "excluded",
+      "workloadMetrics": {
+        "templateBytes": 15,
+        "templateCharacters": 15,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "b663911cc0fd82e71e1317646b95625e1a457a0077ec95220dd771eb4a01d97f",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 29360128,
+        "minNsPerOp": 103.2041072845459,
+        "p25NsPerOp": 103.39255332946777,
+        "medianNsPerOp": 104.63113784790039,
+        "p75NsPerOp": 112.67228126525879,
+        "maxNsPerOp": 113.99312019348145,
+        "opsPerSecond": 9557384.35582794,
+        "iqrRatio": 0.08868992659986857
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 14680064,
+        "minNsPerOp": 238.04502487182617,
+        "p25NsPerOp": 247.47095108032227,
+        "medianNsPerOp": 250.99945068359375,
+        "p75NsPerOp": 270.2744483947754,
+        "maxNsPerOp": 467.1073913574219,
+        "opsPerSecond": 3984072.4642086388,
+        "iqrRatio": 0.09085078573816834
+      },
+      "goMedianOverNodeMedian": 2.3988982232847857,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 2097152,
+          "elapsedNs": 236802200,
+          "nsPerOp": 112.91608810424805
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 2097152,
+          "elapsedNs": 216829900,
+          "nsPerOp": 103.39255332946777
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 2097152,
+          "elapsedNs": 239060900,
+          "nsPerOp": 113.99312019348145
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 2097152,
+          "elapsedNs": 218080100,
+          "nsPerOp": 103.98869514465332
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 2097152,
+          "elapsedNs": 216599500,
+          "nsPerOp": 103.28269004821777
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 2097152,
+          "elapsedNs": 216529500,
+          "nsPerOp": 103.24931144714355
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 2097152,
+          "elapsedNs": 216434700,
+          "nsPerOp": 103.2041072845459
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 262431300,
+          "nsPerOp": 250.27399063110352
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 258116200,
+          "nsPerOp": 246.1587905883789
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 283403300,
+          "nsPerOp": 270.2744483947754
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 256264700,
+          "nsPerOp": 244.39306259155273
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 249608300,
+          "nsPerOp": 238.04502487182617
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 489797600,
+          "nsPerOp": 467.1073913574219
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 267911700,
+          "nsPerOp": 255.50050735473633
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 2097152,
+          "elapsedNs": 227342200,
+          "nsPerOp": 108.40520858764648
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 2097152,
+          "elapsedNs": 236888400,
+          "nsPerOp": 112.95719146728516
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 2097152,
+          "elapsedNs": 236290900,
+          "nsPerOp": 112.67228126525879
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 2097152,
+          "elapsedNs": 220021000,
+          "nsPerOp": 104.91418838500977
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 2097152,
+          "elapsedNs": 217693400,
+          "nsPerOp": 103.80430221557617
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 2097152,
+          "elapsedNs": 219497400,
+          "nsPerOp": 104.66451644897461
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 2097152,
+          "elapsedNs": 219357400,
+          "nsPerOp": 104.59775924682617
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 271599600,
+          "nsPerOp": 259.01756286621094
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 259492100,
+          "nsPerOp": 247.47095108032227
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 263952700,
+          "nsPerOp": 251.72491073608398
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 259628500,
+          "nsPerOp": 247.60103225708008
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 289520300,
+          "nsPerOp": 276.1080741882324
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 370982500,
+          "nsPerOp": 353.79648208618164
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 261271700,
+          "nsPerOp": 249.16810989379883
+        }
+      ]
+    },
+    {
+      "id": "renderer-renderfn-medium",
+      "api": "renderer.renderFn",
+      "category": "sync-resolver",
+      "size": "medium",
+      "timedSetup": "excluded",
+      "workloadMetrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "42b11706c95a3dfac52d70678203d74132fdc48bcaea61015a4b3f658ceec3b2",
+        "resolverCalls": 12
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 7340032,
+        "minNsPerOp": 549.1741180419922,
+        "p25NsPerOp": 550.6961822509766,
+        "medianNsPerOp": 554.4784545898438,
+        "p75NsPerOp": 558.0045700073242,
+        "maxNsPerOp": 600.3864288330078,
+        "opsPerSecond": 1803496.5862464672,
+        "iqrRatio": 0.013180652369538476
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 5505024,
+        "minNsPerOp": 766.8872833251953,
+        "p25NsPerOp": 803.9056777954102,
+        "medianNsPerOp": 815.4820442199707,
+        "p75NsPerOp": 1060.2912902832031,
+        "maxNsPerOp": 1560.2218627929688,
+        "opsPerSecond": 1226268.569722495,
+        "iqrRatio": 0.31439761832283175
+      },
+      "goMedianOverNodeMedian": 1.4707190828960077,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 290087800,
+          "nsPerOp": 553.2985687255859
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 290318400,
+          "nsPerOp": 553.7384033203125
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 291688900,
+          "nsPerOp": 556.352424621582
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 288812600,
+          "nsPerOp": 550.8663177490234
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 288699600,
+          "nsPerOp": 550.6507873535156
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 288723400,
+          "nsPerOp": 550.6961822509766
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 292564700,
+          "nsPerOp": 558.0228805541992
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 265887100,
+          "nsPerOp": 1014.2787933349609
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 207051900,
+          "nsPerOp": 789.8403167724609
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 316928400,
+          "nsPerOp": 1208.9859008789062
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 377865000,
+          "nsPerOp": 1441.4405822753906
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 201034900,
+          "nsPerOp": 766.8872833251953
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 277949000,
+          "nsPerOp": 1060.2912902832031
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 409002800,
+          "nsPerOp": 1560.2218627929688
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 291842800,
+          "nsPerOp": 556.6459655761719
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 314775400,
+          "nsPerOp": 600.3864288330078
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 291094400,
+          "nsPerOp": 555.218505859375
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 288532600,
+          "nsPerOp": 550.3322601318359
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 292555100,
+          "nsPerOp": 558.0045700073242
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 294224400,
+          "nsPerOp": 561.1885070800781
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 287925400,
+          "nsPerOp": 549.1741180419922
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 426985000,
+          "nsPerOp": 814.4092559814453
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 516319600,
+          "nsPerOp": 984.8014831542969
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 424075300,
+          "nsPerOp": 808.8594436645508
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 421478100,
+          "nsPerOp": 803.9056777954102
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 419886200,
+          "nsPerOp": 800.8693695068359
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 428109900,
+          "nsPerOp": 816.5548324584961
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 424768400,
+          "nsPerOp": 810.1814270019531
+        }
+      ]
+    },
+    {
+      "id": "renderer-renderfnasync-medium",
+      "api": "renderer.renderFnAsync",
+      "category": "async-resolver",
+      "size": "medium",
+      "timedSetup": "excluded",
+      "workloadMetrics": {
+        "templateBytes": 97,
+        "templateCharacters": 97,
+        "interpolations": 6,
+        "pathCount": 6,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "2de28fb0a15b5739fc1397849c982569a4376363d45c5d1585cc73983fd14d91",
+        "resolverCalls": 6
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 3670016,
+        "minNsPerOp": 917.8535461425781,
+        "p25NsPerOp": 919.6556091308594,
+        "medianNsPerOp": 924.3091583251953,
+        "p75NsPerOp": 925.3200531005859,
+        "maxNsPerOp": 973.2006072998047,
+        "opsPerSecond": 1081889.0962975558,
+        "iqrRatio": 0.00612830016743561
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 458752,
+        "minNsPerOp": 6277.044677734375,
+        "p25NsPerOp": 6458.3709716796875,
+        "medianNsPerOp": 6561.0687255859375,
+        "p75NsPerOp": 6589.3890380859375,
+        "maxNsPerOp": 6735.662841796875,
+        "opsPerSecond": 152414.1937578462,
+        "iqrRatio": 0.019969012959020545
+      },
+      "goMedianOverNodeMedian": 7.098348714270326,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 242467100,
+          "nsPerOp": 924.9385833740234
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 242567100,
+          "nsPerOp": 925.3200531005859
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 241082200,
+          "nsPerOp": 919.6556091308594
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 242296500,
+          "nsPerOp": 924.2877960205078
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 255118700,
+          "nsPerOp": 973.2006072998047
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 243351200,
+          "nsPerOp": 928.3111572265625
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 240789500,
+          "nsPerOp": 918.5390472412109
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 32768,
+          "elapsedNs": 211036200,
+          "nsPerOp": 6440.313720703125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 32768,
+          "elapsedNs": 216210200,
+          "nsPerOp": 6598.211669921875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 32768,
+          "elapsedNs": 215921100,
+          "nsPerOp": 6589.3890380859375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 32768,
+          "elapsedNs": 205686200,
+          "nsPerOp": 6277.044677734375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 32768,
+          "elapsedNs": 211627900,
+          "nsPerOp": 6458.3709716796875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 32768,
+          "elapsedNs": 220714200,
+          "nsPerOp": 6735.662841796875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 32768,
+          "elapsedNs": 210575000,
+          "nsPerOp": 6426.239013671875
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 240966400,
+          "nsPerOp": 919.2138671875
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 242251700,
+          "nsPerOp": 924.1168975830078
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 242307700,
+          "nsPerOp": 924.3305206298828
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 242203800,
+          "nsPerOp": 923.9341735839844
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 242452500,
+          "nsPerOp": 924.8828887939453
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 244041800,
+          "nsPerOp": 930.9455871582031
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 240609800,
+          "nsPerOp": 917.8535461425781
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 32768,
+          "elapsedNs": 213729800,
+          "nsPerOp": 6522.515869140625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 32768,
+          "elapsedNs": 214373800,
+          "nsPerOp": 6542.169189453125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 32768,
+          "elapsedNs": 214938100,
+          "nsPerOp": 6559.3902587890625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 32768,
+          "elapsedNs": 215308000,
+          "nsPerOp": 6570.6787109375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 32768,
+          "elapsedNs": 217443800,
+          "nsPerOp": 6635.858154296875
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 32768,
+          "elapsedNs": 215048100,
+          "nsPerOp": 6562.7471923828125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 32768,
+          "elapsedNs": 215383600,
+          "nsPerOp": 6572.98583984375
+        }
+      ]
+    },
+    {
+      "id": "renderer-renderfnasync-small",
+      "api": "renderer.renderFnAsync",
+      "category": "async-resolver",
+      "size": "small",
+      "timedSetup": "excluded",
+      "workloadMetrics": {
+        "templateBytes": 8,
+        "templateCharacters": 8,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "bf3aedeada12993b5cb250800e62ddf9443038ba9bf63d763f7670e747f31152",
+        "resolverCalls": 1
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 7340032,
+        "minNsPerOp": 386.944580078125,
+        "p25NsPerOp": 390.5485153198242,
+        "medianNsPerOp": 392.09203720092773,
+        "p75NsPerOp": 393.3021545410156,
+        "maxNsPerOp": 483.97674560546875,
+        "opsPerSecond": 2550421.5977932485,
+        "iqrRatio": 0.007022940942257143
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 3670016,
+        "minNsPerOp": 1362.7197265625,
+        "p25NsPerOp": 1386.0050201416016,
+        "medianNsPerOp": 1397.646141052246,
+        "p75NsPerOp": 1404.4578552246094,
+        "maxNsPerOp": 1426.5941619873047,
+        "opsPerSecond": 715488.6853171074,
+        "iqrRatio": 0.013202794713914657
+      },
+      "goMedianOverNodeMedian": 3.5645869042120375,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 203998400,
+          "nsPerOp": 389.0960693359375
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 202870400,
+          "nsPerOp": 386.944580078125
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 204759900,
+          "nsPerOp": 390.5485153198242
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 207318100,
+          "nsPerOp": 395.42789459228516
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 203785600,
+          "nsPerOp": 388.690185546875
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 204847300,
+          "nsPerOp": 390.71521759033203
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 204785700,
+          "nsPerOp": 390.5977249145508
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 373973100,
+          "nsPerOp": 1426.5941619873047
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 368170200,
+          "nsPerOp": 1404.4578552246094
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 364974400,
+          "nsPerOp": 1392.266845703125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 364101100,
+          "nsPerOp": 1388.9354705810547
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 359485200,
+          "nsPerOp": 1371.3272094726562
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 373892700,
+          "nsPerOp": 1426.2874603271484
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 357228800,
+          "nsPerOp": 1362.7197265625
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 206007400,
+          "nsPerOp": 392.9279327392578
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 205631300,
+          "nsPerOp": 392.21057891845703
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 205507000,
+          "nsPerOp": 391.97349548339844
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 206792500,
+          "nsPerOp": 394.4253921508789
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 205697900,
+          "nsPerOp": 392.33760833740234
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 206203600,
+          "nsPerOp": 393.3021545410156
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 253743200,
+          "nsPerOp": 483.97674560546875
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 365530800,
+          "nsPerOp": 1394.3893432617188
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 367440800,
+          "nsPerOp": 1401.6754150390625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 367238300,
+          "nsPerOp": 1400.9029388427734
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 363332900,
+          "nsPerOp": 1386.0050201416016
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 367696100,
+          "nsPerOp": 1402.6493072509766
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 362389500,
+          "nsPerOp": 1382.406234741211
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 370181900,
+          "nsPerOp": 1412.1318817138672
+        }
+      ]
+    },
+    {
+      "id": "renderfn-medium-repeated",
+      "api": "renderFn",
+      "category": "sync-resolver",
+      "size": "medium",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "42b11706c95a3dfac52d70678203d74132fdc48bcaea61015a4b3f658ceec3b2",
+        "resolverCalls": 12
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 1835008,
+        "minNsPerOp": 2323.0140686035156,
+        "p25NsPerOp": 2333.7669372558594,
+        "medianNsPerOp": 2337.764358520508,
+        "p75NsPerOp": 2486.8125915527344,
+        "maxNsPerOp": 2703.516387939453,
+        "opsPerSecond": 427759.1094052209,
+        "iqrRatio": 0.06546667278037058
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 917504,
+        "minNsPerOp": 3297.1145629882812,
+        "p25NsPerOp": 3384.4253540039062,
+        "medianNsPerOp": 4372.843933105469,
+        "p75NsPerOp": 5123.785400390625,
+        "maxNsPerOp": 6018.513488769531,
+        "opsPerSecond": 228684.12760613402,
+        "iqrRatio": 0.3977640348009116
+      },
+      "goMedianOverNodeMedian": 1.8705238263932187,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 131072,
+          "elapsedNs": 304482100,
+          "nsPerOp": 2323.0140686035156
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 131072,
+          "elapsedNs": 305753700,
+          "nsPerOp": 2332.715606689453
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 131072,
+          "elapsedNs": 329893500,
+          "nsPerOp": 2516.887664794922
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 131072,
+          "elapsedNs": 306059100,
+          "nsPerOp": 2335.045623779297
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 131072,
+          "elapsedNs": 305891500,
+          "nsPerOp": 2333.7669372558594
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 131072,
+          "elapsedNs": 330540500,
+          "nsPerOp": 2521.8238830566406
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 131072,
+          "elapsedNs": 305540600,
+          "nsPerOp": 2331.0897827148438
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 65536,
+          "elapsedNs": 394429300,
+          "nsPerOp": 6018.513488769531
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 65536,
+          "elapsedNs": 224805000,
+          "nsPerOp": 3430.2520751953125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 65536,
+          "elapsedNs": 216771400,
+          "nsPerOp": 3307.6690673828125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 65536,
+          "elapsedNs": 226578600,
+          "nsPerOp": 3457.3150634765625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 65536,
+          "elapsedNs": 220853500,
+          "nsPerOp": 3369.9569702148438
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 65536,
+          "elapsedNs": 216079700,
+          "nsPerOp": 3297.1145629882812
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 65536,
+          "elapsedNs": 221801700,
+          "nsPerOp": 3384.4253540039062
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 131072,
+          "elapsedNs": 325951500,
+          "nsPerOp": 2486.8125915527344
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 131072,
+          "elapsedNs": 310829800,
+          "nsPerOp": 2371.4431762695312
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 131072,
+          "elapsedNs": 306319500,
+          "nsPerOp": 2337.0323181152344
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 131072,
+          "elapsedNs": 354355300,
+          "nsPerOp": 2703.516387939453
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 131072,
+          "elapsedNs": 306511400,
+          "nsPerOp": 2338.4963989257812
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 131072,
+          "elapsedNs": 305970500,
+          "nsPerOp": 2334.369659423828
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 131072,
+          "elapsedNs": 311005800,
+          "nsPerOp": 2372.7859497070312
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 65536,
+          "elapsedNs": 350196000,
+          "nsPerOp": 5343.56689453125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 65536,
+          "elapsedNs": 335792400,
+          "nsPerOp": 5123.785400390625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 65536,
+          "elapsedNs": 293133100,
+          "nsPerOp": 4472.856140136719
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 65536,
+          "elapsedNs": 379504600,
+          "nsPerOp": 5790.7806396484375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 65536,
+          "elapsedNs": 297932300,
+          "nsPerOp": 4546.086120605469
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 65536,
+          "elapsedNs": 280024300,
+          "nsPerOp": 4272.831726074219
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 65536,
+          "elapsedNs": 308706700,
+          "nsPerOp": 4710.490417480469
+        }
+      ]
+    },
+    {
+      "id": "renderfn-small-single",
+      "api": "renderFn",
+      "category": "sync-resolver",
+      "size": "small",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 8,
+        "templateCharacters": 8,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "bf3aedeada12993b5cb250800e62ddf9443038ba9bf63d763f7670e747f31152",
+        "resolverCalls": 1
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 14680064,
+        "minNsPerOp": 329.8978805541992,
+        "p25NsPerOp": 333.57839584350586,
+        "medianNsPerOp": 335.01243591308594,
+        "p75NsPerOp": 336.93838119506836,
+        "maxNsPerOp": 354.63504791259766,
+        "opsPerSecond": 2984963.818654885,
+        "iqrRatio": 0.010029434705624478
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 7340032,
+        "minNsPerOp": 538.7401580810547,
+        "p25NsPerOp": 571.9898223876953,
+        "medianNsPerOp": 800.0173568725586,
+        "p75NsPerOp": 908.4297180175781,
+        "maxNsPerOp": 1092.5247192382812,
+        "opsPerSecond": 1249972.880475015,
+        "iqrRatio": 0.420540745447198
+      },
+      "goMedianOverNodeMedian": 2.3880228645605004,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 352362800,
+          "nsPerOp": 336.0393524169922
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 354021300,
+          "nsPerOp": 337.62102127075195
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 350499300,
+          "nsPerOp": 334.26218032836914
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 348166300,
+          "nsPerOp": 332.03725814819336
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 354279600,
+          "nsPerOp": 337.8673553466797
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 347285500,
+          "nsPerOp": 331.19726181030273
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 345923000,
+          "nsPerOp": 329.8978805541992
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 437287700,
+          "nsPerOp": 834.0600967407227
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 282455000,
+          "nsPerOp": 538.7401580810547
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 401591300,
+          "nsPerOp": 765.9746170043945
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 572797600,
+          "nsPerOp": 1092.5247192382812
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 454320000,
+          "nsPerOp": 866.546630859375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 285613600,
+          "nsPerOp": 544.7647094726562
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 294978700,
+          "nsPerOp": 562.6272201538086
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 351550700,
+          "nsPerOp": 335.2648735046387
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 352382100,
+          "nsPerOp": 336.0577583312988
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 353305500,
+          "nsPerOp": 336.93838119506836
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 350086600,
+          "nsPerOp": 333.8685989379883
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 351021300,
+          "nsPerOp": 334.7599983215332
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 349782300,
+          "nsPerOp": 333.57839584350586
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 371861800,
+          "nsPerOp": 354.63504791259766
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 299887400,
+          "nsPerOp": 571.9898223876953
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 485074800,
+          "nsPerOp": 925.2067565917969
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 364669400,
+          "nsPerOp": 695.5516815185547
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 476278800,
+          "nsPerOp": 908.4297180175781
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 330324700,
+          "nsPerOp": 630.0443649291992
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 441371900,
+          "nsPerOp": 841.8500900268555
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 514536000,
+          "nsPerOp": 981.3995361328125
+        }
+      ]
+    },
+    {
+      "id": "renderfnasync-medium-multiple",
+      "api": "renderFnAsync",
+      "category": "async-resolver",
+      "size": "medium",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 97,
+        "templateCharacters": 97,
+        "interpolations": 6,
+        "pathCount": 6,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "2de28fb0a15b5739fc1397849c982569a4376363d45c5d1585cc73983fd14d91",
+        "resolverCalls": 6
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 1835008,
+        "minNsPerOp": 1898.3848571777344,
+        "p25NsPerOp": 1914.1960144042969,
+        "medianNsPerOp": 1958.9256286621094,
+        "p75NsPerOp": 1992.8642272949219,
+        "maxNsPerOp": 2150.4844665527344,
+        "opsPerSecond": 510483.90269056393,
+        "iqrRatio": 0.04015885633409838
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 458752,
+        "minNsPerOp": 8031.011962890625,
+        "p25NsPerOp": 8179.779052734375,
+        "medianNsPerOp": 8237.881469726562,
+        "p75NsPerOp": 8344.793701171875,
+        "maxNsPerOp": 9218.71337890625,
+        "opsPerSecond": 121390.43316839477,
+        "iqrRatio": 0.020031199652958503
+      },
+      "goMedianOverNodeMedian": 4.205305882568294,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 131072,
+          "elapsedNs": 252370100,
+          "nsPerOp": 1925.4310607910156
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 131072,
+          "elapsedNs": 248825100,
+          "nsPerOp": 1898.3848571777344
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 131072,
+          "elapsedNs": 250897500,
+          "nsPerOp": 1914.1960144042969
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 131072,
+          "elapsedNs": 268665500,
+          "nsPerOp": 2049.755096435547
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 131072,
+          "elapsedNs": 250620300,
+          "nsPerOp": 1912.0811462402344
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 131072,
+          "elapsedNs": 250237600,
+          "nsPerOp": 1909.161376953125
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 131072,
+          "elapsedNs": 251263400,
+          "nsPerOp": 1916.9876098632812
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 32768,
+          "elapsedNs": 273442200,
+          "nsPerOp": 8344.793701171875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 32768,
+          "elapsedNs": 270951200,
+          "nsPerOp": 8268.7744140625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 32768,
+          "elapsedNs": 266739000,
+          "nsPerOp": 8140.228271484375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 32768,
+          "elapsedNs": 302078800,
+          "nsPerOp": 9218.71337890625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 32768,
+          "elapsedNs": 263160200,
+          "nsPerOp": 8031.011962890625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 32768,
+          "elapsedNs": 268035000,
+          "nsPerOp": 8179.779052734375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 32768,
+          "elapsedNs": 272649400,
+          "nsPerOp": 8320.599365234375
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 131072,
+          "elapsedNs": 256361500,
+          "nsPerOp": 1955.8830261230469
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 131072,
+          "elapsedNs": 257159100,
+          "nsPerOp": 1961.9682312011719
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 131072,
+          "elapsedNs": 257483100,
+          "nsPerOp": 1964.4401550292969
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 131072,
+          "elapsedNs": 261208700,
+          "nsPerOp": 1992.8642272949219
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 131072,
+          "elapsedNs": 265424900,
+          "nsPerOp": 2025.0312805175781
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 131072,
+          "elapsedNs": 281868300,
+          "nsPerOp": 2150.4844665527344
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 131072,
+          "elapsedNs": 257201000,
+          "nsPerOp": 1962.2879028320312
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 32768,
+          "elapsedNs": 265584800,
+          "nsPerOp": 8105.0048828125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 32768,
+          "elapsedNs": 269474900,
+          "nsPerOp": 8223.721313476562
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 32768,
+          "elapsedNs": 268636100,
+          "nsPerOp": 8198.123168945312
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 32768,
+          "elapsedNs": 268998400,
+          "nsPerOp": 8209.1796875
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 32768,
+          "elapsedNs": 278959700,
+          "nsPerOp": 8513.174438476562
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 32768,
+          "elapsedNs": 274516200,
+          "nsPerOp": 8377.569580078125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 32768,
+          "elapsedNs": 270402900,
+          "nsPerOp": 8252.041625976562
+        }
+      ]
+    },
+    {
+      "id": "renderfnasync-small-single",
+      "api": "renderFnAsync",
+      "category": "async-resolver",
+      "size": "small",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 8,
+        "templateCharacters": 8,
+        "interpolations": 1,
+        "pathCount": 1,
+        "dataNodes": 19
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "bf3aedeada12993b5cb250800e62ddf9443038ba9bf63d763f7670e747f31152",
+        "resolverCalls": 1
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 7340032,
+        "minNsPerOp": 650.23193359375,
+        "p25NsPerOp": 654.3380737304688,
+        "medianNsPerOp": 667.0313835144043,
+        "p75NsPerOp": 689.5488739013672,
+        "maxNsPerOp": 704.2591094970703,
+        "opsPerSecond": 1499179.8357841515,
+        "iqrRatio": 0.05278732161803609
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 1835008,
+        "minNsPerOp": 1795.6947326660156,
+        "p25NsPerOp": 1840.6852722167969,
+        "medianNsPerOp": 1876.5762329101562,
+        "p75NsPerOp": 1882.26318359375,
+        "maxNsPerOp": 1915.0215148925781,
+        "opsPerSecond": 532885.3592317005,
+        "iqrRatio": 0.022156260240211476
+      },
+      "goMedianOverNodeMedian": 2.8133252486906897,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 350384300,
+          "nsPerOp": 668.3050155639648
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 361522200,
+          "nsPerOp": 689.5488739013672
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 366325500,
+          "nsPerOp": 698.7104415893555
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 349048800,
+          "nsPerOp": 665.7577514648438
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 355640000,
+          "nsPerOp": 678.3294677734375
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 342702800,
+          "nsPerOp": 653.6537170410156
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 360450800,
+          "nsPerOp": 687.5053405761719
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 131072,
+          "elapsedNs": 245814800,
+          "nsPerOp": 1875.4180908203125
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 131072,
+          "elapsedNs": 238165500,
+          "nsPerOp": 1817.0585632324219
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 131072,
+          "elapsedNs": 247739700,
+          "nsPerOp": 1890.1039123535156
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 131072,
+          "elapsedNs": 243754100,
+          "nsPerOp": 1859.6961975097656
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 131072,
+          "elapsedNs": 242885800,
+          "nsPerOp": 1853.0715942382812
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 131072,
+          "elapsedNs": 246184800,
+          "nsPerOp": 1878.240966796875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 131072,
+          "elapsedNs": 240641500,
+          "nsPerOp": 1835.9489440917969
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 364773600,
+          "nsPerOp": 695.7504272460938
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 340908800,
+          "nsPerOp": 650.23193359375
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 343061600,
+          "nsPerOp": 654.3380737304688
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 343207700,
+          "nsPerOp": 654.6167373657227
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 369234600,
+          "nsPerOp": 704.2591094970703
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 345441000,
+          "nsPerOp": 658.8764190673828
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 342176600,
+          "nsPerOp": 652.6500701904297
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 131072,
+          "elapsedNs": 251005700,
+          "nsPerOp": 1915.0215148925781
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 131072,
+          "elapsedNs": 246712000,
+          "nsPerOp": 1882.26318359375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 131072,
+          "elapsedNs": 241262300,
+          "nsPerOp": 1840.6852722167969
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 131072,
+          "elapsedNs": 246118400,
+          "nsPerOp": 1877.734375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 131072,
+          "elapsedNs": 246474400,
+          "nsPerOp": 1880.450439453125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 131072,
+          "elapsedNs": 235365300,
+          "nsPerOp": 1795.6947326660156
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 131072,
+          "elapsedNs": 250965300,
+          "nsPerOp": 1914.7132873535156
+        }
+      ]
+    },
+    {
+      "id": "tokenize-large-repeated",
+      "api": "tokenize",
+      "category": "tokenization",
+      "size": "large",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 895,
+        "templateCharacters": 895,
+        "interpolations": 64,
+        "pathCount": 64,
+        "dataNodes": 0
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "b33a4b417b941f920a12ade3572b023d8a94a1704e6d101dbc7e97caeacc4153",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 917504,
+        "minNsPerOp": 5864.1204833984375,
+        "p25NsPerOp": 5872.605895996094,
+        "medianNsPerOp": 5903.929901123047,
+        "p75NsPerOp": 5959.071350097656,
+        "maxNsPerOp": 6973.5198974609375,
+        "opsPerSecond": 169378.70481995048,
+        "iqrRatio": 0.01464540662739153
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 114688,
+        "minNsPerOp": 27937.87841796875,
+        "p25NsPerOp": 30849.6826171875,
+        "medianNsPerOp": 34913.873291015625,
+        "p75NsPerOp": 36430.11474609375,
+        "maxNsPerOp": 42489.74609375,
+        "opsPerSecond": 28641.909525899828,
+        "iqrRatio": 0.15983423215155737
+      },
+      "goMedianOverNodeMedian": 5.913666638280088,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 65536,
+          "elapsedNs": 385688900,
+          "nsPerOp": 5885.145568847656
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 65536,
+          "elapsedNs": 384311000,
+          "nsPerOp": 5864.1204833984375
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 65536,
+          "elapsedNs": 388941400,
+          "nsPerOp": 5934.7747802734375
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 65536,
+          "elapsedNs": 386511300,
+          "nsPerOp": 5897.694396972656
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 65536,
+          "elapsedNs": 387755500,
+          "nsPerOp": 5916.679382324219
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 65536,
+          "elapsedNs": 384622400,
+          "nsPerOp": 5868.8720703125
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 65536,
+          "elapsedNs": 384752900,
+          "nsPerOp": 5870.863342285156
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 8192,
+          "elapsedNs": 231684800,
+          "nsPerOp": 28281.8359375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 8192,
+          "elapsedNs": 252720600,
+          "nsPerOp": 30849.6826171875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 8192,
+          "elapsedNs": 328238100,
+          "nsPerOp": 40068.12744140625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 8192,
+          "elapsedNs": 346481800,
+          "nsPerOp": 42295.1416015625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 8192,
+          "elapsedNs": 285886600,
+          "nsPerOp": 34898.2666015625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 8192,
+          "elapsedNs": 261026200,
+          "nsPerOp": 31863.5498046875
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 8192,
+          "elapsedNs": 286142300,
+          "nsPerOp": 34929.47998046875
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 65536,
+          "elapsedNs": 386680200,
+          "nsPerOp": 5900.2716064453125
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 65536,
+          "elapsedNs": 387159700,
+          "nsPerOp": 5907.588195800781
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 65536,
+          "elapsedNs": 384867100,
+          "nsPerOp": 5872.605895996094
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 65536,
+          "elapsedNs": 390533700,
+          "nsPerOp": 5959.071350097656
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 65536,
+          "elapsedNs": 394495400,
+          "nsPerOp": 6019.5220947265625
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 65536,
+          "elapsedNs": 397098300,
+          "nsPerOp": 6059.239196777344
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 65536,
+          "elapsedNs": 457016600,
+          "nsPerOp": 6973.5198974609375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 8192,
+          "elapsedNs": 294444900,
+          "nsPerOp": 35942.98095703125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 8192,
+          "elapsedNs": 228867100,
+          "nsPerOp": 27937.87841796875
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 8192,
+          "elapsedNs": 235734900,
+          "nsPerOp": 28776.23291015625
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 8192,
+          "elapsedNs": 348076000,
+          "nsPerOp": 42489.74609375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 8192,
+          "elapsedNs": 258153400,
+          "nsPerOp": 31512.8662109375
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 8192,
+          "elapsedNs": 294404100,
+          "nsPerOp": 35938.00048828125
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 8192,
+          "elapsedNs": 298435500,
+          "nsPerOp": 36430.11474609375
+        }
+      ]
+    },
+    {
+      "id": "tokenize-medium-mixed",
+      "api": "tokenize",
+      "category": "tokenization",
+      "size": "medium",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 181,
+        "templateCharacters": 181,
+        "interpolations": 12,
+        "pathCount": 12,
+        "dataNodes": 0
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "5f77c394c0077a53817e114ca54f0657b194e592b0b4c8fb159ed6449cddac21",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 3670016,
+        "minNsPerOp": 1102.059555053711,
+        "p25NsPerOp": 1110.5003356933594,
+        "medianNsPerOp": 1117.9616928100586,
+        "p75NsPerOp": 1119.25048828125,
+        "maxNsPerOp": 1120.6260681152344,
+        "opsPerSecond": 894485.0314919509,
+        "iqrRatio": 0.007826880513138722
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 1835008,
+        "minNsPerOp": 2291.094207763672,
+        "p25NsPerOp": 2392.7658081054688,
+        "medianNsPerOp": 2761.2770080566406,
+        "p75NsPerOp": 3411.316680908203,
+        "maxNsPerOp": 4031.011199951172,
+        "opsPerSecond": 362151.2789489346,
+        "iqrRatio": 0.36886950126006385
+      },
+      "goMedianOverNodeMedian": 2.469920951509544,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 293472700,
+          "nsPerOp": 1119.509506225586
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 293055400,
+          "nsPerOp": 1117.9176330566406
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 291111000,
+          "nsPerOp": 1110.5003356933594
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 293078500,
+          "nsPerOp": 1118.0057525634766
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 290041000,
+          "nsPerOp": 1106.4186096191406
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 289383000,
+          "nsPerOp": 1103.9085388183594
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 288898300,
+          "nsPerOp": 1102.059555053711
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 131072,
+          "elapsedNs": 337952200,
+          "nsPerOp": 2578.3706665039062
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 131072,
+          "elapsedNs": 313624600,
+          "nsPerOp": 2392.7658081054688
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 131072,
+          "elapsedNs": 317378000,
+          "nsPerOp": 2421.4019775390625
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 131072,
+          "elapsedNs": 385900000,
+          "nsPerOp": 2944.183349609375
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 131072,
+          "elapsedNs": 447128100,
+          "nsPerOp": 3411.316680908203
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 131072,
+          "elapsedNs": 497504900,
+          "nsPerOp": 3795.661163330078
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 131072,
+          "elapsedNs": 392080400,
+          "nsPerOp": 2991.3360595703125
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 262144,
+          "elapsedNs": 291964500,
+          "nsPerOp": 1113.7561798095703
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 262144,
+          "elapsedNs": 293104700,
+          "nsPerOp": 1118.105697631836
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 262144,
+          "elapsedNs": 292548100,
+          "nsPerOp": 1115.982437133789
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 262144,
+          "elapsedNs": 293404800,
+          "nsPerOp": 1119.25048828125
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 262144,
+          "elapsedNs": 293420200,
+          "nsPerOp": 1119.3092346191406
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 262144,
+          "elapsedNs": 293765400,
+          "nsPerOp": 1120.6260681152344
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 262144,
+          "elapsedNs": 293261300,
+          "nsPerOp": 1118.7030792236328
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 131072,
+          "elapsedNs": 391932200,
+          "nsPerOp": 2990.2053833007812
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 131072,
+          "elapsedNs": 519166400,
+          "nsPerOp": 3960.92529296875
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 131072,
+          "elapsedNs": 528352700,
+          "nsPerOp": 4031.011199951172
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 131072,
+          "elapsedNs": 307482500,
+          "nsPerOp": 2345.905303955078
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 131072,
+          "elapsedNs": 312873500,
+          "nsPerOp": 2387.035369873047
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 131072,
+          "elapsedNs": 300298300,
+          "nsPerOp": 2291.094207763672
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 131072,
+          "elapsedNs": 333235700,
+          "nsPerOp": 2542.3866271972656
+        }
+      ]
+    },
+    {
+      "id": "tokenize-small-few",
+      "api": "tokenize",
+      "category": "tokenization",
+      "size": "small",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 34,
+        "templateCharacters": 34,
+        "interpolations": 2,
+        "pathCount": 2,
+        "dataNodes": 0
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "049385eb6eb3d0a501635572ed9bde3c4f5663557d41750c1b03e818d160dbfe",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 14680064,
+        "minNsPerOp": 295.72248458862305,
+        "p25NsPerOp": 297.19676971435547,
+        "medianNsPerOp": 302.5309085845947,
+        "p75NsPerOp": 319.26116943359375,
+        "maxNsPerOp": 441.13426208496094,
+        "opsPerSecond": 3305447.3828097354,
+        "iqrRatio": 0.07293271230522404
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 7340032,
+        "minNsPerOp": 426.6908645629883,
+        "p25NsPerOp": 447.50804901123047,
+        "medianNsPerOp": 616.9094085693359,
+        "p75NsPerOp": 716.4138793945312,
+        "maxNsPerOp": 959.3891143798828,
+        "opsPerSecond": 1620983.5449245018,
+        "iqrRatio": 0.4358919261855897
+      },
+      "goMedianOverNodeMedian": 2.039161589986213,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 310487400,
+          "nsPerOp": 296.1038589477539
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 314384600,
+          "nsPerOp": 299.82051849365234
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 311633400,
+          "nsPerOp": 297.19676971435547
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 310087500,
+          "nsPerOp": 295.72248458862305
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 310214400,
+          "nsPerOp": 295.843505859375
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 312691000,
+          "nsPerOp": 298.2053756713867
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 332454500,
+          "nsPerOp": 317.05331802368164
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 338482300,
+          "nsPerOp": 645.6037521362305
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 502996200,
+          "nsPerOp": 959.3891143798828
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 301065800,
+          "nsPerOp": 574.2374420166016
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 340733800,
+          "nsPerOp": 649.8981475830078
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 234623100,
+          "nsPerOp": 447.50804901123047
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 465016700,
+          "nsPerOp": 886.9489669799805
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 400536100,
+          "nsPerOp": 763.9619827270508
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 319709500,
+          "nsPerOp": 304.898738861084
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 334769600,
+          "nsPerOp": 319.26116943359375
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 386791500,
+          "nsPerOp": 368.87311935424805
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 314743800,
+          "nsPerOp": 300.16307830810547
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 462562800,
+          "nsPerOp": 441.13426208496094
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 343315900,
+          "nsPerOp": 327.4115562438965
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 332677200,
+          "nsPerOp": 317.2657012939453
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 524288,
+          "elapsedNs": 375607200,
+          "nsPerOp": 716.4138793945312
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 524288,
+          "elapsedNs": 350786200,
+          "nsPerOp": 669.0715789794922
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 524288,
+          "elapsedNs": 308394100,
+          "nsPerOp": 588.2150650024414
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 524288,
+          "elapsedNs": 234631800,
+          "nsPerOp": 447.52464294433594
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 524288,
+          "elapsedNs": 228123300,
+          "nsPerOp": 435.1106643676758
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 524288,
+          "elapsedNs": 223708900,
+          "nsPerOp": 426.6908645629883
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 524288,
+          "elapsedNs": 232319800,
+          "nsPerOp": 443.11485290527344
+        }
+      ]
+    },
+    {
+      "id": "tokenize-small-plain",
+      "api": "tokenize",
+      "category": "tokenization",
+      "size": "small",
+      "timedSetup": "included",
+      "workloadMetrics": {
+        "templateBytes": 11,
+        "templateCharacters": 11,
+        "interpolations": 0,
+        "pathCount": 0,
+        "dataNodes": 0
+      },
+      "correctness": {
+        "status": "PASS",
+        "resultDigest": "51206405873d311eabbb3169150061bd6bd16e8b7c100d91b03f6c678e633ac9",
+        "resolverCalls": 0
+      },
+      "node": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 29360128,
+        "minNsPerOp": 112.8260612487793,
+        "p25NsPerOp": 113.41776847839355,
+        "medianNsPerOp": 114.68584537506104,
+        "p75NsPerOp": 115.32573699951172,
+        "maxNsPerOp": 143.4378147125244,
+        "opsPerSecond": 8719471.847024066,
+        "iqrRatio": 0.016636477804897975
+      },
+      "go": {
+        "rounds": 2,
+        "samples": 14,
+        "totalIterations": 14680064,
+        "minNsPerOp": 277.2589683532715,
+        "p25NsPerOp": 280.9136390686035,
+        "medianNsPerOp": 291.1415100097656,
+        "p75NsPerOp": 353.4219741821289,
+        "maxNsPerOp": 447.0433235168457,
+        "opsPerSecond": 3434755.8339120294,
+        "iqrRatio": 0.2490484270384298
+      },
+      "goMedianOverNodeMedian": 2.538600200030227,
+      "rawSamples": [
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 2097152,
+          "elapsedNs": 238048800,
+          "nsPerOp": 113.51051330566406
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 2097152,
+          "elapsedNs": 257546600,
+          "nsPerOp": 122.80778884887695
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 2097152,
+          "elapsedNs": 239929100,
+          "nsPerOp": 114.4071102142334
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 2097152,
+          "elapsedNs": 237854300,
+          "nsPerOp": 113.41776847839355
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 2097152,
+          "elapsedNs": 237844900,
+          "nsPerOp": 113.41328620910645
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 2097152,
+          "elapsedNs": 236613400,
+          "nsPerOp": 112.8260612487793
+        },
+        {
+          "round": 1,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 2097152,
+          "elapsedNs": 236734500,
+          "nsPerOp": 112.8838062286377
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 306590200,
+          "nsPerOp": 292.38719940185547
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 303977800,
+          "nsPerOp": 289.8958206176758
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 294001900,
+          "nsPerOp": 280.3820610046387
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 296116000,
+          "nsPerOp": 282.3982238769531
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 324427700,
+          "nsPerOp": 309.39836502075195
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 290727100,
+          "nsPerOp": 277.2589683532715
+        },
+        {
+          "round": 1,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 294559300,
+          "nsPerOp": 280.9136390686035
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 1,
+          "iterations": 2097152,
+          "elapsedNs": 240253600,
+          "nsPerOp": 114.56184387207031
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 2,
+          "iterations": 2097152,
+          "elapsedNs": 240773700,
+          "nsPerOp": 114.80984687805176
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 3,
+          "iterations": 2097152,
+          "elapsedNs": 241654100,
+          "nsPerOp": 115.22965431213379
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 4,
+          "iterations": 2097152,
+          "elapsedNs": 241334900,
+          "nsPerOp": 115.07744789123535
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 5,
+          "iterations": 2097152,
+          "elapsedNs": 289366200,
+          "nsPerOp": 137.9805564880371
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 6,
+          "iterations": 2097152,
+          "elapsedNs": 241855600,
+          "nsPerOp": 115.32573699951172
+        },
+        {
+          "round": 2,
+          "runtime": "node",
+          "sampleIndex": 7,
+          "iterations": 2097152,
+          "elapsedNs": 300810900,
+          "nsPerOp": 143.4378147125244
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 1,
+          "iterations": 1048576,
+          "elapsedNs": 303957200,
+          "nsPerOp": 289.8761749267578
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 2,
+          "iterations": 1048576,
+          "elapsedNs": 468758900,
+          "nsPerOp": 447.0433235168457
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 3,
+          "iterations": 1048576,
+          "elapsedNs": 397304600,
+          "nsPerOp": 378.8991928100586
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 4,
+          "iterations": 1048576,
+          "elapsedNs": 393657800,
+          "nsPerOp": 375.4213333129883
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 5,
+          "iterations": 1048576,
+          "elapsedNs": 370589800,
+          "nsPerOp": 353.4219741821289
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 6,
+          "iterations": 1048576,
+          "elapsedNs": 292270300,
+          "nsPerOp": 278.7306785583496
+        },
+        {
+          "round": 2,
+          "runtime": "go",
+          "sampleIndex": 7,
+          "iterations": 1048576,
+          "elapsedNs": 310938700,
+          "nsPerOp": 296.53425216674805
+        }
+      ]
+    }
+  ],
+  "contentSha256": "af7b6ba69096e16f09f114632a0d1200bd00c1ccb44a9b622d85a9bf791d7acf"
+}

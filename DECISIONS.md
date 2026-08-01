@@ -215,3 +215,25 @@
 - Evidence records the corpus SHA-256, a timestamp-free deterministic result SHA-256, a summary SHA-256, fixed upstream and Go base commits, working-tree state, oracle source/version, execution environment, and reproduction command.
 - The verifier executes the complete corpus twice and requires identical classifications, counts, normalized results, and deterministic hashes before copying the first run into tracked evidence.
 - Any `FAIL`, process failure, timeout, malformed or missing response, unexpected/duplicate id, unsupported difference id, or deterministic mismatch exits non-zero. A report containing `FAIL` is not accepted as successful evidence.
+
+## D-022 Cross-runtime benchmark architecture
+
+- A tracked declarative workload suite is the only shared input. The Node runner directly calls the fixed CJS artifact, while the Go runner directly calls exported Go APIs; neither runtime calls the other.
+- A separate validation process runs each workload once before any timed process. API identity, semantic result digest, and resolver call count must match or measurement stops.
+- The suite contains successful compatibility cases only. Phase 4A expected differences, skips, errors, cancellation, deadline, and rejection paths are not converted into performance cases.
+- Benchmark commands, runners, aggregation, and evidence remain outside the product package. No product cache, optimization, telemetry, dependency, or public API change is introduced.
+
+## D-023 Timed regions and sampling
+
+- Module/binary startup, JSON reading, workload validation, input conversion, resolver creation, renderer setup, correctness checks, calibration, and report generation are outside measured samples.
+- Top-level render and resolver APIs include their normal compile/tokenize work. `Compile` and `NewRenderer` measure construction only. Renderer methods reuse one renderer created before timing; `GetRef` receives a pre-parsed ref.
+- Each runtime calibrates independently by doubling iterations until one batch reaches 200 ms, subject to a finite iteration cap. Three calibrated batches warm the runtime before seven measured batches in each round.
+- Round 1 runs Node then Go; round 2 runs Go then Node, with a new process for every runtime/round. Runtimes are never measured in parallel.
+- Async workloads use immediately successful fixed resolvers and sequentially await calls. They measure runtime-specific immediate Promise/goroutine overhead, not I/O latency or parallel capacity.
+
+## D-024 Benchmark evidence and claims
+
+- JSON evidence retains every raw sample and records min, nearest-rank p25, median, nearest-rank p75, max, total iterations, ops/s, IQR/median, and `Go median / Node median` for each workload.
+- Markdown uses median as the primary display and states the ratio direction. No speed threshold is a PASS condition, and slower observations are retained.
+- Evidence records the parent commit and modified working tree honestly because it is generated before commit. It also records workload hash, fixed upstream, runtime/config/environment details, order, commands, correctness, warnings, and a content hash.
+- Results describe one documented environment and run policy. They do not establish universal superiority, production latency, I/O performance, scalability, exact repeatability of timing values, or complete compatibility.

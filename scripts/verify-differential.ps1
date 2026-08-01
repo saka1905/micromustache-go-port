@@ -1,5 +1,9 @@
 [CmdletBinding()]
-param([int]$TimeoutSeconds = 30)
+param(
+    [int]$TimeoutSeconds = 30,
+    [string]$EvidenceJson,
+    [string]$EvidenceMarkdown
+)
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -7,8 +11,10 @@ $ErrorActionPreference = 'Stop'
 $repositoryRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $runner = Join-Path $repositoryRoot 'scripts\run-differential.ps1'
 $corpus = Join-Path $repositoryRoot 'testdata\differential\cases.ndjson'
-$evidenceJson = Join-Path $repositoryRoot 'evidence\differential-summary.json'
-$evidenceMarkdown = Join-Path $repositoryRoot 'evidence\differential-summary.md'
+if ([string]::IsNullOrEmpty($EvidenceJson)) { $EvidenceJson = Join-Path $repositoryRoot 'evidence\differential-summary.json' }
+if ([string]::IsNullOrEmpty($EvidenceMarkdown)) { $EvidenceMarkdown = Join-Path $repositoryRoot 'evidence\differential-summary.md' }
+$EvidenceJson = [System.IO.Path]::GetFullPath($EvidenceJson)
+$EvidenceMarkdown = [System.IO.Path]::GetFullPath($EvidenceMarkdown)
 $temporaryRoot = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath()).TrimEnd('\', '/')
 $temporaryDirectory = [System.IO.Path]::GetFullPath((Join-Path $temporaryRoot ("micromustache-differential-verify-" + [guid]::NewGuid().ToString('N'))))
 if (-not $temporaryDirectory.StartsWith($temporaryRoot + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) {
@@ -40,8 +46,8 @@ try {
         if ($actualAPIs -notcontains $api) { throw "Corpus does not cover required API operation: $api" }
     }
 
-    Copy-Item -LiteralPath $firstJson -Destination $evidenceJson -Force
-    Copy-Item -LiteralPath $firstMarkdown -Destination $evidenceMarkdown -Force
+    Copy-Item -LiteralPath $firstJson -Destination $EvidenceJson -Force
+    Copy-Item -LiteralPath $firstMarkdown -Destination $EvidenceMarkdown -Force
     Write-Output "PASS deterministic differential runs=2 cases=$($first.counts.total) pass=$($first.counts.pass) expected_difference=$($first.counts.expectedDifference) skip=$($first.counts.skip) fail=$($first.counts.fail) hash=$($first.deterministicSha256)"
 }
 finally {
