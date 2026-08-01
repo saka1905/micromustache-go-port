@@ -72,13 +72,13 @@ func runDemoSections(output io.Writer, sections []demoSection) error {
 func basicRenderSection() ([]string, error) {
 	result, err := mm.Render(
 		"{{greeting}}, {{person.name}} from {{person.city}}!",
-		mm.Scope{"greeting": "こんにちは", "person": mm.Scope{"name": "Aoi", "city": "米沢"}},
+		mm.Scope{"greeting": "こんにちは", "person": mm.Scope{"name": "Aoi", "city": "Sample City"}},
 		mm.CompileOptions{},
 	)
 	if err != nil {
 		return nil, err
 	}
-	if err := requireString("Render", result, "こんにちは, Aoi from 米沢!"); err != nil {
+	if err := requireString("Render", result, "こんにちは, Aoi from Sample City!"); err != nil {
 		return nil, err
 	}
 	return []string{"output: " + result}, nil
@@ -174,7 +174,7 @@ func syncResolverSection() ([]string, error) {
 		}
 	}
 	var topCalls []string
-	top, err := mm.RenderFunc("{{name}} from {{city}}", makeResolver(&topCalls), mm.Scope{"name": "Aoi", "city": "Yonezawa"}, mm.CompileOptions{})
+	top, err := mm.RenderFunc("{{name}} from {{city}}", makeResolver(&topCalls), mm.Scope{"name": "Aoi", "city": "Sample City"}, mm.CompileOptions{})
 	if err != nil {
 		return nil, err
 	}
@@ -183,14 +183,14 @@ func syncResolverSection() ([]string, error) {
 		return nil, err
 	}
 	var compiledCalls []string
-	compiled, err := renderer.RenderFunc(makeResolver(&compiledCalls), mm.Scope{"name": "Ren", "city": "Sendai"})
+	compiled, err := renderer.RenderFunc(makeResolver(&compiledCalls), mm.Scope{"name": "Ren", "city": "Example City"})
 	if err != nil {
 		return nil, err
 	}
-	if err := requireString("RenderFunc", top, "Aoi from Yonezawa"); err != nil {
+	if err := requireString("RenderFunc", top, "Aoi from Sample City"); err != nil {
 		return nil, err
 	}
-	if err := requireString("Renderer.RenderFunc", compiled, "Sendai welcomes Ren"); err != nil {
+	if err := requireString("Renderer.RenderFunc", compiled, "Example City welcomes Ren"); err != nil {
 		return nil, err
 	}
 	if strings.Join(topCalls, ", ") != "name, city" || strings.Join(compiledCalls, ", ") != "city, name" {

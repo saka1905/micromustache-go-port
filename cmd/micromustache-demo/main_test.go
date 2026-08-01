@@ -12,7 +12,7 @@ import (
 const expectedDemoOutput = `micromustache Go port demo
 
 [1/6] Basic Render
-output: こんにちは, Aoi from 米沢!
+output: こんにちは, Aoi from Sample City!
 status: PASS
 
 [2/6] Tokenize
@@ -32,9 +32,9 @@ NewRenderer: left + right
 status: PASS
 
 [5/6] Synchronous Resolver
-top-level: Aoi from Yonezawa
+top-level: Aoi from Sample City
 top-level calls: name, city
-compiled: Sendai welcomes Ren
+compiled: Example City welcomes Ren
 compiled calls: city, name
 status: PASS
 
