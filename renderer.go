@@ -73,5 +73,5 @@ func (r *Renderer) RenderFunc(resolve Resolver, scope Scope) (string, error) {
 
 // RenderFuncAsync renders a compiled template with an asynchronous resolver.
 func (r *Renderer) RenderFuncAsync(ctx context.Context, resolve AsyncResolver, scope Scope) (string, error) {
-	return "", notImplemented("Renderer.RenderFuncAsync")
+	return r.renderFuncAsync(ctx, resolve, scope, "Renderer.RenderFuncAsync")
 }

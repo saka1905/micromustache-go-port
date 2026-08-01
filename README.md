@@ -18,10 +18,10 @@ See [docs/UPSTREAM.md](docs/UPSTREAM.md) for the fixed metadata, [docs/ORIGINAL_
 
 ## Current status
 
-- Phase: **3G - asynchronous top-level resolver rendering**
-- Go public API: **Defined for the complete fixed upstream surface**
-- Implemented: **`Compile`, `NewRenderer`, `Renderer.Render`, `Renderer.RenderFunc`, `RenderFuncAsync`, `RenderFunc`, `Render`, `Tokenize`, `GetRef`, and `Get`**
-- Not implemented: **`Renderer.RenderFuncAsync`, differential harness, and benchmark**
+- Phase: **3H - complete public API implementation**
+- Go public API: **Implemented for the complete fixed upstream surface**
+- Implemented: **`Compile`, `NewRenderer`, `Renderer.Render`, `Renderer.RenderFunc`, `Renderer.RenderFuncAsync`, `RenderFuncAsync`, `RenderFunc`, `Render`, `Tokenize`, `GetRef`, and `Get`**
+- Remaining validation work: **full differential harness, benchmark, demo, and final submission documentation**
 - Original tests: **Stored unchanged and hash-verified**
 - Node oracle: **Implemented and verified for validation only**
 - Original tests against Go: **Not started**
@@ -52,4 +52,4 @@ This Git repository was created after the Port Mortem 2026 kickoff at 2026-08-01
 9. Build differential testing.
 10. Complete benchmarks, documentation, and the demo.
 
-The Node oracle is a development and test reference only. The Go package never calls Node at runtime, uses it as a proxy or fallback, or requires it in the final build. Phase 3G adds top-level asynchronous resolver rendering through `RenderFuncAsync`; the compiled asynchronous renderer method remains unimplemented.
+The Node oracle is a development and test reference only. The Go package never calls Node at runtime, uses it as a proxy or fallback, or requires it in the final build. Phase 3H completes the mapped public API through compiled asynchronous resolver rendering. This is not yet a claim of complete compatibility: the documented Go/JavaScript differences and unverified differential scope remain.

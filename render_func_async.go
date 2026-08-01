@@ -18,21 +18,28 @@ func RenderFuncAsync(ctx context.Context, template string, resolve AsyncResolver
 	if err != nil {
 		return "", err
 	}
+	return renderer.renderFuncAsync(ctx, resolve, scope, "RenderFuncAsync")
+}
+
+func (r *Renderer) renderFuncAsync(ctx context.Context, resolve AsyncResolver, scope Scope, api string) (string, error) {
+	if r == nil || !r.initialized {
+		return "", fmt.Errorf("Renderer: %w", ErrInvalidRenderer)
+	}
 	if ctx == nil {
-		return "", fmt.Errorf("RenderFuncAsync context is nil: %w", ErrInvalidContext)
+		return "", fmt.Errorf("%s context is nil: %w", api, ErrInvalidContext)
 	}
 	if resolve == nil {
-		return "", fmt.Errorf("RenderFuncAsync resolver is nil: %w", ErrInvalidResolver)
+		return "", fmt.Errorf("%s resolver is nil: %w", api, ErrInvalidResolver)
 	}
 	if err := ctx.Err(); err != nil {
-		return "", fmt.Errorf("RenderFuncAsync context: %w", err)
+		return "", fmt.Errorf("%s context: %w", api, err)
 	}
 
-	pathCount := len(renderer.tokens.Paths)
+	pathCount := len(r.tokens.Paths)
 	results := make(chan asyncResolveResult, pathCount)
-	for index, path := range renderer.tokens.Paths {
+	for index, path := range r.tokens.Paths {
 		if err := ctx.Err(); err != nil {
-			return "", fmt.Errorf("RenderFuncAsync context: %w", err)
+			return "", fmt.Errorf("%s context: %w", api, err)
 		}
 
 		started := make(chan struct{})
@@ -47,24 +54,24 @@ func RenderFuncAsync(ctx context.Context, template string, resolve AsyncResolver
 	values := make([]Value, pathCount)
 	for received := 0; received < pathCount; received++ {
 		if err := ctx.Err(); err != nil {
-			return "", fmt.Errorf("RenderFuncAsync context: %w", err)
+			return "", fmt.Errorf("%s context: %w", api, err)
 		}
 		select {
 		case <-ctx.Done():
-			return "", fmt.Errorf("RenderFuncAsync context: %w", ctx.Err())
+			return "", fmt.Errorf("%s context: %w", api, ctx.Err())
 		case result := <-results:
 			if err := ctx.Err(); err != nil {
-				return "", fmt.Errorf("RenderFuncAsync context: %w", err)
+				return "", fmt.Errorf("%s context: %w", api, err)
 			}
 			if result.err != nil {
-				return "", fmt.Errorf("RenderFuncAsync resolver for path %q at index %d: %w", renderer.tokens.Paths[result.index], result.index, result.err)
+				return "", fmt.Errorf("%s resolver for path %q at index %d: %w", api, r.tokens.Paths[result.index], result.index, result.err)
 			}
 			values[result.index] = result.value
 		}
 	}
 
 	if err := ctx.Err(); err != nil {
-		return "", fmt.Errorf("RenderFuncAsync context: %w", err)
+		return "", fmt.Errorf("%s context: %w", api, err)
 	}
-	return stringifyTokens(renderer.tokens, values, renderer.options.Explicit)
+	return stringifyTokens(r.tokens, values, r.options.Explicit)
 }

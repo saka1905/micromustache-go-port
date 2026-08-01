@@ -17,6 +17,9 @@ var (
 	_ func(mm.Scope, mm.Ref, mm.GetOptions) (mm.Value, error)                                      = mm.GetRef
 	_ func(string, mm.TokenizeOptions) (mm.Tokens, error)                                          = mm.Tokenize
 	_ func(mm.Tokens, mm.RendererOptions) (*mm.Renderer, error)                                    = mm.NewRenderer
+	_ func(*mm.Renderer, mm.Scope) (string, error)                                                 = (*mm.Renderer).Render
+	_ func(*mm.Renderer, mm.Resolver, mm.Scope) (string, error)                                    = (*mm.Renderer).RenderFunc
+	_ func(*mm.Renderer, context.Context, mm.AsyncResolver, mm.Scope) (string, error)              = (*mm.Renderer).RenderFuncAsync
 )
 
 func TestValueStatesRemainDistinct(t *testing.T) {
@@ -80,6 +83,14 @@ func TestImplementedAPIsDoNotReturnErrNotImplemented(t *testing.T) {
 			_, err = renderer.RenderFunc(func(string, mm.Scope) (mm.Value, error) { return mm.Undefined{}, nil }, mm.Scope{})
 			return err
 		}},
+		{"Renderer.RenderFuncAsync", func() error {
+			renderer, err := mm.NewRenderer(mm.Tokens{Strings: []string{""}}, mm.RendererOptions{})
+			if err != nil {
+				return err
+			}
+			_, err = renderer.RenderFuncAsync(context.Background(), func(context.Context, string, mm.Scope) (mm.Value, error) { return mm.Undefined{}, nil }, mm.Scope{})
+			return err
+		}},
 	}
 
 	for _, test := range tests {
@@ -90,41 +101,5 @@ func TestImplementedAPIsDoNotReturnErrNotImplemented(t *testing.T) {
 				t.Fatal("implemented API returned ErrNotImplemented")
 			}
 		})
-	}
-}
-
-func TestUnimplementedAPIsReturnErrNotImplemented(t *testing.T) {
-	ctx := context.Background()
-	scope := mm.Scope{}
-	asyncResolver := func(context.Context, string, mm.Scope) (mm.Value, error) {
-		t.Fatal("skeleton must not invoke the async resolver")
-		return nil, nil
-	}
-
-	var renderer mm.Renderer
-	cases := []struct {
-		name string
-		call func() error
-	}{
-		{"Renderer.RenderFuncAsync", func() error {
-			value, err := renderer.RenderFuncAsync(ctx, asyncResolver, scope)
-			assertEmptyString(t, value)
-			return err
-		}},
-	}
-
-	for _, test := range cases {
-		t.Run(test.name, func(t *testing.T) {
-			if err := test.call(); !errors.Is(err, mm.ErrNotImplemented) {
-				t.Fatalf("errors.Is(err, ErrNotImplemented) = false; err = %v", err)
-			}
-		})
-	}
-}
-
-func assertEmptyString(t *testing.T, value string) {
-	t.Helper()
-	if value != "" {
-		t.Errorf("got %q, want empty string", value)
 	}
 }

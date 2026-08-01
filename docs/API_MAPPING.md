@@ -12,10 +12,10 @@ by `oracle/upstream.sha256`.
 `renderFnAsync`, `compile`, `get`, `getRef`, `tokenize`, and `Renderer`.
 `Renderer` exposes `render`, `renderFn`, and `renderFnAsync` methods.
 
-**Go design decision:** Phase 3G implements top-level `RenderFuncAsync` in
-addition to the earlier synchronous APIs, tokenization, and lookup. Only
-`Renderer.RenderFuncAsync` still returns a zero value with an error matching
-`ErrNotImplemented` through `errors.Is`.
+**Go design decision:** Phase 3H implements every mapped fixed-upstream public
+operation. This completes the public API implementation, not the later proof of
+complete compatibility; known differences and unverified differential scope
+remain below.
 
 ## Function and type mapping
 
@@ -31,7 +31,7 @@ addition to the earlier synchronous APIs, tokenization, and lookup. Only
 | `CompileOptions` | `CompileOptions` |
 | path reference `string[]` | `Ref` (`[]string`) |
 
-| Fixed upstream TypeScript API | Go API | Phase 3G result |
+| Fixed upstream TypeScript API | Go API | Phase 3H result |
 | --- | --- | --- |
 | `render(template, scope?, options?): string` | `Render(template string, scope Scope, options CompileOptions) (string, error)` | implemented |
 | `renderFn(template, resolveFn, scope?, options?): string` | `RenderFunc(template string, resolve Resolver, scope Scope, options CompileOptions) (string, error)` | implemented |
@@ -43,7 +43,7 @@ addition to the earlier synchronous APIs, tokenization, and lookup. Only
 | `new Renderer(tokens, options?)` | `NewRenderer(tokens Tokens, options RendererOptions) (*Renderer, error)` | implemented |
 | `Renderer.render(scope?): string` | `(*Renderer).Render(scope Scope) (string, error)` | implemented |
 | `Renderer.renderFn(resolveFn, scope?): string` | `(*Renderer).RenderFunc(resolve Resolver, scope Scope) (string, error)` | implemented |
-| `Renderer.renderFnAsync(resolveFn, scope?): Promise<string>` | `(*Renderer).RenderFuncAsync(ctx context.Context, resolve AsyncResolver, scope Scope) (string, error)` | `"", ErrNotImplemented` |
+| `Renderer.renderFnAsync(resolveFn, scope?): Promise<string>` | `(*Renderer).RenderFuncAsync(ctx context.Context, resolve AsyncResolver, scope Scope) (string, error)` | implemented |
 
 **Go design decision:** `renderFn` becomes the Go-idiomatic `RenderFunc`.
 Asynchronous calls accept `context.Context` for cancellation and deadlines and
@@ -77,8 +77,8 @@ The synchronous resolver is
 `func(path string, scope Scope) (Value, error)`. Both `RenderFunc` and
 `Renderer.RenderFunc` call it as described below. The asynchronous resolver is
 `func(ctx context.Context, path string, scope Scope) (Value, error)`;
-`RenderFuncAsync` calls it concurrently as described below, while the compiled
-renderer async method remains unimplemented.
+both `RenderFuncAsync` and `Renderer.RenderFuncAsync` call it concurrently as
+described below.
 
 ## Options and defaults
 
@@ -277,12 +277,13 @@ call `Promise.all` and stringify the fulfilled values. Consequently:
 6. stringification occurs only after all promises fulfill.
 
 Go `RenderFuncAsync` first calls `Compile`, preserving tokenization and
-`ValidatePath` error stages. It then validates the Go-only context and resolver
-boundaries and dispatches one goroutine per raw path occurrence. Dispatch uses
-the stored left-to-right path order; each result carries its interpolation
-index and is sent to a channel buffered to the total occurrence count. Values
-are placed back at that index before the existing `stringifyTokens` helper is
-called.
+`ValidatePath` error stages, and then delegates to the same private compiled
+async helper used by `Renderer.RenderFuncAsync`. The helper validates the
+Go-only context and resolver boundaries and dispatches one goroutine per raw
+path occurrence. Dispatch uses the stored left-to-right path order; each result
+carries its interpolation index and is sent to a channel buffered to the total
+occurrence count. Values are placed back at that index before the existing
+`stringifyTokens` helper is called.
 
 Resolver completion order is intentionally unconstrained. The first observed
 resolver error is returned with raw path and index while preserving its cause
@@ -385,6 +386,42 @@ the top-level API name, while `Renderer.RenderFunc` uses its method name. Both
 preserve resolver causes through `errors.Is` and `errors.As`; this wrapping is
 not described as a JavaScript error message.
 
+### Compiled asynchronous resolver rendering
+
+Fixed `Renderer.renderFnAsync` uses the raw trimmed paths and literal strings
+already retained by the renderer. It neither retokenizes nor uses the parsed-ref
+cache. `resolveRefs` creates every resolver promise from left to right, then
+`Promise.all` restores interpolation-index order before the renderer stringifies
+the values. Constructor-time `ValidatePath` is the only parsed-path stage for
+this method; without it, invalid parser syntax remains a raw resolver path.
+`ValidateRef` and `MaxRefDepth` are ignored by resolver rendering.
+
+Go `Renderer.RenderFuncAsync` directly reuses the renderer's defensive-copy
+tokens and `RendererOptions` snapshot and calls the same private async helper as
+the top-level API. It does not call `Compile`, `Tokenize`, or `parseTokenPaths`
+during the method call. A nil or zero-value receiver returns
+`ErrInvalidRenderer` before the per-call context and resolver boundaries.
+
+Every invocation supplies and owns its context, resolver, scope, result channel,
+goroutines, collected values, error, and output. None is written to `Renderer`.
+The same renderer can therefore be called with different resolvers, scopes, and
+contexts, and remains reusable after resolver error, cancellation, deadline, or
+unsupported-value failure. Resolver results are never cached; missing/present
+transitions and repeated occurrences are observed afresh on every call.
+
+Representative comparisons between
+`Compile(template, options).RenderFuncAsync(...)` and top-level
+`RenderFuncAsync(...)` produced the same outputs, raw paths, scope, occurrence
+counts, stringify classifications, context causes, and validation categories.
+Compile errors necessarily occur before a renderer method can be invoked; this
+stage boundary is retained rather than hidden.
+
+The Phase 3G warnings apply unchanged: left-to-right goroutine dispatch does not
+guarantee JavaScript-identical entry order into user resolver bodies, concurrent
+completion is scheduler-dependent, the first error observed on the Go channel
+wins, and already-started context-ignoring resolvers cannot be forcibly stopped.
+This implementation does not claim exact JavaScript microtask ordering.
+
 ### Compile-time and render-time errors
 
 | Condition | Phase |
@@ -397,12 +434,12 @@ not described as a JavaScript error message.
 | nil resolver | each `RenderFunc` / `Renderer.RenderFunc`, after successful compilation |
 | resolver error | current resolver occurrence; later calls and stringification do not run |
 | unsupported resolver value | after all resolver occurrences have returned |
-| nil async context | `RenderFuncAsync`, after successful compilation |
+| nil async context | `RenderFuncAsync`, after successful compilation; each `Renderer.RenderFuncAsync` call after receiver validation |
 | canceled/deadline context | before/during async dispatch or result collection |
 | async resolver error | first observed failed completion; all normally dispatched calls may already be running |
 | unsupported async resolver value | after every async resolver succeeds, in interpolation order during stringification |
 | invalid token shape | `NewRenderer` |
-| nil or zero-value Renderer | `Renderer.Render` / `Renderer.RenderFunc` |
+| nil or zero-value Renderer | every public `Renderer` method |
 
 All refs are parsed before any lookup. All values are looked up before
 stringification. A cached path error remains template-scoped, while data errors
@@ -498,6 +535,15 @@ all-start-before-rejection, constructor validation, empty/plain templates, and
 stringification after every fulfillment. Temporary inputs were deleted and do
 not extend the committed protocol or form the later differential harness.
 
+Phase 3H measured 38 declarative `compile.renderFnAsync` and
+`renderer.renderFnAsync` requests plus 16 fixed delay/event/reuse observations.
+They confirmed compile-state reuse, raw paths, representative value coercion,
+validation stages, all-start and reverse completion behavior,
+interpolation-order output, repeated occurrences, fastest-settled rejection,
+and reuse after rejection and stringification errors. Temporary inputs were
+deleted and do not extend the committed protocol or form the later differential
+harness.
+
 **Unresolved compatibility warning:** fixed JavaScript lookup uses the `in`
 operator. It can traverse prototype properties, execute getters, expose array
 constructors, and observe an inherited `__proto__`; direct Node measurements
@@ -514,9 +560,9 @@ byte-for-byte JavaScript equivalent.
 
 ## Error and runtime boundary
 
-`ErrNotImplemented` remains the stable sentinel for
-`Renderer.RenderFuncAsync`.
-Each unimplemented function and method wraps it with the API name.
+`ErrNotImplemented` remains exported for source compatibility with the
+incremental API skeleton. Every mapped public operation is now implemented, and
+no current public operation returns this sentinel for normal input.
 
 The Node oracle is a development and differential-validation reference only.
 The Go package does not import, launch, proxy, or fall back to Node.js, and it
@@ -524,5 +570,5 @@ has no external dependency.
 
 ## Later implementation order
 
-1. Compiled asynchronous rendering through `Renderer.RenderFuncAsync`.
-2. Differential testing against the fixed Node oracle.
+1. Differential testing against the fixed Node oracle.
+2. Benchmark, demo, and final submission evidence.

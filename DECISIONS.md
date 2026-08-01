@@ -176,3 +176,27 @@
 - The result channel has enough capacity for every dispatched resolver, so internal result sends cannot remain blocked after an early error or cancellation. No global worker pool, semaphore, cache, mutable state, or package-level wait group is introduced.
 - Resolver panics are not recovered or converted into successful values. Go scheduler execution of user resolver bodies may interleave after ordered dispatch; this is documented rather than claimed as identical JavaScript call-stack timing.
 - Thirty-two declarative `renderFnAsync` oracle requests and seventeen fixed delay/event observations confirmed all-start behavior, invocation and completion ordering, repeated occurrences, fastest rejection selection, output order, validation timing, and stringification timing.
+
+## D-018 Compiled asynchronous resolver rendering
+
+### Upstream facts
+
+- Fixed `Renderer.renderFnAsync` reads the raw trimmed occurrences in its retained `tokens.paths`, invokes `resolveRefs`, passes all returned promises to `Promise.all`, and stringifies the fulfilled values in interpolation order.
+- It does not retokenize the template or read the parsed-ref cache during a call. `validatePath` can affect the method only through eager constructor validation; `validateRef` and `maxRefDepth` do not participate.
+- A renderer retains template tokens and options but not the resolver, scope, promises, fulfillment values, rejection, or rendered output. The same instance remains reusable after resolver rejection or stringification failure.
+
+### Go decisions
+
+- `Renderer.RenderFuncAsync` reuses only the renderer's defensive-copy token strings, raw paths, options snapshot, initialization state, and any compile-time validation already completed. It does not call `Compile`, retokenize, or parse paths during the method call.
+- The top-level and compiled async APIs share the Phase 3G private dispatch, indexed collection, error wrapping, context handling, and stringification helper. The API name in Go-specific error context remains appropriate to the caller.
+- Context, resolver, scope, result channel, goroutines, resolved values, errors, and output are per-call values and are never retained by the renderer. Repeated use after resolver error, cancellation, deadline, and unsupported value therefore starts from fresh call state.
+- Completion order does not change template-order output, and repeated paths remain independent calls. Existing warnings remain: actual resolver-body entry and simultaneous channel-error selection are scheduler-dependent, and a context-ignoring resolver already started cannot be forcibly terminated.
+- The implementation adds no external dependency, Node.js runtime path, file-system/network access, global cache, semaphore, or worker pool. Sixty-four concurrent read-only calls are covered when caller resolvers and scopes are themselves concurrency-safe.
+- Thirty-eight declarative compiled/constructor async oracle requests and sixteen fixed delay/event/reuse observations confirmed representative values, errors, validation stages, all-start behavior, reverse completion, output ordering, repeated occurrences, rejection selection, and reuse.
+
+## D-019 Public API implementation complete
+
+- Every fixed upstream runtime export and public `Renderer` method now has an implemented Go mapping. No mapped public operation returns `ErrNotImplemented` for normal input.
+- `ErrNotImplemented` remains exported for source compatibility with earlier incremental phases, but no current public operation returns it. The now-unused private wrapper was removed.
+- Public API implementation does not establish complete compatibility. Known differences remain documented in `docs/API_MAPPING.md`, and broad compatibility claims wait for the later differential harness.
+- Work after Phase 3H focuses on validation, evaluation, demo, and submission evidence rather than adding unrequested public operations.

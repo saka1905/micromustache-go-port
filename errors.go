@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	// ErrNotImplemented marks every API operation whose behavior is not implemented yet.
+	// ErrNotImplemented is retained for source compatibility; no current public operation returns it.
 	ErrNotImplemented = errors.New("micromustache: not implemented")
 	// ErrInvalidTemplate marks template tokenization syntax errors.
 	ErrInvalidTemplate = errors.New("micromustache: invalid template")
@@ -43,8 +43,4 @@ func (e *compatibilityError) Unwrap() error {
 
 func compatibleError(kind error, format string, args ...any) error {
 	return &compatibilityError{kind: kind, message: fmt.Sprintf(format, args...)}
-}
-
-func notImplemented(api string) error {
-	return fmt.Errorf("%s: %w", api, ErrNotImplemented)
 }
