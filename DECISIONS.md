@@ -139,3 +139,21 @@
 - All paths are parsed before any lookup, and all lookup values are collected before stringification. This preserves invalid-path-before-data-error and lookup-before-unsupported-value ordering.
 - Source-derived errors retain existing sentinels and messages. `ErrInvalidTokens` and `ErrInvalidRenderer` remain distinguishable with `errors.Is`; they are not described as identical to upstream `TypeError`.
 - Forty-eight declarative `compile.render` oracle requests and sixteen fixed stage/reuse observations confirmed representative output, first-error selection, compile/render stage boundaries, data non-caching, token/options reference behavior, and repeated rendering.
+
+## D-016 Compiled synchronous resolver rendering
+
+### Upstream facts
+
+- `Renderer.renderFn` reads the raw trimmed occurrences in `tokens.paths`; it does not access or parse the renderer's refs cache. `validatePath` therefore affects it only through eager constructor validation.
+- The resolver receives each raw path and the current scope from left to right, once per interpolation occurrence. Repeated paths are not deduplicated.
+- A thrown resolver error stops later calls immediately. When all calls succeed, every value is collected before stringification, so a stringification error occurs after all resolver calls.
+- The renderer retains no resolver or resolver result, and the same instance can be called again with different resolvers and scopes after success or failure.
+
+### Go decisions
+
+- `Renderer.RenderFunc` reuses the renderer's defensive-copy token paths, literal strings, and options snapshot. It does not retokenize, use parsed refs as resolver paths, or retain the resolver, scope, values, errors, or output.
+- Top-level `RenderFunc` now follows fixed source through `Compile` and the same private compiled resolver helper. Existing raw-path, validation, call-order, stringification, and Go error-classification behavior is preserved.
+- Nil resolvers use the existing `ErrInvalidResolver`. Resolver errors are wrapped with API, raw path, and occurrence index while preserving the cause for `errors.Is` and `errors.As`; this context is Go-specific.
+- Resolver values use the existing deterministic stringification boundary. Unsupported Go values remain `ErrUnsupportedValue` and are not presented as the same error class as JavaScript stringification errors.
+- No resolver result cache, global mutable state, goroutine, Node.js runtime call, file-system/network access, or external dependency is added. Concurrent calls are safe when the caller's resolver and scope permit concurrent read-only use.
+- Forty declarative `compile.renderFn` oracle requests and fourteen fixed call/reuse observations confirmed representative output, raw path and scope, order/count, stopping, validation stage, stringification timing, and reuse after errors.

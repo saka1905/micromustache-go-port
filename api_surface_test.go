@@ -68,6 +68,14 @@ func TestImplementedAPIsDoNotReturnErrNotImplemented(t *testing.T) {
 			_, err = renderer.Render(mm.Scope{})
 			return err
 		}},
+		{"Renderer.RenderFunc", func() error {
+			renderer, err := mm.NewRenderer(mm.Tokens{Strings: []string{""}}, mm.RendererOptions{})
+			if err != nil {
+				return err
+			}
+			_, err = renderer.RenderFunc(func(string, mm.Scope) (mm.Value, error) { return mm.Undefined{}, nil }, mm.Scope{})
+			return err
+		}},
 	}
 
 	for _, test := range tests {
@@ -84,10 +92,6 @@ func TestImplementedAPIsDoNotReturnErrNotImplemented(t *testing.T) {
 func TestUnimplementedAPIsReturnErrNotImplemented(t *testing.T) {
 	ctx := context.Background()
 	scope := mm.Scope{}
-	resolver := func(string, mm.Scope) (mm.Value, error) {
-		t.Fatal("skeleton must not invoke the resolver")
-		return nil, nil
-	}
 	asyncResolver := func(context.Context, string, mm.Scope) (mm.Value, error) {
 		t.Fatal("skeleton must not invoke the async resolver")
 		return nil, nil
@@ -100,11 +104,6 @@ func TestUnimplementedAPIsReturnErrNotImplemented(t *testing.T) {
 	}{
 		{"RenderFuncAsync", func() error {
 			value, err := mm.RenderFuncAsync(ctx, "", asyncResolver, scope, mm.CompileOptions{})
-			assertEmptyString(t, value)
-			return err
-		}},
-		{"Renderer.RenderFunc", func() error {
-			value, err := renderer.RenderFunc(resolver, scope)
 			assertEmptyString(t, value)
 			return err
 		}},

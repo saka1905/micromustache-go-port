@@ -12,10 +12,10 @@ by `oracle/upstream.sha256`.
 `renderFnAsync`, `compile`, `get`, `getRef`, `tokenize`, and `Renderer`.
 `Renderer` exposes `render`, `renderFn`, and `renderFnAsync` methods.
 
-**Go design decision:** Phase 3E implements `Compile`, `NewRenderer`, and
-`Renderer.Render` in addition to the earlier top-level functions, tokenization,
-and lookup. Resolver renderer methods and asynchronous behavior still return a
-zero value with an error matching `ErrNotImplemented` through `errors.Is`.
+**Go design decision:** Phase 3F implements `Renderer.RenderFunc` in addition
+to the earlier compiled data renderer, top-level functions, tokenization, and
+lookup. Only the two asynchronous operations still return a zero value with an
+error matching `ErrNotImplemented` through `errors.Is`.
 
 ## Function and type mapping
 
@@ -31,7 +31,7 @@ zero value with an error matching `ErrNotImplemented` through `errors.Is`.
 | `CompileOptions` | `CompileOptions` |
 | path reference `string[]` | `Ref` (`[]string`) |
 
-| Fixed upstream TypeScript API | Go API | Phase 3E result |
+| Fixed upstream TypeScript API | Go API | Phase 3F result |
 | --- | --- | --- |
 | `render(template, scope?, options?): string` | `Render(template string, scope Scope, options CompileOptions) (string, error)` | implemented |
 | `renderFn(template, resolveFn, scope?, options?): string` | `RenderFunc(template string, resolve Resolver, scope Scope, options CompileOptions) (string, error)` | implemented |
@@ -42,7 +42,7 @@ zero value with an error matching `ErrNotImplemented` through `errors.Is`.
 | `tokenize(template, options?): Tokens` | `Tokenize(template string, options TokenizeOptions) (Tokens, error)` | implemented |
 | `new Renderer(tokens, options?)` | `NewRenderer(tokens Tokens, options RendererOptions) (*Renderer, error)` | implemented |
 | `Renderer.render(scope?): string` | `(*Renderer).Render(scope Scope) (string, error)` | implemented |
-| `Renderer.renderFn(resolveFn, scope?): string` | `(*Renderer).RenderFunc(resolve Resolver, scope Scope) (string, error)` | `"", ErrNotImplemented` |
+| `Renderer.renderFn(resolveFn, scope?): string` | `(*Renderer).RenderFunc(resolve Resolver, scope Scope) (string, error)` | implemented |
 | `Renderer.renderFnAsync(resolveFn, scope?): Promise<string>` | `(*Renderer).RenderFuncAsync(ctx context.Context, resolve AsyncResolver, scope Scope) (string, error)` | `"", ErrNotImplemented` |
 
 **Go design decision:** `renderFn` becomes the Go-idiomatic `RenderFunc`.
@@ -74,11 +74,11 @@ The following states remain representable and distinct:
 Top-level `Render` applies the Phase 3C conversion boundary described below.
 
 The synchronous resolver is
-`func(path string, scope Scope) (Value, error)`. `RenderFunc` calls it in Phase
-3D as described below. The asynchronous resolver is `func(ctx context.Context,
-path string, scope Scope) (Value, error)` and remains uncalled; Promise
-ordering, rejection behavior, and cancellation semantics remain implementation
-work.
+`func(path string, scope Scope) (Value, error)`. Both `RenderFunc` and
+`Renderer.RenderFunc` call it as described below. The asynchronous resolver is
+`func(ctx context.Context, path string, scope Scope) (Value, error)` and remains
+uncalled; Promise ordering, rejection behavior, and cancellation semantics
+remain implementation work.
 
 ## Options and defaults
 
@@ -101,10 +101,11 @@ defaults. `Get`, `GetRef`, and `Render` apply the upstream depth default.
 because the fixed top-level operation parses all paths before lookup whether
 that flag is false or true.
 
-`RenderFunc` applies tags and path-length options during tokenization,
+`RenderFunc` applies tags and path-length options during compilation,
 `ValidatePath` before any resolver call, and `Explicit` during shared
-stringification. `ValidateRef` and `MaxRefDepth` are lookup options and do not
-apply because the resolver owns path interpretation.
+stringification. `Renderer.RenderFunc` reuses that compiled token and option
+state. `ValidateRef` and `MaxRefDepth` are lookup options and do not apply
+because the resolver owns path interpretation.
 
 `Compile` applies tags and `MaxPathLen` while producing tokens. Its renderer
 snapshot retains only `RendererOptions`; tags and the template string are not
@@ -220,8 +221,8 @@ class for analogous JavaScript values.
 ## Top-level synchronous resolver rendering
 
 The fixed upstream top-level `renderFn` compiles the template and then calls
-`Renderer.renderFn`. Phase 3D reproduces its observable one-shot behavior
-without invoking `Compile`; `Renderer.RenderFunc` remains unimplemented:
+`Renderer.renderFn`. Phase 3F now follows that structure through `Compile` and
+the same private compiled resolver helper used by `Renderer.RenderFunc`:
 
 1. `Tokenize` produces literal strings and raw trimmed paths.
 2. When `ValidatePath` is true, every path is parsed before the resolver is
@@ -237,10 +238,11 @@ error stops the loop immediately, so later paths are not called and no
 stringification occurs. Conversely, if all calls succeed, a later unsupported
 Go value is detected only after every resolver call finishes.
 
-`RenderFunc` passes the same `Scope` value supplied by the caller and does not
-interpret a raw path itself unless validation was requested. Measurements
-confirmed that `a.`, which is invalid for the parser, is passed to the resolver
-and can render successfully when `ValidatePath` is false.
+Both APIs pass the same `Scope` value supplied by the caller and do not
+interpret a raw path during resolver calls. Measurements confirmed that `a.`,
+which is invalid for the parser, is passed to the resolver and can render
+successfully when `ValidatePath` is false. With `ValidatePath`, compilation
+parses all paths before a renderer is returned.
 
 Resolver-returned values go through exactly the same private stringification
 helper as `Render`, including `Explicit`, array/object handling, number forms,
@@ -301,6 +303,37 @@ Top-level `Render` now directly follows fixed source by calling `Compile` and
 then `Renderer.Render`. Therefore ordinary results and error classification are
 shared rather than independently duplicated.
 
+### Compiled synchronous resolver rendering
+
+Fixed `Renderer.renderFn` does not read the parsed-ref cache used by
+`Renderer.render`. It iterates the renderer's raw trimmed `tokens.paths` and:
+
+1. validates that the resolver is callable;
+2. calls it once per interpolation occurrence from left to right with the raw
+   path and current scope;
+3. stops immediately when a resolver throws;
+4. otherwise collects every value before stringification.
+
+Go `Renderer.RenderFunc` reuses the defensive-copy token paths, literal
+strings, and `RendererOptions` snapshot held by the compiled renderer. It does
+not retokenize or convert a raw resolver path to a parsed `Ref`. With
+`ValidatePath`, refs were already parsed during `Compile`/`NewRenderer`; without
+it, even a path such as `a.` remains resolver-owned. `ValidateRef` and
+`MaxRefDepth` do not participate in resolver rendering.
+
+Every call supplies its own resolver and scope. Neither those inputs nor the
+returned values, errors, and output are retained, so a renderer can be reused
+with different resolvers after successful, resolver-error, or unsupported-value
+calls. Repeated paths remain repeated calls. Concurrent read-only renderer use
+is safe when the caller's resolver and scope are themselves safe for concurrent
+use.
+
+Top-level `RenderFunc` now calls `Compile` and the same private compiled
+resolver helper. It retains the established Go-specific error context using
+the top-level API name, while `Renderer.RenderFunc` uses its method name. Both
+preserve resolver causes through `errors.Is` and `errors.As`; this wrapping is
+not described as a JavaScript error message.
+
 ### Compile-time and render-time errors
 
 | Condition | Phase |
@@ -310,8 +343,11 @@ shared rather than independently duplicated.
 | invalid path without `ValidatePath` | first `Renderer.Render` |
 | `MaxRefDepth`, `ValidateRef`, missing validated ref | every `Renderer.Render` |
 | unsupported Go value | every `Renderer.Render`, after all lookups |
+| nil resolver | each `RenderFunc` / `Renderer.RenderFunc`, after successful compilation |
+| resolver error | current resolver occurrence; later calls and stringification do not run |
+| unsupported resolver value | after all resolver occurrences have returned |
 | invalid token shape | `NewRenderer` |
-| nil or zero-value Renderer | `Renderer.Render` |
+| nil or zero-value Renderer | `Renderer.Render` / `Renderer.RenderFunc` |
 
 All refs are parsed before any lookup. All values are looked up before
 stringification. A cached path error remains template-scoped, while data errors
@@ -389,6 +425,14 @@ transitions, nested map/array changes, invalid tokens, and upstream token/option
 reference retention. Temporary measurement inputs were deleted and do not form
 the later differential harness.
 
+Phase 3F measured 40 declarative `compile.renderFn` requests plus 14 fixed
+call/reuse observations. They confirmed raw dot/bracket/quoted/whitespace paths,
+scope identity, left-to-right order, one call per occurrence, first-error
+stopping, all-calls-before-stringification behavior, constructor validation,
+nil-resolver handling, ignored lookup options, and reuse after resolver and
+stringification errors. Temporary inputs were deleted and do not extend the
+committed oracle protocol or form the later differential harness.
+
 **Unresolved compatibility warning:** fixed JavaScript lookup uses the `in`
 operator. It can traverse prototype properties, execute getters, expose array
 constructors, and observe an inherited `__proto__`; direct Node measurements
@@ -405,8 +449,8 @@ byte-for-byte JavaScript equivalent.
 
 ## Error and runtime boundary
 
-`ErrNotImplemented` remains the stable sentinel for `RenderFuncAsync`,
-`Renderer.RenderFunc`, and `Renderer.RenderFuncAsync`.
+`ErrNotImplemented` remains the stable sentinel for `RenderFuncAsync` and
+`Renderer.RenderFuncAsync`.
 Each unimplemented function and method wraps it with the API name.
 
 The Node oracle is a development and differential-validation reference only.

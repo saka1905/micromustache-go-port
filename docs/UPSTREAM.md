@@ -18,4 +18,4 @@
 - Original test aggregate size: 30,626 bytes
 - Test manifest: [tests/original.sha256](../tests/original.sha256)
 
-The preserved license, package metadata, and original tests were obtained from the fixed commit. The temporary upstream clone is not retained in this repository. The Go public API skeleton, Phase 3B tokenization/value lookup, Phase 3C top-level synchronous rendering, Phase 3D synchronous resolver rendering, and Phase 3E compiled data rendering exist; resolver renderer methods and asynchronous rendering remain unimplemented.
+The preserved license, package metadata, and original tests were obtained from the fixed commit. The temporary upstream clone is not retained in this repository. The Go public API skeleton, Phase 3B tokenization/value lookup, Phase 3C top-level synchronous rendering, Phase 3D synchronous resolver rendering, Phase 3E compiled data rendering, and Phase 3F compiled synchronous resolver rendering exist; asynchronous rendering remains unimplemented.

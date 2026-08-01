@@ -68,7 +68,7 @@ func (r *Renderer) parsedRefs() ([]Ref, error) {
 
 // RenderFunc renders a compiled template with a synchronous resolver.
 func (r *Renderer) RenderFunc(resolve Resolver, scope Scope) (string, error) {
-	return "", notImplemented("Renderer.RenderFunc")
+	return r.renderFunc(resolve, scope, "Renderer.RenderFunc")
 }
 
 // RenderFuncAsync renders a compiled template with an asynchronous resolver.
