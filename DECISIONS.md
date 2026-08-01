@@ -237,3 +237,12 @@
 - Markdown uses median as the primary display and states the ratio direction. No speed threshold is a PASS condition, and slower observations are retained.
 - Evidence records the parent commit and modified working tree honestly because it is generated before commit. It also records workload hash, fixed upstream, runtime/config/environment details, order, commands, correctness, warnings, and a content hash.
 - Results describe one documented environment and run policy. They do not establish universal superiority, production latency, I/O performance, scalability, exact repeatability of timing values, or complete compatibility.
+
+## D-025 Runnable demo and evidence walkthrough
+
+- The Phase 5A demo is one Go command under `cmd/micromustache-demo`. It uses only the standard library and exported product APIs, contains no copy of product parsing or rendering logic, and has no Node.js, npm, shell, network, filesystem, time, random, environment, or machine-identity dependency.
+- Six fixed sections exercise all eleven mapped operations: render, tokenization, parsed and string path lookup, compilation, direct renderer construction, renderer reuse, and top-level/compiled synchronous and asynchronous resolver paths. Async output records deterministic values and counts, never goroutine entry or completion order.
+- Section functions validate their own expected values before emitting PASS. Any error is reported with its section name to stderr, exits non-zero, and prevents the final `DEMO_STATUS: PASS` line.
+- Tracked differential and benchmark values are not duplicated in Go source. Evidence reading remains in `scripts/run-demo.ps1` so a built demo binary works outside the repository and normal package use stays independent of validation artifacts.
+- The PowerShell 5.1 walkthrough builds only in a validated system temporary directory, requires two byte-for-byte identical UTF-8 runs, checks section order and evidence integrity, prints but does not automatically run the full differential and benchmark commands, and removes temporary artifacts in `finally`.
+- `evidence/demo-output.txt` records an actual successful direct run. It contains no timestamp, hostname, username, absolute path, environment details, or performance claim.

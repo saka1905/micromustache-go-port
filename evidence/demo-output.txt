@@ -1,0 +1,37 @@
+micromustache Go port demo
+
+[1/6] Basic Render
+output: こんにちは, Aoi from 米沢!
+status: PASS
+
+[2/6] Tokenize
+literal fragments: 3
+paths: user.name, items[1]
+status: PASS
+
+[3/6] Get and GetRef
+Get: Ren
+GetRef: Aoi
+status: PASS
+
+[4/6] Compile and Renderer Reuse
+render 1: Hello, Aoi!
+render 2: Hello, Ren!
+NewRenderer: left + right
+status: PASS
+
+[5/6] Synchronous Resolver
+top-level: Aoi from Yonezawa
+top-level calls: name, city
+compiled: Sendai welcomes Ren
+compiled calls: city, name
+status: PASS
+
+[6/6] Asynchronous Resolver
+top-level: first then second
+top-level calls: 2
+compiled: left + right
+compiled calls: 2
+status: PASS
+
+DEMO_STATUS: PASS
